@@ -1,4 +1,38 @@
-# Laravel.gitignore
+# Created by https://www.gitignore.io/api/laravel
+# Edit at https://www.gitignore.io/?templates=laravel
+
+# MacOs
+.DS_Store
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# vscode
+.vscode/
+
+# React 
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# log
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# phpStorm 
+.idea/
+
+# build output
+build/
+dist/
+/temp
+
+# Laravel
 
 /vendor/
 node_modules/
@@ -29,3 +63,4 @@ Homestead.json
 *.css.map
 *.sass.map
 *.scss.map
+
