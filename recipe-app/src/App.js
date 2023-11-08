@@ -5,24 +5,16 @@ import { useState } from 'react';
 function Square({value, onSquareClick}){
 
   return (
-    <button className="square"
-    onClick={onSquareClick}
-    >
+    <button className="square" onClick={onSquareClick}>
       {value}
     </button>
   );
 }
 
 export default function Board(){
-  const winner = calculateWinner(squares);
-  let status;
-  if(winner){
-    status = 'Winner: ' + winner;
-  } else {
-    status = " Next player: " + (xIsNext ? 'X' : 'O')
-  }
   const [xIsNext, setXIsNext] = useState(true); // [state, setState
   const [squares, setSquares] = useState(Array(9).fill(null)); // [state, setState
+
   function handleClick(i){
     if(squares[i] || calculateWinner(squares)) return; // if square is already filled, return (do nothing
     const nextSquares = squares.slice();
@@ -33,6 +25,14 @@ export default function Board(){
     }
     setSquares(nextSquares);
     setXIsNext(!xIsNext);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if(winner){
+    status = 'Winner: ' + winner;
+  } else {
+    status = " Next player: " + (xIsNext ? 'X' : 'O')
   }
 
   return (  
@@ -64,7 +64,7 @@ function calculateWinner(squares){
     [0,3,6], [1,4,7], [2,5,8], // vertical
     [0,4,8], [2,4,6] // diagonal
   ];
-  for(i = 0; i < lines.length; i++){
+  for(let i = 0; i < lines.length; i++){
     const [a,b,c] = lines[i];
     if(squares[a] && squares[a] === squares[b] && squares[a] === squares[c]){
       return squares[a];
