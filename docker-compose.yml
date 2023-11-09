@@ -30,7 +30,7 @@ services:
 
   # MySQL Service
   db:
-    image: mysql:5.7
+    image: mysql/mysql-server:5.7
     container_name: mysql-db
     environment:
       MYSQL_DATABASE: fsd10_tango
