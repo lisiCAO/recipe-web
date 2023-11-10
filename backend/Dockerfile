@@ -1,6 +1,8 @@
 # Use the official Ubuntu base image
 FROM ubuntu:latest
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     software-properties-common \
@@ -11,13 +13,16 @@ RUN apt-get update && apt-get install -y \
 
 # Install PHP and extensions
 RUN add-apt-repository ppa:ondrej/php && apt-get update && apt-get install -y \
-    php8.0 \
-    php8.0-fpm \
-    php8.0-mysql \
-    php8.0-mbstring \
-    php8.0-xml \
-    php8.0-gd \
-    php8.0-curl
+    php8.2 \
+    php8.2-fpm \
+    php8.2-mysql \
+    php8.2-mbstring \
+    php8.2-xml \
+    php8.2-gd \
+    php8.2-curl\
+    tzdata \
+    && ln -fs /usr/share/zoneinfo/America/Montreal /etc/localtime \
+    && dpkg-reconfigure --frontend noninteractive tzdata
 
 # Get Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
