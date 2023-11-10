@@ -1,0 +1,27 @@
+.recipe-details {
+    display: flex;
+    align-items: flex-start;
+
+    .recipe-image {
+        width: 50%;
+        margin-right: 20px;
+
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+    }
+
+    .recipe-info {
+        width: 50%;
+
+        p {
+            margin: 0 0 10px;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+    }
+}
