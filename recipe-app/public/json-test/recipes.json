@@ -1,0 +1,14 @@
+[
+    {
+        "recipe_id": 1,
+        "recipe_name": "Spaghetti Carbonara",
+        "created_date": "2021-01-01",
+        "updated_date": "2021-01-05"
+    },
+    {
+        "recipe_id": 2,
+        "recipe_name": "Chicken Tikka Masala",
+        "created_date": "2021-02-15",
+        "updated_date": "2021-02-20"
+    }
+]
