@@ -1,0 +1,30 @@
+.admin-sidebar {
+    background-color: #343a40; // You can adjust the color to match your admin panel's theme
+    color: #fff;
+    width: 250px; // Adjust the width as needed
+    height: 100vh; // Full height
+    position: fixed; // Sidebar stays in place when scrolling
+    top: 0;
+    left: 0;
+    overflow-x: hidden; // Prevent horizontal scroll
+    padding-top: 20px; // Space for the top content
+  }
+  
+  .admin-nav {
+    display: flex;
+    flex-direction: column; // Stack the links vertically
+  }
+  
+  .admin-nav-item {
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+  
+    &:hover {
+      background-color: #495057; // Change color on hover
+    }
+  }
+  
+  // Responsive adjustments can be added as necessary
+  
