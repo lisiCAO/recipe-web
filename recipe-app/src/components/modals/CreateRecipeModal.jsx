@@ -1,5 +1,5 @@
 import React from 'react';
-import CreateModal from '../common/CreateModal';
+import CreateModal from './CreateModal.jsx'
 import './CreateRecipeModal.scss';
 
 const recipeConfig = [

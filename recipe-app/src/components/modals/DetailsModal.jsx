@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from '../common/Modal';
-import './RecipeDetailsModal.scss';
+import './DetailsModal.scss';
 
 const displayConfig = {
     recipe: {

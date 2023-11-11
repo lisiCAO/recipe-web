@@ -2,6 +2,7 @@ import React from 'react';
 import Button from './Button';
 import './Table.scss';
 
+
 const Table = ({ columns, data,  onViewDetails, onDelete }) => {
     return(
         <table className = "table">
@@ -31,5 +32,3 @@ const Table = ({ columns, data,  onViewDetails, onDelete }) => {
 };
 
 export default Table;
-
-// Path: recipe-app/src/components/common/Modal.jsx
