@@ -1,81 +1,80 @@
 import React, { useState, useEffect } from 'react';
-import SearchBar from '../common/Searchbar';
-import Table from '../common/Table';
-import RecipeDetailsModal from '../modals/RecipeDetailsModal';
 import Button from '../common/Button';
+import Table from '../common/Table';
+import SearchBar from '../common/Searchbar';
+import CreateRecipeModal from '../modals/CreateRecipeModal';
+import RecipeDetailsModal from '../modals/RecipeDetailsModal';
 import './Recipes.scss';
 
 const Recipes = () => {
-    const [recipes, setRecipes] = useState([]); 
-    const [filteredRecipes, setFilteredRecipes] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [recipes, setRecipes] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
-    const [searchQuery, setSearchQuery] = useState('');
 
-    
-
+    // 加载初始数据
     useEffect(() => {
-        fetch('http://localhost:3001/recipes')
-            .then(res => res.json())
-            .then(data => {
-                setRecipes(data);
-                setFilteredRecipes(data);
-            });
+        // fetchRecipes(); // 假设这是一个加载食谱数据的函数
     }, []);
 
-    const handleSearch = (searchTerm) => {
-        if(!searchTerm) {
-            setFilteredRecipes(recipes);
-            setSearchQuery('');
-            return;
-        } else {
-            const filtered = recipes.filter(recipe => 
-                recipe.recipe_name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-            setFilteredRecipes(filtered);
-            setSearchQuery(searchTerm);
-        }
+    const handleCreate = (newRecipe) => {
+        // addRecipe(newRecipe); // 假设这是一个添加食谱的函数
+        setShowCreateModal(false);
+        // 可能还需要更新食谱列表
     };
 
-    const openModal = (recipe) => {
+    const handleViewDetails = (recipe) => {
         setSelectedRecipe(recipe);
-        setIsModalOpen(true);
+        setShowDetailsModal(true);
     };
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setSelectedRecipe(null);
-    }
-
-    const handleDelete = (recipeId) => {
-        const filtered = recipes.filter(recipe => recipe.id !== recipeId);
-        setRecipes(filtered);
-        setFilteredRecipes(filtered);
+    const handleDelete = (recipe) => {
+        // deleteRecipe(recipe); // 假设这是一个删除食谱的函数
+        // 可能还需要更新食谱列表
     };
 
-    const handleAddNew = () => {
-        alert('Add new recipe');
+    const handleSearch = (term) => {
+        setSearchTerm(term);
+        // searchRecipes(term); // 假设这是一个搜索食谱的函数
+    };
 
-    }
+    // 定义表格列
+    const columns = [
+        // 这里定义你的列
+    ];
+
+    // 过滤或排序食谱列表
+    const filteredRecipes = recipes.filter(/* 你的过滤逻辑 */);
 
     return (
-        <div className="recipes-page">
-            <div className="recipes-header">
-                <h1>Recipes</h1>
-                <Button onClick={handleAddNew}>Add New</Button>
+        <div>
+            <div className="top-bar">
+                <Button onClick={() => setShowCreateModal(true)}>Add New</Button>
+                <SearchBar value={searchTerm} onChange={handleSearch} />
             </div>
-            <SearchBar value={searchQuery} onChange={handleSearch} />
-            <Table
-                columns={['Name', 'Description', 'Category', 'Actions']}
-                data={filteredRecipes}
-                onRowClick={openModal}
+            <Table 
+                columns={columns} 
+                data={filteredRecipes} 
+                onViewDetails={handleViewDetails} 
                 onDelete={handleDelete}
             />
-            {isModalOpen && <RecipeDetailsModal recipe={selectedRecipe} onClose={closeModal} />}
+            {showCreateModal && (
+                <CreateRecipeModal 
+                    isOpen={showCreateModal} 
+                    onClose={() => setShowCreateModal(false)} 
+                    onCreate={handleCreate}
+                />
+            )}
+            {showDetailsModal && (
+                <RecipeDetailsModal 
+                    isOpen={showDetailsModal} 
+                    onClose={() => setShowDetailsModal(false)} 
+                    recipe={selectedRecipe}
+                />
+            )}
         </div>
     );
 };
 
 export default Recipes;
-
-

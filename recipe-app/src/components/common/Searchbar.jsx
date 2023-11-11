@@ -16,3 +16,5 @@ const SearchBar = ({ value, onChange }) => {
 }
 
 export default SearchBar;
+
+// Path: recipe-app/src/components/common/Modal.jsx

@@ -1,0 +1,21 @@
+.details-modal {
+    .detail-item {
+        margin-bottom: 1rem;
+
+        strong {
+            font-weight: bold;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 0.5rem;
+        }
+    }
+
+    h2 {
+        margin-bottom: 1rem;
+        text-align: center;
+        color: #333;
+    }
+}

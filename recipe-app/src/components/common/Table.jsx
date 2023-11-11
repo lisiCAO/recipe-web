@@ -1,7 +1,8 @@
 import React from 'react';
+import Button from './Button';
 import './Table.scss';
 
-const Table = ({ columns, data }) => {
+const Table = ({ columns, data,  onViewDetails, onDelete }) => {
     return(
         <table className = "table">
             <thead>
@@ -9,6 +10,7 @@ const Table = ({ columns, data }) => {
                     {columns.map((col, index) => (
                         <th key = {index}>{col.header}</th>
                     ))}
+                    <th>Action</th> {/* 新增一个表头用于操作 */}
                 </tr>
             </thead>
             <tbody>
@@ -17,6 +19,10 @@ const Table = ({ columns, data }) => {
                         {columns.map((col, colIndex) => (
                             <td key = {colIndex}>{col.cell(row)}</td>
                         ))}
+                        <td>
+                            <Button onClick={() => onViewDetails(row)} className = "btn btn-primary">Edit</Button>
+                            <Button onClick={() => onDelete(row)} className = "btn btn-danger">Delete</Button>
+                        </td>
                     </tr>
                 ))}
             </tbody>
@@ -25,3 +31,5 @@ const Table = ({ columns, data }) => {
 };
 
 export default Table;
+
+// Path: recipe-app/src/components/common/Modal.jsx
