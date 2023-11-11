@@ -1,7 +1,7 @@
 import React from 'react';
 import './Searchbar.scss';
 
-const Searchbar = ({ value, onChange }) => {
+const SearchBar = ({ value, onChange }) => {
     return (
         <div className = "search-bar">
             <input
@@ -15,4 +15,4 @@ const Searchbar = ({ value, onChange }) => {
     );
 }
 
-export default Searchbar;
+export default SearchBar;

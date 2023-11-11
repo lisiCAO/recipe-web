@@ -12,7 +12,7 @@ const Table = ({ columns, data }) => {
                 </tr>
             </thead>
             <tbody>
-                {data.map((row, index) => (
+                {data.map((row, rowIndex) => (
                     <tr key = {rowIndex}>
                         {columns.map((col, colIndex) => (
                             <td key = {colIndex}>{col.cell(row)}</td>
