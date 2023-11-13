@@ -7,7 +7,10 @@ import RecipeDetailsModal from '../modals/RecipeDetailsModal';
 import './Recipes.scss';
 
 const Recipes = () => {
-    const [recipes, setRecipes] = useState([]);
+    const [recipes, setRecipes] = useState([
+        { id: 1, name: 'Spaghetti Carbonara', description: 'A classic Italian dish', cookingTime: 30 },
+        { id: 2, name: 'Margherita Pizza', description: 'Simple yet delicious', cookingTime: 50 },
+    ]);
     const [searchTerm, setSearchTerm] = useState('');
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -41,11 +44,17 @@ const Recipes = () => {
 
     // 定义表格列
     const columns = [
-        // 这里定义你的列
+        { header: 'Name', cell: (row) => row.name },
+        { header: 'Description', cell: (row) => row.description },
+        { header: 'Cooking Time', cell: (row) => `${row.cookingTime} mins` },
     ];
 
     // 过滤或排序食谱列表
-    const filteredRecipes = recipes.filter(/* 你的过滤逻辑 */);
+    const filteredRecipes = recipes.filter(recipe =>
+
+        recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
+
+    );
 
     return (
         <div>
@@ -78,3 +87,5 @@ const Recipes = () => {
 };
 
 export default Recipes;
+
+// Path: recipe-app/src/components/pages/Recipes.jsx
