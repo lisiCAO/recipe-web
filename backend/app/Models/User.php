@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Hash;
  * @property string $last_name
  * @property string $email
  * @property string $password
- * @property string $created_date
- * @property string|null $last_login_date
  * @property string|null $profile_image_path
  * @property string|null $category
  * @property \Illuminate\Support\Carbon|null $created_at

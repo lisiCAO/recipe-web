@@ -31,6 +31,8 @@ class RecipeApiTest extends TestCase
 
     public function testGetRecipes()
     {
+
+
         $response = $this->getJson('/api/recipes');
 
         $response->assertStatus(200)
@@ -38,6 +40,42 @@ class RecipeApiTest extends TestCase
                 // 对返回的 JSON 结构进行断言
             ]);
     }
+    public function testUpdateRecipe()
+    {
 
+        $user = User::factory()->create();
+        $recipe = Recipe::factory()->create();
+
+        $updatedData = [
+
+            'recipe_name' => 'Updated Recipe Name',
+            'user_id' => $user->user_id,
+            // 其他更新字段...
+        ];
+
+        $response = $this->putJson('/api/recipes/'. $recipe->recipe_id, $updatedData);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'message' => 'Recipe updated successfully',
+                // 其他断言...
+            ]);
+
+        $this->assertDatabaseHas('recipes', $updatedData);
+    }
+
+    public function testDeleteRecipe()
+    {
+        $recipe = Recipe::factory()->create();
+
+        $response = $this->deleteJson('/api/recipes/' . $recipe->recipe_id);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'message' => 'Recipe deleted successfully',
+            ]);
+
+        $this->assertDatabaseMissing('recipes', ['id' => $recipe->id]);
+    }
 
 }
