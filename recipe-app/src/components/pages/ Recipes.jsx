@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../common/Button';
-import Table from '../common/Table';
-import SearchBar from '../common/Searchbar';
+import Table from '../admin/Table';
+import SearchBar from '../admin/Searchbar';
 import CreateRecipeModal from '../modals/CreateRecipeModal';
 import RecipeDetailsModal from '../modals/RecipeDetailsModal';
 import './Recipes.scss';
