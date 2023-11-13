@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('recipe_id');
             $table->text('comment');
             $table->decimal('rating', 10, 2);
-            $table->timestamp('created_date')->useCurrent();
             $table->unsignedBigInteger('user_id');
+            $table->timestamps();
 
             // 添加外键约束
             $table->foreign('recipe_id')->references('recipe_id')->on('recipes')->onDelete('cascade');

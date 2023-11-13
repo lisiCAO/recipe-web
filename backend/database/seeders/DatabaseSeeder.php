@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -41,6 +42,8 @@ class DatabaseSeeder extends Seeder
                 'password' => '$2y$10$tPuc1Ky6wRvokSCIA9Kn7usdBBuAUqPrdiDAiWS6az08HzZOkfCyW',
                 'profile_image_path' => '/path/to/image1.jpg',
                 'category' => 'admin',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ],
             [
                 'first_name' => 'Bob',
@@ -49,6 +52,9 @@ class DatabaseSeeder extends Seeder
                 'password' => '$2y$10$Ak00HlPFxl9joK4Mcb8G9.wzkRZK256VprgEPNbIsO3yQOPTR/UZO',
                 'profile_image_path' => '/path/to/image2.jpg',
                 'category' => 'user',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+
             ],
             [
                 'first_name' => 'Charlie',
@@ -56,6 +62,9 @@ class DatabaseSeeder extends Seeder
                 'email' => 'charlie@email.com',
                 'password' => '$2y$10$tUhio9IUZ.bmWY1OLRfLiO6gV5fo0NBhThhav8vFfKCrn91iXz2rO',
                 'profile_image_path' => '/path/to/image3.jpg',
+                'category' => 'user',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ],
             // Add more user records as needed
         ]);
@@ -66,16 +75,22 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Tomato',
                 'img_path' => '/path/to/tomato.jpg',
                 'description' => 'A red juicy fruit used in cooking.',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ],
             [
                 'name' => 'Potato',
                 'img_path' => '/path/to/potato.jpg',
                 'description' => 'A starchy tuber, versatile in cooking.',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ],
             [
                 'name' => 'Onion',
                 'img_path' => '/path/to/onion.jpg',
                 'description' => 'A bulbous plant used to add flavor.',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ],
             // Add more ingredient records as needed
         ]);
@@ -89,6 +104,8 @@ class DatabaseSeeder extends Seeder
                 'step_instruction' => 'Step-by-step instructions for Tomato Soup.',
                 'description' => 'A delicious tomato soup.',
                 'recipe_image_path' => '/path/to/tomato_soup.jpg',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ],
             [
                 'recipe_name' => 'Potato Salad',
@@ -97,6 +114,8 @@ class DatabaseSeeder extends Seeder
                 'step_instruction' => 'Step-by-step instructions for Potato Salad.',
                 'description' => 'A creamy potato salad.',
                 'recipe_image_path' => '/path/to/potato_salad.jpg',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ],
             [
                 'recipe_name' => 'Onion Pie',
@@ -105,6 +124,8 @@ class DatabaseSeeder extends Seeder
                 'step_instruction' => 'Step-by-step instructions for Onion Pie.',
                 'description' => 'A savory onion pie.',
                 'recipe_image_path' => '/path/to/onion_pie.jpg',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ],
             // Add more recipe records as needed
         ]);
@@ -118,18 +139,24 @@ class DatabaseSeeder extends Seeder
                 'ingredient_id' => 1,
                 'quantity' => '2 cups',
                 'measurement_unit' => 'Cup',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ],
             [
                 'recipe_id' => 1,
                 'ingredient_id' => 2,
                 'quantity' => '1 cup',
                 'measurement_unit' => 'Cup',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ],
             [
                 'recipe_id' => 1,
                 'ingredient_id' => 3,
                 'quantity' => '0.5 cup',
                 'measurement_unit' => 'Cup',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ],
             // Add more recipe_ingredients records as needed
         ]);
@@ -142,18 +169,21 @@ class DatabaseSeeder extends Seeder
                 'comment' => 'Great taste!',
                 'rating' => 4.5,
                 'user_id' => 1,
+                'created_at' => Carbon::now()
             ],
             [
                 'recipe_id' => 1,
                 'comment' => 'Loved it, but a bit salty.',
                 'rating' => 4,
                 'user_id' => 2,
+                'created_at' => Carbon::now(),
             ],
             [
                 'recipe_id' => 1,
                 'comment' => 'Perfect for dinner.',
                 'rating' => 5,
                 'user_id' => 3,
+                'created_at' => Carbon::now()
             ],
             // Add more review records as needed
         ]);

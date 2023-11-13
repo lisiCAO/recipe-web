@@ -40,7 +40,7 @@ SET FOREIGN_KEY_CHECKS=1;
 -- Example records for 'users' table
 INSERT INTO `users` (`first_name`, `last_name`, `email`, `password`, `profile_image_path`, `category`) VALUES ('Alice','M', 'alice@email.com', '$2y$10$tPuc1Ky6wRvokSCIA9Kn7usdBBuAUqPrdiDAiWS6az08HzZOkfCyW', '/path/to/image1.jpg', 'admin');
 INSERT INTO `users` (`first_name`, `last_name`, `email`, `password`, `profile_image_path`, `category`) VALUES ('Bob','T', 'bob@email.com', '$2y$10$Ak00HlPFxl9joK4Mcb8G9.wzkRZK256VprgEPNbIsO3yQOPTR/UZO', '/path/to/image2.jpg', 'user');
-INSERT INTO `users` (`first_name`, `last_name`, `email`, `password`, `profile_image_path`) VALUES ('Charlie','C', 'charlie@email.com', '$2y$10$tUhio9IUZ.bmWY1OLRfLiO6gV5fo0NBhThhav8vFfKCrn91iXz2rO', '/path/to/image3.jpg');
+INSERT INTO `users` (`first_name`, `last_name`, `email`, `password`, `profile_image_path`, 'category') VALUES ('Charlie','C', 'charlie@email.com', '$2y$10$tUhio9IUZ.bmWY1OLRfLiO6gV5fo0NBhThhav8vFfKCrn91iXz2rO', '/path/to/image3.jpg', 'user');
 
 -- Example records for 'ingredients' table
 INSERT INTO `ingredients` (`name`, `img_path`, `description`) VALUES
