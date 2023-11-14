@@ -17,9 +17,9 @@ class RecipeDetailResource extends JsonResource
         return [
             'id' => $this->recipe_id,
             'name' => $this->recipe_name,
+            'imagePath' => $this->recipe_image_path,
             'cookingTime' => $this->cooking_time,
             'instructions' => $this->step_instruction,
-            'imagePath' => $this->recipe_image_path,
             'createdAt' => $this->created_at,
             'createdBy' => $this->user->last_name,
         ];

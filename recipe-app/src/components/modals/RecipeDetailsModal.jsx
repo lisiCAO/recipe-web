@@ -6,7 +6,7 @@ const RecipeDetailsModal = ({ isOpen, onClose, recipe }) => {
         <DetailsModal 
             isOpen = {isOpen}
             onClose = {onClose}
-            data = {recipe}
+            data = {recipe.data}
             type = 'recipe'
             className="recipe-details-modal"
         />
