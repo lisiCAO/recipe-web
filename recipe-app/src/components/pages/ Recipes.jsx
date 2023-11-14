@@ -4,13 +4,11 @@ import Table from '../admin/Table';
 import SearchBar from '../admin/Searchbar';
 import CreateRecipeModal from '../modals/CreateRecipeModal';
 import RecipeDetailsModal from '../modals/RecipeDetailsModal';
+import ApiService from '../../services/ApiService';
 import './Recipes.scss';
 
 const Recipes = () => {
-    const [recipes, setRecipes] = useState([
-        { id: 1, name: 'Spaghetti Carbonara', description: 'A classic Italian dish', cookingTime: 30 },
-        { id: 2, name: 'Margherita Pizza', description: 'Simple yet delicious', cookingTime: 50 },
-    ]);
+    const [recipes, setRecipes] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -18,23 +16,44 @@ const Recipes = () => {
 
     // 加载初始数据
     useEffect(() => {
-        // fetchRecipes(); // 假设这是一个加载食谱数据的函数
+        
+
+        ApiService.fetchRecipes()
+        .then(response => {
+            if (Array.isArray(response.data)) {
+                setRecipes(response.data);
+            } else {
+                console.error('Unable to fetch recipes.');
+                return [];
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            // 错误处理逻辑
+        });
     }, []);
 
     const handleCreate = (newRecipe) => {
-        // addRecipe(newRecipe); // 假设这是一个添加食谱的函数
-        setShowCreateModal(false);
-        // 可能还需要更新食谱列表
+        ApiService.createRecipe(newRecipe).then(addedRecipe => {
+            setRecipes([...recipes, addedRecipe]);
+            setShowCreateModal(false);
+        });
     };
 
     const handleViewDetails = (recipe) => {
-        setSelectedRecipe(recipe);
-        setShowDetailsModal(true);
+        const recipeId = recipe.id;
+            ApiService.fetchRecipe(recipeId) // 假设这是一个获取单个食谱详细信息的函数
+              .then(data => {
+                  setSelectedRecipe(data);
+                  setShowDetailsModal(true);
+              })
+              .catch(error => console.error(error));   
     };
 
     const handleDelete = (recipe) => {
-        // deleteRecipe(recipe); // 假设这是一个删除食谱的函数
-        // 可能还需要更新食谱列表
+        ApiService.deleteRecipe(recipe.id).then(() => {
+            setRecipes(recipes.filter(r => r.id !== recipe.id));
+        });
     };
 
     const handleSearch = (term) => {
@@ -45,13 +64,14 @@ const Recipes = () => {
     // 定义表格列
     const columns = [
         { header: 'Name', cell: (row) => row.name },
-        { header: 'Description', cell: (row) => row.description },
-        { header: 'Cooking Time', cell: (row) => `${row.cookingTime} mins` },
+        { header: 'Created At', cell: (row) => row.createdAt },
+        { header: 'Updated At', cell: (row) => row.updatedAt },
+        { header: 'Created By', cell: (row) => row.createdBy },
     ];
+    
 
     // 过滤或排序食谱列表
     const filteredRecipes = recipes.filter(recipe =>
-
         recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
 
     );

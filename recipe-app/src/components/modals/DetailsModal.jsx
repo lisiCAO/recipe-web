@@ -4,11 +4,10 @@ import './DetailsModal.scss';
 
 const displayConfig = {
     recipe: {
-        title: 'recipe_name',
-        image: 'recipe_image_path',
-        description: 'ingredient_description',
-        instructions: 'step_instruction',
-        ignoreFields: ['recipe_id', 'user_id']
+        title: 'name',              // 标题字段
+        image: 'imagePath',         // 图片字段
+        instructions: 'instructions', // 指令字段
+        ignoreFields: ['id', 'createdBy', 'createdAt'] // 忽略的字段
     },
     ingredient: {
         title: 'ingredient_name',
@@ -34,25 +33,35 @@ const DetailsModal =  ({ isOpen, onClose, data, type}) => {
 
     const renderDetails = () => {
         return Object.entries(data).map(([key, value]) => {
-            if(config.ignoreFields.includes(key)) return null;
-
-            if(key === config.title) {
-                return (
-                    <h2 key = {key}>{value}</h2>
-                )
+            if (config.ignoreFields.includes(key)) return null;
+    
+            if (key === config.title) {
+                return <h2 key={key}>{value}</h2>;
             }
-
-            if(key === config.image) {
+    
+            if (key === config.image) {
                 return (
-                    <div key = {key} className = "detail-item">
-                        <strong>{key.replace(/_/g, ' ')}: </strong>
-                        <img src = {value} alt = {data[config.image]} />
+                    <div key={key} className="detail-item">
+                    {value ? (
+                        <img src={value} alt={data[config.title]} />
+                    ) : (
+                        <img src="/path/to/default-image.jpg" alt="Default" />
+                    )}
+                </div>
+                );
+            }
+    
+            if (key === config.instructions) {
+                return (
+                    <div key={key} className="detail-item">
+                        <strong>Instructions: </strong>
+                        <p>{value}</p>
                     </div>
-                )
+                );
             }
-
+    
             return (
-                <div key = {key} className = "detail-item">
+                <div key={key} className="detail-item">
                     <strong>{key.replace(/_/g, ' ')}: </strong>
                     <span>{value}</span>
                 </div>

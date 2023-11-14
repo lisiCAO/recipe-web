@@ -43,6 +43,11 @@ class Review extends Model
         'user_id'
     ];
 
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
+
     public function recipe(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Recipe::class, 'recipe_id');

@@ -41,6 +41,11 @@ class Ingredient extends Model
         'description'
     ];
 
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
+
     public function recipes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
     return $this->belongsToMany(Recipe::class, 'recipe_ingredients', 'ingredient_id', 'recipe_id')

@@ -67,7 +67,6 @@ class User extends Model
         return $date->format('Y-m-d H:i:s');
     }
 
-
     //密码修改器： 在保存到数据库前自动加密
     public function setPasswordAttribute($value): void
     {
