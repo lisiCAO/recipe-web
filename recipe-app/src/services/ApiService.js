@@ -77,7 +77,6 @@ const ApiService = {
   async fetchRecipe(recipeId) {
     try {
       const response = await fetch(`${API_BASE_URL}/recipes/${recipeId}`);
-      console.log(response);
       return handleResponse(response);
     } catch (error) {
       return handleError(error);
