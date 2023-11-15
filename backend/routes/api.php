@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\IngredientController;
 use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\FileUploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,3 +33,6 @@ Route::apiResource('ingredients', IngredientController::class);
 
 // Review 相关的 API
 Route::apiResource('reviews', ReviewController::class);
+
+// 上传图片
+Route::post('/upload', FileUploadController::class . '@upload');

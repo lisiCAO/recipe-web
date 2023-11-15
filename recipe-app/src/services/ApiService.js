@@ -99,23 +99,13 @@ const ApiService = {
    
   // 更新食谱信息
   async updateRecipe(recipeId, recipeData) {
-    const formData = new FormData();
-    formData.append('_method', 'PUT');
-
-    for (const key in recipeData) {
-        formData.append(key, recipeData[key]);
-    }
-
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-  }
 
     try {
       const response = await fetch(`${API_BASE_URL}/recipes/${recipeId}`, {
-        method: 'POST',
-        body: formData
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: recipeData
       });
-      console.log(response);
       return handleResponse(response);
     } catch (error) {
       return handleError(error);
@@ -133,6 +123,19 @@ const ApiService = {
       return handleError(error);
     }
   },
+
+  // 上传文件
+  async uploadFile(formData) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/upload`, {
+            method: 'POST',
+            body: formData
+        });
+        return handleResponse(response);
+    } catch (error) {
+        return handleError(error);
+    }
+}
 
   // 为其他 API 路由添加类似的方法（如 recipes, ingredients, reviews）
 
