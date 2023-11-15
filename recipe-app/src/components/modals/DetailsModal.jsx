@@ -43,7 +43,6 @@ const DetailsModal =  ({ isOpen, onClose, data, type, onEdit }) => {
             }
     
             if (key === config.image) {
-                console.log('image value', value);
                 return (
                     <div key={key} className="detail-item">
                     {value ? (
