@@ -139,11 +139,20 @@ const ApiService = {
 };
 
 const handleResponse = async (response) => {
-    if (response.ok && response.headers.get('Content-Type').includes('application/json')) {
-        return await response.json();
-    } else {
-        // 处理非 JSON 响应或错误
-    }
+    if (response.ok) {
+      const contentType = response.headers.get('Content-Type');
+      if (contentType && contentType.includes('application/json')) {
+          return await response.json();
+      } else {
+          // 处理非 JSON 响应
+          const text = await response.text();
+          throw new Error(`Non-JSON response: ${text}`);
+      }
+  } else {
+      // 处理 HTTP 错误状态
+      const errorText = await response.text();
+      throw new Error(`HTTP error ${response.status}: ${errorText}`);
+  }
 }
 
 function handleError(error) {
