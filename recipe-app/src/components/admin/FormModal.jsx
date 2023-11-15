@@ -23,6 +23,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
             });
             setFormData(newFormData);
         } else {
+            console.log('Resetting form data:' , defaultFormData);
             setFormData(defaultFormData);
         }
     }, [initialData, mode, config]);
@@ -52,6 +53,9 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
 
     const renderFormFields = () => {
         return config.map((field) => {
+            if (field.name === 'recipe_id') {
+                return null;
+            }
             switch (field.type) {
                 case 'text':
                     return (

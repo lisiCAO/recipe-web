@@ -36,10 +36,13 @@ const Recipes = () => {
     
 
     const handleCreate = (newRecipe) => {
-        ApiService.createRecipe(newRecipe).then(addedRecipe => {
-            setRecipes([...recipes, addedRecipe]);
+        console.log('Creating new recipe:', newRecipe);
+        ApiService.createRecipe(newRecipe)
+        .then(addedRecipe => {
+            setRecipes([...recipes, addedRecipe.recipe]);
             setShowCreateModal(false);
-        });
+        })
+        .catch(error => console.error(error)); 
     };
 
     const handleViewDetails = (recipe) => {

@@ -30,12 +30,18 @@ class RecipeController extends Controller
         // 数据验证
         $validatedData = $request->validate([
             'recipe_name' => 'required|string|max:100',
-            'user_id' => 'required|exists:users,user_id',
+            // 'user_id' => 'required|exists:users,user_id',
             'cooking_time' => 'nullable|integer',
             'step_instruction' => 'nullable|string',
             'description' => 'nullable|string',
             'recipe_image_path' => 'nullable|string',
             ]);
+
+            // Hardcode the user_id here
+            $validatedData['user_id'] = 1; // Replace 1 with the desired user_id
+            if (empty($validatedData['recipe_id'])) {
+                $validatedData['recipe_id'] = uniqid(); // Or use another method to generate a unique ID
+            }
 
         $recipe = new Recipe($validatedData);
 

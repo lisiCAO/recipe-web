@@ -89,7 +89,7 @@ const ApiService = {
       const response = await fetch(`${API_BASE_URL}/recipes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(recipeData)
+        body: recipeData
       });
       return handleResponse(response);
     } catch (error) {

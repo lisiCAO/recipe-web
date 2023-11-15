@@ -16,6 +16,7 @@ const CreateRecipeModal = ({ isOpen, onClose, onCreate }) => {
     );
 };
 
+
 export default CreateRecipeModal;
 
 
