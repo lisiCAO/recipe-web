@@ -3,6 +3,7 @@ import Button from '../common/Button';
 import Modal from '../common/Modal';
 import './DetailsModal.scss';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const displayConfig = {
     recipe: {
@@ -42,10 +43,11 @@ const DetailsModal =  ({ isOpen, onClose, data, type, onEdit }) => {
             }
     
             if (key === config.image) {
+                console.log('image value', value);
                 return (
                     <div key={key} className="detail-item">
                     {value ? (
-                        <img src={value} alt={data[config.title]} />
+                        <img src={`http://localhost:8000${value}`} alt={data[config.title]} />
                     ) : (
                         <img src="/path/to/default-image.jpg" alt="Default" />
                     )}
@@ -71,7 +73,7 @@ const DetailsModal =  ({ isOpen, onClose, data, type, onEdit }) => {
         });
     };
     return (
-        <Modal isOpen = {isOpen} onClose = {onClose}>
+        <Modal isOpen = {isOpen} onClose = {onClose} className="details-modal">
             {renderDetails()}
             {onEdit && (
                 <Button onClick={() => onEdit(data)} className="edit-button"variant="edit">

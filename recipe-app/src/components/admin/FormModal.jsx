@@ -4,6 +4,7 @@ import Button from '../common/Button';
 import FormInput from '../common/FormInput';
 import FormTextArea from '../common/FormTextArea';
 import FormFileInput from '../common/FormFileInput';
+import ApiService from '../../services/ApiService';
 import './FormModal.scss';
 
 const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => {
@@ -14,7 +15,6 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
     }, {});
 
     const [formData, setFormData] = useState(defaultFormData);
-
     useEffect(() => {
         if (mode === 'edit' && initialData) {
             const newFormData = { ...defaultFormData };
@@ -32,9 +32,23 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
         setFormData({ ...formData, [e.target.name]: e.target.value });
     }
 
-    const handleFileChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.files[0] });
-    }
+    const handleFileUpload = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        try{
+            const response = await ApiService.uploadFile(formData);
+            if(response.url){
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    recipe_image_path: response.url
+                }));
+            } else {
+                console.error('File upload response does not contain a URL.');
+            }
+        } catch (error) {
+            console.error('File upload error:', error);
+        }
+        };
 
     const renderFormFields = () => {
         return config.map((field) => {
@@ -79,7 +93,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
                             {...field}
                             name={field.name}
                             label={field.label}
-                            onChange={handleFileChange}
+                            onFileUpload={handleFileUpload}
                         />
                     );
                 default:
@@ -92,7 +106,9 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
         <Modal isOpen={isOpen} onClose={onClose}>
             <form onSubmit={(e) => {
                 e.preventDefault();
-                onSubmit(formData);
+                console.log('Form data:', formData)
+                const jsonFormData = JSON.stringify(formData);
+                onSubmit(jsonFormData);
                 onClose();
             }}>
                 {renderFormFields()}

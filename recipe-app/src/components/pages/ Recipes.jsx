@@ -59,7 +59,6 @@ const Recipes = () => {
 
     const saveEditedRecipe = (updatedRecipeData) => {
 
-        
         ApiService.updateRecipe(editingRecipe.id, updatedRecipeData)
             .then(updatedRecipe => {
                 // Update the recipes list with the updated recipe

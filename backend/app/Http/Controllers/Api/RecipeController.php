@@ -34,16 +34,14 @@ class RecipeController extends Controller
             'cooking_time' => 'nullable|integer',
             'step_instruction' => 'nullable|string',
             'description' => 'nullable|string',
-            'recipe_image_path' => 'nullable|image|max:2048',
+            'recipe_image_path' => 'nullable|string',
             ]);
 
         $recipe = new Recipe($validatedData);
 
-        if($request->hasFile('recipe_image_path') && $request->file('recipe_image_path')->isValid()){
-            // 存储图片并获取存储路径
-            $path = $request->recipe_image_path->store('public/recipes');
-            $recipe->recipe_image_path = Storage::url($path);
-        }
+        // if (isset($validatedData['recipe_image_path']) && $recipe->recipe_image_path != $validatedData['recipe_image_path']) {
+        //     Storage::delete($recipe->recipe_image_path); // 删除旧图片
+        // }
 
         $recipe->save(); //保存食谱
 
@@ -79,20 +77,11 @@ class RecipeController extends Controller
             'cooking_time' => 'nullable|integer',
             'step_instruction' => 'nullable|string',
             'description' => 'nullable|string',
-            'recipe_image_path' => 'nullable|image|max:2048',
+            'recipe_image_path' => 'nullable|string',
         ]);
-
-        // 处理图片上传，如有
-        if ($request->hasFile('recipe_image_path') && $request->file('recipe_image_path')->isValid()) {
-            // 指定存储路径，例如 'recipes/2023/05/01'
-            $storagePath = 'recipes/' . date('Y/m/d');
-        
-            // 存储图片并获取存储路径
-            $path = $request->file('recipe_image_path')->store($storagePath, 'public');
-        
-            // 获取图片的公共访问URL
-            $validatedData['recipe_image_path'] = Storage::disk('public')->url($path);
-        }
+        // if (isset($validatedData['recipe_image_path']) && $recipe->recipe_image_path != $validatedData['recipe_image_path']) {
+        //     Storage::delete($recipe->recipe_image_path); // 删除旧图片
+        // }
 
         // 更新模型
         $recipe->update($validatedData);
