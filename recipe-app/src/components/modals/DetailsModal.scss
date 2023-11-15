@@ -1,4 +1,4 @@
-.details-modal {
+
     .modal-body {
         padding: 20px;
         display: flex;
@@ -16,8 +16,8 @@
             }
 
             img {
-                max-width: 100%; // Ensures image does not exceed the container width
-                height: auto; // Maintains the aspect ratio of the image
+                max-width: 200px; // 设置图片的宽度
+                height: auto; // 设置图片的高度
                 border-radius: 4px;
                 margin-top: 10px;
             }
@@ -49,4 +49,3 @@
             }
         }
     }
-}
