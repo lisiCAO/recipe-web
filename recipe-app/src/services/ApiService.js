@@ -99,12 +99,23 @@ const ApiService = {
    
   // 更新食谱信息
   async updateRecipe(recipeId, recipeData) {
+    const formData = new FormData();
+    formData.append('_method', 'PUT');
+
+    for (const key in recipeData) {
+        formData.append(key, recipeData[key]);
+    }
+
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+  }
+
     try {
       const response = await fetch(`${API_BASE_URL}/recipes/${recipeId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(recipeData)
+        method: 'POST',
+        body: formData
       });
+      console.log(response);
       return handleResponse(response);
     } catch (error) {
       return handleError(error);
@@ -127,9 +138,12 @@ const ApiService = {
 
 };
 
-function handleResponse(response) {
-  if (!response.ok) throw new Error(response.statusText);
-  return response.json();
+const handleResponse = async (response) => {
+    if (response.ok && response.headers.get('Content-Type').includes('application/json')) {
+        return await response.json();
+    } else {
+        // 处理非 JSON 响应或错误
+    }
 }
 
 function handleError(error) {

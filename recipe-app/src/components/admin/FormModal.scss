@@ -1,4 +1,4 @@
-.create-modal {
+.form-modal {
     .modal-body {
         padding: 20px;
 
@@ -18,6 +18,7 @@
 
             input[type="text"],
             input[type="number"],
+            input[type="file"],
             textarea {
                 padding: 8px;
                 border: 1px solid #ccc;
@@ -27,7 +28,6 @@
 
             input[type="file"] {
                 border: none;
-                padding: 8px;
             }
 
             textarea {
@@ -35,9 +35,9 @@
                 height: 100px;
             }
 
-            .submit-button {
+            .button {
                 margin-top: 20px;
-                align-self: center; // This centers the button in the form
+                align-self: center; // Centers the button in the form
                 padding: 10px 20px;
                 background-color: #007bff;
                 color: white;
@@ -53,4 +53,3 @@
         }
     }
 }
-

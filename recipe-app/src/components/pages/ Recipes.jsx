@@ -3,6 +3,7 @@ import Button from '../common/Button';
 import Table from '../admin/Table';
 import SearchBar from '../admin/Searchbar';
 import CreateRecipeModal from '../modals/CreateRecipeModal';
+import EditRecipeModal from '../modals/EditReipeModal';
 import RecipeDetailsModal from '../modals/RecipeDetailsModal';
 import ApiService from '../../services/ApiService';
 import './Recipes.scss';
@@ -13,11 +14,11 @@ const Recipes = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
+    const [editingRecipe, setEditingRecipe] = useState(null);
+
 
     // 加载初始数据
     useEffect(() => {
-        
-
         ApiService.fetchRecipes()
         .then(response => {
             if (Array.isArray(response.data)) {
@@ -32,6 +33,7 @@ const Recipes = () => {
             // 错误处理逻辑
         });
     }, []);
+    
 
     const handleCreate = (newRecipe) => {
         ApiService.createRecipe(newRecipe).then(addedRecipe => {
@@ -50,11 +52,37 @@ const Recipes = () => {
               .catch(error => console.error(error));   
     };
 
+    const handleEditRecipe = (recipe) => {
+        setEditingRecipe(recipe);
+        // Open the edit modal here
+    };
+
+    const saveEditedRecipe = (updatedRecipeData) => {
+
+        
+        ApiService.updateRecipe(editingRecipe.id, updatedRecipeData)
+            .then(updatedRecipe => {
+                // Update the recipes list with the updated recipe
+                setRecipes(recipes.map(recipe => 
+                    recipe.id === updatedRecipe.id ? updatedRecipe : recipe
+                ));
+                setEditingRecipe(null); // Reset the editing state to close the modal
+                setShowDetailsModal(false); // Close the details modal
+            })
+            .catch(error => {
+                console.error('Error updating recipe:', error);
+                // Handle error (e.g., show a notification to the user)
+            });
+    };
+    
+    
+
     const handleDelete = (recipe) => {
         ApiService.deleteRecipe(recipe.id).then(() => {
             setRecipes(recipes.filter(r => r.id !== recipe.id));
         });
     };
+    
 
     const handleSearch = (term) => {
         setSearchTerm(term);
@@ -100,7 +128,16 @@ const Recipes = () => {
                     isOpen={showDetailsModal} 
                     onClose={() => setShowDetailsModal(false)} 
                     recipe={selectedRecipe}
+                    onEdit={handleEditRecipe}
                 />
+            )}
+            {editingRecipe && (
+                <EditRecipeModal
+                    isOpen={!!editingRecipe}
+                    onClose={() => setEditingRecipe(null)}
+                    onEdit={saveEditedRecipe}
+                    recipeData={editingRecipe}
+                /> 
             )}
         </div>
     );

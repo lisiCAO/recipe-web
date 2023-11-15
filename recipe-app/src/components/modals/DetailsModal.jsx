@@ -1,6 +1,8 @@
 import React from 'react';
+import Button from '../common/Button';
 import Modal from '../common/Modal';
 import './DetailsModal.scss';
+
 
 const displayConfig = {
     recipe: {
@@ -26,7 +28,7 @@ const displayConfig = {
     }
 };
 
-const DetailsModal =  ({ isOpen, onClose, data, type}) => {
+const DetailsModal =  ({ isOpen, onClose, data, type, onEdit }) => {
     if(!data || !isOpen) return null;
 
     const config = displayConfig[type];
@@ -62,7 +64,7 @@ const DetailsModal =  ({ isOpen, onClose, data, type}) => {
     
             return (
                 <div key={key} className="detail-item">
-                    <strong>{key.replace(/_/g, ' ')}: </strong>
+                    <strong>{camelCaseToWords(key)}: </strong>
                     <span>{value}</span>
                 </div>
             );
@@ -71,8 +73,19 @@ const DetailsModal =  ({ isOpen, onClose, data, type}) => {
     return (
         <Modal isOpen = {isOpen} onClose = {onClose}>
             {renderDetails()}
+            {onEdit && (
+                <Button onClick={() => onEdit(data)} className="edit-button"variant="edit">
+                    Edit
+                </Button>
+            )}
         </Modal>
     );
 };
 
+function camelCaseToWords(str) {
+    return str.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase(); })
+}
+
 export default DetailsModal;
+
+// Path: recipe-app/src/components/modals/DetailsModal.jsx

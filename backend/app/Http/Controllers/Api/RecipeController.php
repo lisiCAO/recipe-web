@@ -67,7 +67,7 @@ class RecipeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): JsonResponse
+    public function update(Request $request, string $id)
     {
         // 查找模型实例
         $recipe = Recipe::findOrFail($id);
@@ -75,7 +75,7 @@ class RecipeController extends Controller
         // 数据验证
         $validatedData = $request->validate([
             'recipe_name' => 'required|string|max:100',
-            'user_id' => 'required|exists:users,user_id',
+            // 'user_id' => 'required|exists:users,user_id',
             'cooking_time' => 'nullable|integer',
             'step_instruction' => 'nullable|string',
             'description' => 'nullable|string',
@@ -83,9 +83,15 @@ class RecipeController extends Controller
         ]);
 
         // 处理图片上传，如有
-        if($request->hasFile('recipe_image_path')&& $request->file('recipe_image_path')->isValid()){
-            $path = $request->recipe_image_path->store('public/recipes');
-            $validatedData['recipe_image_path'] = Storage::url($path);
+        if ($request->hasFile('recipe_image_path') && $request->file('recipe_image_path')->isValid()) {
+            // 指定存储路径，例如 'recipes/2023/05/01'
+            $storagePath = 'recipes/' . date('Y/m/d');
+        
+            // 存储图片并获取存储路径
+            $path = $request->file('recipe_image_path')->store($storagePath, 'public');
+        
+            // 获取图片的公共访问URL
+            $validatedData['recipe_image_path'] = Storage::disk('public')->url($path);
         }
 
         // 更新模型

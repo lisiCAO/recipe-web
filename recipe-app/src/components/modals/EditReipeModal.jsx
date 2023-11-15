@@ -1,22 +1,21 @@
 import React from 'react';
 import FormModal from '../admin/FormModal.jsx';
 import recipeConfig from './recipeConfig.js';
-import './CreateRecipeModal.scss';
 
-
-const CreateRecipeModal = ({ isOpen, onClose, onCreate }) => {
+const EditRecipeModal = ({ isOpen, onClose, onEdit, recipeData }) => {
     return (
         <FormModal
             isOpen={isOpen}
             onClose={onClose}
-            onSubmit={onCreate}
+            onSubmit={onEdit}
             config={recipeConfig}
-            mode="create"
+            initialData={recipeData}
+            mode="edit"
         />
     );
 };
 
-export default CreateRecipeModal;
+export default EditRecipeModal;
 
 
-// Path: recipe-app/src/components/modals/CreateRecipeModal.jsx
+// Path: recipe-app/src/components/modals/EditRecipeModal.jsx

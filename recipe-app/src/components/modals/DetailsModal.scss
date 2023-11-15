@@ -1,21 +1,52 @@
 .details-modal {
-    .detail-item {
-        margin-bottom: 1rem;
+    .modal-body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
 
-        strong {
-            font-weight: bold;
+        .detail-item {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+
+            strong {
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+            img {
+                max-width: 100%; // Ensures image does not exceed the container width
+                height: auto; // Maintains the aspect ratio of the image
+                border-radius: 4px;
+                margin-top: 10px;
+            }
+
+            p {
+                margin: 0;
+                padding: 0;
+                line-height: 1.5; // Enhances readability
+            }
         }
 
-        img {
-            max-width: 100%;
-            height: auto;
-            margin-top: 0.5rem;
-        }
-    }
+        .edit-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            align-self: flex-end; // Aligns the button to the right
 
-    h2 {
-        margin-bottom: 1rem;
-        text-align: center;
-        color: #333;
+            &:hover {
+                background-color: #0056b3;
+            }
+
+            &:disabled {
+                background-color: #cccccc;
+                cursor: default;
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import DetailsModal from './DetailsModal.jsx';
 
-const RecipeDetailsModal = ({ isOpen, onClose, recipe }) => {
+const RecipeDetailsModal = ({ isOpen, onClose, recipe, onEdit }) => {
     return (
         <DetailsModal 
             isOpen = {isOpen}
@@ -9,10 +9,11 @@ const RecipeDetailsModal = ({ isOpen, onClose, recipe }) => {
             data = {recipe.data}
             type = 'recipe'
             className="recipe-details-modal"
+            onEdit={onEdit}
         />
     );
 };
 
 export default RecipeDetailsModal;
 
-// Path: recipe-app/src/components/common/Modal.jsx
+// Path: recipe-app/src/components/modals/RecipeDetailsModal.jsx
