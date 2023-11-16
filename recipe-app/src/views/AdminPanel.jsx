@@ -19,7 +19,6 @@ const AdminPanel = () => {
 
     return (
         <div className="admin-panel">
-            <Navbar />
             <div className="admin-body">
                 <Sidebar setActiveTab={setActiveTab} />
                 <div className="admin-content">

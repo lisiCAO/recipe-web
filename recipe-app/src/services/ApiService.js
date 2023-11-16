@@ -135,6 +135,34 @@ const ApiService = {
     } catch (error) {
         return handleError(error);
     }
+},
+// 登录用户
+async login(credentials) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials)
+    });
+    const data = await handleResponse(response);
+    // 保存JWT到localStorage
+    localStorage.setItem('token', data.token);
+    return data;
+  } catch (error) {
+    return handleError(error);
+  }
+},
+
+// 获取当前用户信息
+async fetchCurrentUser() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/me`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error);
+  }
 }
 
   // 为其他 API 路由添加类似的方法（如 recipes, ingredients, reviews）
