@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Button from './Button';
+import Button from '../common/Button';
 import './Navbar.scss'; // Your custom styling for the navbar
 
 const Navbar = ({ onLoginClick, isLoggedIn, userEmail, onLogout }) => {

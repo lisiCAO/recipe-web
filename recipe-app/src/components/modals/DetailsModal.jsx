@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../common/Button';
-import Modal from '../common/Modal';
+import Modal from './Modal';
 import './DetailsModal.scss';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
@@ -48,7 +48,7 @@ const DetailsModal =  ({ isOpen, onClose, data, type, onEdit }) => {
                     {value ? (
                         <img src={`http://localhost:8000${value}`} alt={data[config.title]} />
                     ) : (
-                        <img src="/path/to/default-image.jpg" alt="Default" />
+                        <img src="http://localhost:8000/storage/recipes/1700071458_b1.jpg" alt="Default" />
                     )}
                 </div>
                 );

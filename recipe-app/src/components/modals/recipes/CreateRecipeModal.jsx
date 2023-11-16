@@ -1,5 +1,5 @@
 import React from 'react';
-import FormModal from '../admin/FormModal.jsx';
+import FormModal from '../FormModal.jsx';
 import recipeConfig from './recipeConfig.js';
 import './CreateRecipeModal.scss';
 

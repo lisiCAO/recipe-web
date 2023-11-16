@@ -1,5 +1,5 @@
 import React from 'react';
-import DetailsModal from './DetailsModal.jsx';
+import DetailsModal from '../DetailsModal.jsx';
 
 const RecipeDetailsModal = ({ isOpen, onClose, recipe, onEdit }) => {
     return (

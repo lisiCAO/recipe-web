@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../common/Button';
-import Table from '../admin/Table';
-import SearchBar from '../admin/Searchbar';
-import CreateRecipeModal from '../modals/CreateRecipeModal';
-import EditRecipeModal from '../modals/EditReipeModal';
-import RecipeDetailsModal from '../modals/RecipeDetailsModal';
+import Table from '../layout/Table';
+import SearchBar from '../common/Searchbar';
+import CreateRecipeModal from '../modals/recipes/CreateRecipeModal';
+import EditRecipeModal from '../modals/recipes/EditReipeModal';
+import RecipeDetailsModal from '../modals/recipes/RecipeDetailsModal';
 import ApiService from '../../services/ApiService';
 import './Recipes.scss';
 

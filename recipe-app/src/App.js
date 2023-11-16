@@ -1,6 +1,6 @@
 // Desc: This is the main component of the application. It is responsible for rendering the Navbar and the Home or AdminPanel components depending on whether the user is logged in or not.
 import React, { useState, useEffect } from 'react';
-import Navbar from './components/common/Navbar';
+import Navbar from './components/layout/Navbar';
 import LoginModal from './components/modals/LoginModal';
 import Home from './views/Home';
 import AdminPanel from './views/AdminPanel';

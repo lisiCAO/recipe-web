@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Modal from '../common/Modal';
+import Modal from './Modal';
 import Button from '../common/Button';
 import FormInput from '../common/FormInput';
 import FormTextArea from '../common/FormTextArea';
