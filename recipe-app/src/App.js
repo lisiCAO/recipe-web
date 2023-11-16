@@ -1,12 +1,14 @@
 import React from 'react';
-import Recipes from './components/pages/ Recipes.jsx'
+import Home from './views/Home';
+import AdminPanel from './views/AdminPanel';
+
 
 
 function App() {
   return (
     <div>
-      <h1>Recipe App</h1>
-      <Recipes />
+      <AdminPanel />
+
     </div>
   );
 }
