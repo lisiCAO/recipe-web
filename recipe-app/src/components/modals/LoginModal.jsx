@@ -3,12 +3,12 @@ import Modal from './Modal';
 import FormInput from '../common/FormInput';
 import Button from '../common/Button';
 
-
 const LoginModal = ({ onLogin, onClose, error }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     return (
+        <div className="login-modal">
         <Modal isOpen={true} onClose={onClose}>
             <div className="login-content">
                 <h2>Login</h2>
@@ -30,6 +30,7 @@ const LoginModal = ({ onLogin, onClose, error }) => {
                 <Button onClick={() => onLogin(email, password)}>Sign In</Button>
             </div>
         </Modal>
+        </div>
     );
 };
 
