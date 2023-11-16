@@ -40,6 +40,7 @@ function App() {
     setIsLoggedIn(false);
     setCurrentUser(null);
   };
+  
   return (
     <div>
       <Navbar

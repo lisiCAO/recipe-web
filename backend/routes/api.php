@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\RecipeController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\FileUploadController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,3 +37,6 @@ Route::apiResource('reviews', ReviewController::class);
 
 // 上传图片
 Route::post('/upload', FileUploadController::class . '@upload');
+
+// 登录
+Route::post('/login', [LoginController::class, 'login']);
