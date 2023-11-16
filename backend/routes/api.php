@@ -40,3 +40,6 @@ Route::post('/upload', FileUploadController::class . '@upload');
 
 // 登录
 Route::post('/login', [LoginController::class, 'login']);
+
+// 获取当前登录用户
+Route::middleware('auth:sanctum')->get('/me', [UserController::class, 'getCurrentUser']);

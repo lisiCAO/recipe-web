@@ -19,16 +19,22 @@ function App() {
     if (token) {
       // 可以选择调用ApiService.fetchCurrentUser()来获取用户信息
       setIsLoggedIn(true);
-      ApiService.fetchCurrentUser().then(user => setCurrentUser(user));
     }
   }, []);
 
+  const toggleLoginModal = () => {
+    setShowLoginModal(prev => !prev);
+  };
+
   const handleLogin = async (email, password) => {
     try {
-      const data = await ApiService.login({ email, password });
+      const response = await ApiService.login({ email, password });
+      localStorage.setItem('token', response.token); // 保存token
       setIsLoggedIn(true);
       setShowLoginModal(false);
       setLoginError('');
+      setCurrentUser(response.user); 
+      console.log(response.user);
       // 设置用户信息等
     } catch (error) {
       setLoginError(error.message);
@@ -47,6 +53,7 @@ function App() {
         isLoggedIn={isLoggedIn}
         userEmail={currentUser?.email}
         onLogout={handleLogout}
+        onLoginClick={toggleLoginModal}
       />
       {isLoggedIn ? <AdminPanel /> : <Home />}
       {showLoginModal && (
