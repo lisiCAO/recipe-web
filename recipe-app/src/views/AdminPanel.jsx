@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Navbar from '../components/layout/Navbar'; // Import your Navbar component
 import Sidebar from '../components/layout/Sidebar';// Create and import your Sidebar component
 import Recipes from '../components/pages/Recipes'; // Import your Recipes component
 import './AdminPanel.scss'; // Import your SCSS for styling

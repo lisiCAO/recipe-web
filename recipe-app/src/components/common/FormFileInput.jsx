@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from './Button';
 import './FormFileInput.scss';
 
 const FormFileInput = ({ name, label, onFileUpload }) => {

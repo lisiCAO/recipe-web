@@ -3,8 +3,6 @@ import Button from '../common/Button';
 import Modal from './Modal';
 import './DetailsModal.scss';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
-
 const displayConfig = {
     recipe: {
         title: 'name',              // 标题字段

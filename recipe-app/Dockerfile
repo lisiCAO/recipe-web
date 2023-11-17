@@ -1,15 +1,20 @@
-# Stage 1 - Build the React application
-FROM node:16 as build
+# 使用官方 Node.js 镜像作为基础镜像
+FROM node:20.9.0
 
+# 设置工作目录
 WORKDIR /app
-COPY ./recipe-app/package.json ./recipe-app/yarn.lock* ./
-RUN yarn install --frozen-lockfile
-COPY ./recipe-app ./
-RUN yarn build
 
-# Stage 2 - Serve the React application
-FROM nginx:stable-alpine
-COPY --from=build /app/build /usr/share/nginx/html
-RUN chmod -R a+r /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# 复制 package.json 和 package-lock.json 文件
+COPY package*.json ./
+
+# 安装项目依赖
+RUN npm install
+
+# 复制整个前端项目到容器内
+COPY . .
+
+# 暴露端口（如果需要）
+EXPOSE 3000
+
+# 运行前端应用
+CMD [ "npm", "start" ]

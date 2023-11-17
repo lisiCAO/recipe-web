@@ -15,6 +15,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
     }, {});
 
     const [formData, setFormData] = useState(defaultFormData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (mode === 'edit' && initialData) {
             const newFormData = { ...defaultFormData };
@@ -26,7 +27,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
             console.log('Resetting form data:' , defaultFormData);
             setFormData(defaultFormData);
         }
-    }, [initialData, mode, config]);
+    }, [initialData, mode, config, defaultFormData]);
 
     
     const handleChange = (e) => {

@@ -1,69 +1,40 @@
 version: '3.8'
-
 services:
-
-  # Laravel Service
-  app:
+  backend:
     build:
-      context: .
-      dockerfile: ./backend/Dockerfile
+      context: ./backend  # Dockerfile 的构建上下文路径
     container_name: laravel-app
-    volumes:
-      - ./backend:/var/www/html
-    depends_on:
-      - db
-    networks:
-      - app-network
-
-  # React Service
-  client:
-    build:
-      context: .
-      dockerfile: ./recipe-app/Dockerfile
-    container_name: react-client
-    volumes:
-      - ./recipe-app/build:/usr/share/nginx/html
     ports:
-      - '3000:80'
-    networks:
-      - app-network
+      - "8000:8000"  # 映射容器的 8000 端口到本地的 8000 端口
+    depends_on:
+      - mysql
 
-  # MySQL Service
-  db:
-    image: mysql/mysql-server:5.7
+  frontend:
+    build:
+      context: ./recipe-app  # Dockerfile 的构建上下文路径
+    container_name: react-app
+    ports:
+      - "3000:3000"  # 映射容器的 3000 端口到本地的 3000 端口
+
+  mysql:
+    image: mysql:8.1.0
     container_name: mysql-db
     environment:
-      MYSQL_DATABASE: fsd10_tango
+      MYSQL_ROOT_PASSWORD: myDBpw
       MYSQL_USER: fsduser
       MYSQL_PASSWORD: myDBpw
-      MYSQL_ROOT_PASSWORD: myDBpw
-    volumes:
-      - dbdata:/var/lib/mysql
+      MYSQL_DATABASE: fsd10_tango
     ports:
-      - '3306:3306'
-    networks:
-      - app-network
+      - "3307:3306"  # 映射容器的 3306 端口到本地的 3307 端口
 
-        # phpMyAdmin Service
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
     environment:
-      PMA_HOST: db
+      PMA_HOST: mysql
       PMA_PORT: 3306
-    depends_on:
-      - db
     ports:
-      - '8080:80'
-    networks:
-      - app-network
+      - "8080:80"
+    depends_on:
+      - mysql
 
-
-
-networks:
-  app-network:
-    driver: bridge
-
-volumes:
-  dbdata:
-    driver: local
