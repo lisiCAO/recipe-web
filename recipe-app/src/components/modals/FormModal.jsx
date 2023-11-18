@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Modal from './Modal';
 import Button from '../common/Button';
 import FormInput from '../common/FormInput';
@@ -9,13 +9,14 @@ import './FormModal.scss';
 
 const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => {
     // Initialize formData with default values
-    const defaultFormData = config.reduce((acc, field) => {
-        acc[field.name] = '';
-        return acc;
-    }, {});
+    const defaultFormData = useMemo(() => {
+        return config.reduce((acc, field) => {
+            acc[field.name] = '';
+            return acc;
+        }, {});
+    }, [config]);
 
     const [formData, setFormData] = useState(defaultFormData);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (mode === 'edit' && initialData) {
             const newFormData = { ...defaultFormData };
@@ -24,10 +25,9 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
             });
             setFormData(newFormData);
         } else {
-            console.log('Resetting form data:' , defaultFormData);
             setFormData(defaultFormData);
         }
-    }, [initialData, mode, config, defaultFormData]);
+    }, [config, defaultFormData, initialData, mode]);
 
     
     const handleChange = (e) => {
