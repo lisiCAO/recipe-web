@@ -41,8 +41,5 @@ RUN chown -R www-data:www-data /var/www/html
 # 安装 Laravel 项目依赖
 RUN composer install --no-scripts
 
-# 生成 Laravel APP_KEY
-RUN php artisan key:generate
-
 # 运行 Laravel 应用
 CMD [ "php", "artisan", "serve", "--host=0.0.0.0"]
