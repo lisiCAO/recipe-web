@@ -8,6 +8,8 @@ services:
       - "8000:8000"  # 映射容器的 8000 端口到本地的 8000 端口
     depends_on:
       - mysql
+    volumes:
+      - ./backend:/var/www/html 
 
   frontend:
     build:
@@ -15,6 +17,8 @@ services:
     container_name: react-app
     ports:
       - "3000:3000"  # 映射容器的 3000 端口到本地的 3000 端口
+    volumes:
+      - ./recipe-app:/app
 
   mysql:
     image: mysql:8.1.0
