@@ -16,7 +16,7 @@ class UserListResource extends JsonResource
     {
         return [
             'id' => $this->user_id,
-            'user_name' => $this->first_name . ' ' . $this->last_name,
+            'userName' => $this->first_name . ' ' . $this->last_name,
             'email' => $this->email,
             'category' => $this->category,
             'createdAt' => $this->created_at,

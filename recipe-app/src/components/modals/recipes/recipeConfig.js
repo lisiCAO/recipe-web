@@ -15,7 +15,7 @@ const recipeConfig = [
         name: 'recipe_image_path',
         label: 'Recipe Image',
         type: 'file',
-        mapTo: 'ImagePath' // Maps to 'ImagePath' in initialData
+        mapTo: 'imagePath' // Maps to 'ImagePath' in initialData
     },
     {
         name: 'cooking_time',

@@ -16,10 +16,10 @@ class UserDetailResource extends JsonResource
     {
         return [
             'id' => $this->user_id,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
+            'firsName' => $this->first_name,
+            'lastName' => $this->last_name,
             'email' => $this->email,
-            'profile_image_path' => $this->profile_image_path,
+            'imagePath' => $this->profile_image_path,
             'category' => $this->category,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at
