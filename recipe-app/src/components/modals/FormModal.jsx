@@ -103,6 +103,18 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
                             onFileUpload={handleFileUpload}
                         />
                     );
+
+                case 'email':
+                    return (
+                        <FormInput
+                            key={field.name} 
+                            {...field}
+                            name={field.name}
+                            label={field.label}
+                            value={formData[field.name]}
+                            onChange={handleChange}
+                        />
+                    );
                 default:
                     return null;
             }

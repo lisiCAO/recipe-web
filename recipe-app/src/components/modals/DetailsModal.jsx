@@ -21,9 +21,9 @@ const displayConfig = {
         ignoreFields: ['review_id', 'recipe_id', 'user_id']
     },
     user: { 
-        title: 'user_name',
-        image: 'user_image_path',
-        ignoreFields: ['user_id']
+        title: 'fullName',
+        image: 'imagePath',
+        ignoreFields: ['id', 'firstName', 'lastName', 'password']
     }
 };
 
