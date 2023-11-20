@@ -8,6 +8,8 @@ import ApiService from '../../services/ApiService';
 import './FormModal.scss';
 
 const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => {
+    const [formData, setFormData] = useState(defaultFormData);
+
     // Initialize formData with default values
     const defaultFormData = useMemo(() => {
         return config.reduce((acc, field) => {
@@ -16,7 +18,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
         }, {});
     }, [config]);
 
-    const [formData, setFormData] = useState(defaultFormData);
+    // Set formData to initialData when in edit mode
     useEffect(() => {
         if (mode === 'edit' && initialData) {
             const newFormData = { ...defaultFormData };
@@ -54,7 +56,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
 
     const renderFormFields = () => {
         return config.map((field) => {
-            if (field.name === 'recipe_id') {
+            if (field.name.includes('id')) {
                 return null;
             }
             switch (field.type) {
