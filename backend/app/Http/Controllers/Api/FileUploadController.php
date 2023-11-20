@@ -17,7 +17,7 @@ class FileUploadController extends Controller
             $newFileName = time() . '_' . $file->getClientOriginalName();
     
             // 存储文件并指定新的文件名
-            $path = $file->storeAs('public/recipes', $newFileName);
+            $path = $file->storeAs('public/img', $newFileName);
             $url = Storage::url($path);
     
             return response()->json(['url' => $url], 200);

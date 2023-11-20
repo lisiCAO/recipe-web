@@ -32,14 +32,14 @@ class UserController extends Controller
             'last_name' => 'required|string|max:50',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|min:6',
-            'profile_image_path' => 'nullable|image|max:2048',
+            'profile_image_path' => 'nullable|string',
             'category' => 'nullable|string|max:50',
         ]);
 
-        if ($request->hasFile('profile_image_path')) {
-            $path = $request->file('profile_image_path')->store('public/users');
-            $validatedData['profile_image_path'] = Storage::url($path);
-        }
+        // if ($request->hasFile('profile_image_path')) {
+        //     $path = $request->file('profile_image_path')->store('public/users');
+        //     $validatedData['profile_image_path'] = Storage::url($path);
+        // }
 
         $validatedData['password'] = Hash::make($validatedData['password']);
 
@@ -73,17 +73,17 @@ class UserController extends Controller
             'last_name' => 'nullable|string|max:50',
             'email' => 'nullable|string|email|max:100|unique:users,email,' . $id,
             'password' => 'nullable|string|min:6',
-            'profile_image_path' => 'nullable|image|max:2048',
+            'profile_image_path' => 'nullable|string',
             'category' => 'nullable|string|max:50',
         ]);
 
-        if ($request->hasFile('profile_image')) {
-            // 删除旧的图片
-            if ($user->profile_image_path) {
-                Storage::delete($user->profile_image_path);
-            }
-            $data['profile_image_path'] = $request->file('profile_image')->store('public/profile_images');
-        }
+        // if ($request->hasFile('profile_image')) {
+        //     // 删除旧的图片
+        //     if ($user->profile_image_path) {
+        //         Storage::delete($user->profile_image_path);
+        //     }
+        //     $data['profile_image_path'] = $request->file('profile_image')->store('public/users');
+        // }
 
         if (!empty($validatedData['password'])) {
             $validatedData['password'] = Hash::make($validatedData['password']);
