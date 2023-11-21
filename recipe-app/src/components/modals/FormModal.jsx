@@ -8,7 +8,6 @@ import ApiService from '../../services/ApiService';
 import './FormModal.scss';
 
 const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => {
-    const [formData, setFormData] = useState(defaultFormData);
 
     // Initialize formData with default values
     const defaultFormData = useMemo(() => {
@@ -17,6 +16,8 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
             return acc;
         }, {});
     }, [config]);
+
+    const [formData, setFormData] = useState(defaultFormData);
 
     // Set formData to initialData when in edit mode
     useEffect(() => {

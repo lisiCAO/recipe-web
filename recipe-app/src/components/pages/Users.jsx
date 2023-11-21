@@ -96,7 +96,6 @@ const Users = () => {
         { header: 'Name', cell: (row) => row.name },
         { header: 'Email', cell: (row) => row.email },
         { header: 'Created At', cell: (row) => row.createdAt },
-        { header: 'Updated At', cell: (row) => row.updatedAt },
         { header: 'Category', cell: (row) => row.category },
     ];
     
