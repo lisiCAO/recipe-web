@@ -27,6 +27,7 @@ const ApiService = {
   // 创建新用户
   async createUser(userData) {
     try {
+      console.log('createUser api is called')
       const response = await fetch(`${API_BASE_URL}/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

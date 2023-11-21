@@ -156,13 +156,13 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
         <Modal isOpen={isOpen} onClose={onClose}>
             <form onSubmit={(e) => {
                 e.preventDefault();
-                console.log('Form data:', formData)
                 let submittedFormData = formData;
                 if (mode === 'edit' && !isPasswordChanging) {
                     const { password, ...rest } = formData;
                     submittedFormData = rest;
                 }    
                 const jsonFormData = JSON.stringify(submittedFormData);
+                console.log('Form data:', jsonFormData)
                 onSubmit(jsonFormData);
                 onClose();
             }}>

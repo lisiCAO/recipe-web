@@ -18,7 +18,7 @@ class UserController extends Controller
      */
     public function index(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
-        // Get all recipes
+        // Get all users
         return UserListResource::collection(User::all());
     }
 
@@ -27,6 +27,8 @@ class UserController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
+        \Log::info('Request Data:', $request->all());
+
         $validatedData = $request->validate([
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
@@ -36,11 +38,6 @@ class UserController extends Controller
             'category' => 'nullable|string|max:50',
         ]);
 
-        // if ($request->hasFile('profile_image_path')) {
-        //     $path = $request->file('profile_image_path')->store('public/users');
-        //     $validatedData['profile_image_path'] = Storage::url($path);
-        // }
-
         $validatedData['password'] = Hash::make($validatedData['password']);
 
         $user = User::create($validatedData);
@@ -49,7 +46,6 @@ class UserController extends Controller
             'message' => 'User created successfully',
             'user' => new UserDetailResource($user)
         ], 201);
-
     }
 
     /**
@@ -71,19 +67,12 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'first_name' => 'nullable|string|max:50',
             'last_name' => 'nullable|string|max:50',
-            'email' => 'nullable|string|email|max:100|unique:users,email,' . $id,
+            'email' => 'nullable|string|email|max:100|unique:users,email,' .  $id . ',user_id',
             'password' => 'nullable|string|min:6',
             'profile_image_path' => 'nullable|string',
             'category' => 'nullable|string|max:50',
         ]);
 
-        // if ($request->hasFile('profile_image')) {
-        //     // 删除旧的图片
-        //     if ($user->profile_image_path) {
-        //         Storage::delete($user->profile_image_path);
-        //     }
-        //     $data['profile_image_path'] = $request->file('profile_image')->store('public/users');
-        // }
 
         if (!empty($validatedData['password'])) {
             $validatedData['password'] = Hash::make($validatedData['password']);

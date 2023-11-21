@@ -60,7 +60,7 @@ const Users = () => {
     };
 
     const saveEditedUser = (updatedUserData) => {
-
+        console.log('save edited user is called');
         ApiService.updateUser(editingUser.id, updatedUserData)
             .then(updatedUser => {
                 // Update the Users list with the updated User
