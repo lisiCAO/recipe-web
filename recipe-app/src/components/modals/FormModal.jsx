@@ -4,6 +4,7 @@ import Button from '../common/Button';
 import FormInput from '../common/FormInput';
 import FormTextArea from '../common/FormTextArea';
 import FormFileInput from '../common/FormFileInput';
+import Select from '../common/Select';
 import ApiService from '../../services/ApiService';
 import './FormModal.scss';
 
@@ -18,6 +19,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
     }, [config]);
 
     const [formData, setFormData] = useState(defaultFormData);
+    const [isPasswordChanging, setIsPasswordChanging] = useState(mode === 'create');
 
     // Set formData to initialData when in edit mode
     useEffect(() => {
@@ -37,7 +39,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
         setFormData({ ...formData, [e.target.name]: e.target.value });
     }
 
-    const handleFileUpload = async (file) => {
+    const handleFileUpload = async (file,fieldName) => {
         const formData = new FormData();
         formData.append('file', file);
         try{
@@ -45,7 +47,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
             if(response.url){
                 setFormData(prevFormData => ({
                     ...prevFormData,
-                    recipe_image_path: response.url
+                    [fieldName]: response.url
                 }));
             } else {
                 console.error('File upload response does not contain a URL.');
@@ -55,11 +57,28 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
         }
         };
 
-    const renderFormFields = () => {
+    const renderFormFields = (config) => {
         return config.map((field) => {
-            if (field.name.includes('id')) {
+            if (field.name && field.name.includes('id')) {
                 return null;
             }
+
+            if( field.type === 'password'){
+                if( mode === 'edit' && !isPasswordChanging){
+                    return null;
+                }
+                return (
+                    <FormInput
+                        key={field.name} 
+                        {...field}
+                        name={field.name}
+                        label={field.label}
+                        value={formData[field.name]}
+                        onChange={handleChange}
+                    />
+                );
+            }
+
             switch (field.type) {
                 case 'text':
                     return (
@@ -101,7 +120,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
                             {...field}
                             name={field.name}
                             label={field.label}
-                            onFileUpload={handleFileUpload}
+                            onFileUpload={(file) => handleFileUpload(file, field.name)}
                         />
                     );
 
@@ -116,6 +135,17 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
                             onChange={handleChange}
                         />
                     );
+                case 'select':
+                    return (
+                        <Select
+                        key={field.name}
+                        name={field.name}
+                        label={field.label}
+                        options={field.options}
+                        value={formData[field.name]}
+                        onChange={handleChange}
+                        />
+                    );
                 default:
                     return null;
             }
@@ -127,11 +157,26 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
             <form onSubmit={(e) => {
                 e.preventDefault();
                 console.log('Form data:', formData)
-                const jsonFormData = JSON.stringify(formData);
+                let submittedFormData = formData;
+                if (mode === 'edit' && !isPasswordChanging) {
+                    const { password, ...rest } = formData;
+                    submittedFormData = rest;
+                }    
+                const jsonFormData = JSON.stringify(submittedFormData);
                 onSubmit(jsonFormData);
                 onClose();
             }}>
-                {renderFormFields()}
+                {mode === 'edit' && (
+                    <label>
+                        Change Password:
+                        <input
+                            type="checkbox"
+                            checked={isPasswordChanging}
+                            onChange={() => setIsPasswordChanging(!isPasswordChanging)}
+                        />
+                    </label>
+                )}
+                {renderFormFields(config)}
                 <Button type="submit">{mode === 'edit' ? 'Save Changes' : 'Create'}</Button>
             </form>
         </Modal>

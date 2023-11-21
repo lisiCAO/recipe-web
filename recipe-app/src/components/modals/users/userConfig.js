@@ -32,9 +32,22 @@ const userConfig = [
     {
         name: 'category',
         label: 'Category',
-        type: 'text',
+        type: 'select',
+        options: [
+            { value: 'user', name: 'User' },
+            { value: 'admin', name: 'Admin' },
+            { value: 'inactive', name: 'Inactive'},
+            { value: 'banned', name: 'Banned'},
+            { value: 'deleted', name: 'Deleted'},
+        ],
         mapTo: 'category' // Maps to 'stepInstruction' in initialData
     },
+    {
+        name: 'password',
+        label: 'Password',
+        type: 'password',
+        mapTo: 'password' // Maps to 'stepInstruction' in initialData
+    }
     // Additional fields can be added as required
 ];
 
