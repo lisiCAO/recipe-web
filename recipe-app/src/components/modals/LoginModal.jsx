@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Modal from './Modal';
 import FormInput from '../common/FormInput';
-import ErrorDisplay from '../common/ErrorDisplay';
 import Button from '../common/Button';
 
 const LoginModal = ({ onLogin, onClose, error }) => {
@@ -14,7 +13,6 @@ const LoginModal = ({ onLogin, onClose, error }) => {
         <Modal isOpen={true} onClose={onClose}>
             <div className="login-content">
                 <h2>Login</h2>
-                    <ErrorDisplay />
                 <FormInput 
                     name="email" 
                     label="Email" 
