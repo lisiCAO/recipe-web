@@ -37,7 +37,10 @@ function App() {
       console.log(response.user);
       // 设置用户信息等
     } catch (error) {
-      setLoginError(error.message);
+      const jsonPart = error.message.split('HTTP error 401: ')[1];
+      const errorData = JSON.parse(jsonPart);
+      setLoginError(errorData.message);
+      setCurrentUser(null);
     }
   };
 

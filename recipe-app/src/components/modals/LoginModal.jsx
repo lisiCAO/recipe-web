@@ -12,6 +12,7 @@ const LoginModal = ({ onLogin, onClose, error }) => {
         <div className="login-modal">
         <Modal isOpen={true} onClose={onClose}>
             <div className="login-content">
+                <div className="error">{error}</div>
                 <h2>Login</h2>
                 <FormInput 
                     name="email" 
