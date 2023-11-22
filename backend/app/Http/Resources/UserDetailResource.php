@@ -18,7 +18,7 @@ class UserDetailResource extends JsonResource
             'id' => $this->user_id,
             'firstName' => $this->first_name,
             'lastName' => $this->last_name,
-            'fullName' => $this->first_name . ' ' . $this->last_name,
+            'name' => $this->first_name . ' ' . $this->last_name,
             'email' => $this->email,
             'imagePath' => $this->profile_image_path,
             'category' => $this->category,

@@ -60,12 +60,12 @@ const Users = () => {
     };
 
     const saveEditedUser = (updatedUserData) => {
-        console.log('save edited user is called');
         ApiService.updateUser(editingUser.id, updatedUserData)
             .then(updatedUser => {
+                console.log('updatedUser',updatedUser);
                 // Update the Users list with the updated User
                 setUsers(users.map(user => 
-                    user.id === updatedUser.id ? updatedUser : user
+                    user.id === updatedUser.user.id ? updatedUser.user : user
                 ));
                 setEditingUser(null); // Reset the editing state to close the modal
                 setShowDetailsModal(false); // Close the details modal

@@ -31,7 +31,7 @@ const ApiService = {
       const response = await fetch(`${API_BASE_URL}/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData)
+        body: userData
       });
       return handleResponse(response);
     } catch (error) {
@@ -41,11 +41,14 @@ const ApiService = {
 
   // 更新用户信息
   async updateUser(userId, userData) {
+    console.log('updateUser api is called')
+    console.log(userData)
+    console.log(userId)
     try {
       const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData)
+        body: userData
       });
       return handleResponse(response);
     } catch (error) {
