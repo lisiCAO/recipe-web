@@ -1,19 +1,19 @@
 // Desc: This is the main component of the application. It is responsible for rendering the Navbar and the Home or AdminPanel components depending on whether the user is logged in or not.
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Navbar from './components/layout/Navbar';
 import LoginModal from './components/modals/LoginModal';
 import Home from './views/Home';
 import AdminPanel from './views/AdminPanel';
 import ApiService from './services/ApiService';
-
+import { MessageContext } from './components/common/MessageContext';
 
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [loginError, setLoginError] = useState('');
   const [currentUser, setCurrentUser] = useState(null); // 保存当前用户信息
-
+  const { showMessage } = useContext(MessageContext);
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -30,16 +30,17 @@ function App() {
     try {
       const response = await ApiService.login({ email, password });
       localStorage.setItem('token', response.token); // 保存token
-      setIsLoggedIn(true);
-      setShowLoginModal(false);
-      setLoginError('');
-      setCurrentUser(response.user); 
-      console.log(response.user);
-      // 设置用户信息等
+      showMessage('success', 'Login successful')
+      setTimeout(()=>{
+        setIsLoggedIn(true);
+        setShowLoginModal(false);
+        setCurrentUser(response.user); 
+      }, 2000);
+    // 设置用户信息等
     } catch (error) {
       const jsonPart = error.message.split('HTTP error 401: ')[1];
       const errorData = JSON.parse(jsonPart);
-      setLoginError(errorData.message);
+      showMessage('error', 'Failed: ' + errorData.message);
       setCurrentUser(null);
     }
   };
@@ -51,22 +52,21 @@ function App() {
   };
   
   return (
-    <div>
-      <Navbar
-        isLoggedIn={isLoggedIn}
-        userEmail={currentUser?.email}
-        onLogout={handleLogout}
-        onLoginClick={toggleLoginModal}
-      />
-      {isLoggedIn ? <AdminPanel /> : <Home />}
-      {showLoginModal && (
-        <LoginModal
-          onLogin={handleLogin}
-          onClose={() => setShowLoginModal(false)}
-          error={loginError}
+      <div>
+        <Navbar
+          isLoggedIn={isLoggedIn}
+          userEmail={currentUser?.email}
+          onLogout={handleLogout}
+          onLoginClick={toggleLoginModal}
         />
-      )}
-    </div>
+        {isLoggedIn ? <AdminPanel /> : <Home />}
+        {showLoginModal && (
+          <LoginModal
+            onLogin={handleLogin}
+            onClose={() => setShowLoginModal(false)}
+          />
+        )}
+      </div>
   );
 }
 

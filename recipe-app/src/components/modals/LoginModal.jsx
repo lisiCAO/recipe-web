@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Modal from './Modal';
 import FormInput from '../common/FormInput';
 import Button from '../common/Button';
+import { MessageContext } from '../common/MessageContext';
+import Message from '../common/Message';
 
-const LoginModal = ({ onLogin, onClose, error }) => {
+const LoginModal = ({ onLogin, onClose }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { message } =useContext(MessageContext);
     
-
     return (
         <div className="login-modal">
         <Modal isOpen={true} onClose={onClose}>
             <div className="login-content">
-                <div className="error">{error}</div>
                 <h2>Login</h2>
                 <FormInput 
                     name="email" 
@@ -28,6 +29,7 @@ const LoginModal = ({ onLogin, onClose, error }) => {
                     value={password} 
                     onChange={e => setPassword(e.target.value)} 
                 />
+                <Message message = {message} />
                 <Button onClick={() => onLogin(email, password)}>Sign In</Button>
             </div>
         </Modal>

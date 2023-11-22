@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from '../common/Button';
 import Table from '../layout/Table';
 import SearchBar from '../common/Searchbar';
@@ -6,6 +6,7 @@ import CreateUserModal from '../modals/users/CreateUserModal';
 import EditUserModal from '../modals/users/EditUserModal';
 import UserDetailsModal from '../modals/users/UserDetailsModal';
 import ApiService from '../../services/ApiService';
+import { MessageContext } from '../common/MessageContext';
 import './Users.scss';
 
 const Users = () => {
@@ -15,7 +16,7 @@ const Users = () => {
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [editingUser, setEditingUser] = useState(null);
-
+    const { showMessage } = useContext(MessageContext);
 
     // 加载初始数据
     useEffect(() => {
@@ -40,8 +41,14 @@ const Users = () => {
         .then(addedUser => {
             setUsers([...users, addedUser.user]);
             setShowCreateModal(false);
+            showMessage('success', 'User created successfully');
+       
         })
-        .catch(error => console.error(error)); 
+        .catch(error => {
+            console.error(error)
+            showMessage('error', 'Error creating user');
+  
+        }); 
     };
 
     const handleViewDetails = (user) => {
@@ -75,15 +82,12 @@ const Users = () => {
                 // Handle error (e.g., show a notification to the user)
             });
     };
-    
-    
 
     const handleDelete = (user) => {
         ApiService.deleteUser(user.id).then(() => {
             setUsers(users.filter(r => r.id !== user.id));
         });
     };
-    
 
     const handleSearch = (term) => {
         setSearchTerm(term);
