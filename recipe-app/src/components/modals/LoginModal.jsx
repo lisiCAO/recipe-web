@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import Modal from './Modal';
 import FormInput from '../common/FormInput';
+import ErrorDisplay from '../common/ErrorDisplay';
 import Button from '../common/Button';
 
 const LoginModal = ({ onLogin, onClose, error }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    
 
     return (
         <div className="login-modal">
         <Modal isOpen={true} onClose={onClose}>
             <div className="login-content">
                 <h2>Login</h2>
-                {error && <div className="error-message">{error}</div>}
+                    <ErrorDisplay />
                 <FormInput 
                     name="email" 
                     label="Email" 
