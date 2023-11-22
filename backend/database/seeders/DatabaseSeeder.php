@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,17 +21,17 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        // 禁用外键检查
+        // Disable foreign key checks
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        // 清空表格数据
+        // Truncate tables
         DB::table('users')->truncate();
         DB::table('ingredients')->truncate();
         DB::table('recipes')->truncate();
         DB::table('recipe_ingredients')->truncate();
         DB::table('reviews')->truncate();
 
-        // 插入数据
+        // Insert data
 
         // Example records for 'users' table
         DB::table('users')->insert([
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
                 'first_name' => 'Alice',
                 'last_name' => 'M',
                 'email' => 'alice@email.com',
-                'password' => dcrypt('password'),
+                'password' => Hash::make('password'),
                 'profile_image_path' => '/path/to/image1.jpg',
                 'category' => 'admin',
                 'created_at' => Carbon::now(),
@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
                 'first_name' => 'Bob',
                 'last_name' => 'T',
                 'email' => 'bob@email.com',
-                'password' => dcrypt('password'),
+                'password' => Hash::make('password'),
                 'profile_image_path' => '/path/to/image2.jpg',
                 'category' => 'user',
                 'created_at' => Carbon::now(),
@@ -60,7 +60,7 @@ class DatabaseSeeder extends Seeder
                 'first_name' => 'Charlie',
                 'last_name' => 'C',
                 'email' => 'charlie@email.com',
-                'password' => dcrypt('password'),
+                'password' => bcrypt('password'),
                 'profile_image_path' => '/path/to/image3.jpg',
                 'category' => 'user',
                 'created_at' => Carbon::now(),
