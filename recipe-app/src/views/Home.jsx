@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './Home.scss';
 
 const Home = () => {
     return (
@@ -13,3 +13,4 @@ const Home = () => {
 };
 
 export default Home;
+// Path: recipe-app/src/views/Home.jsx

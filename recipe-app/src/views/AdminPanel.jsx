@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import Sidebar from '../components/layout/Sidebar';// Create and import your Sidebar component
-import Recipes from '../components/pages/Recipes'; // Import your Recipes component
-import Users from '../components/pages/Users'; // Import your Users component
-import './AdminPanel.scss'; // Import your SCSS for styling
+import Sidebar from '../components/layout/Sidebar';
+import Recipes from '../components/pages/Recipes'; 
+import Users from '../components/pages/Users'; 
+import './AdminPanel.scss'; 
 
+// Create your AdminPanel component
 const AdminPanel = () => {
+    // Add state to keep track of which tab is active
     const [activeTab, setActiveTab] = useState('recipes'); // Default to 'recipes' tab
 
+    // Add a function to render the content of the tab
     const renderContent = () => {
         switch (activeTab) {
             case 'recipes':
