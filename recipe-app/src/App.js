@@ -6,13 +6,15 @@ import LoginModal from './components/modals/LoginModal';
 import Home from './views/Home';
 import AdminPanel from './views/AdminPanel';
 import ApiService from './services/ApiService';
-
+import { MessageContext } from './components/common/MessageContext';
+import { UserContext, UserProvider} from './components/common/UserContext';
 function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);            // 保存用户是否登录的状态
   const [showLoginModal, setShowLoginModal] = useState(false);    // 保存是否显示登录模态框的状态
   const [currentUser, setCurrentUser] = useState(null);           // 保存当前用户信息
   const { showMessage } = useContext(MessageContext);             // 保存消息提示的方法
+  const { user, setUser } = useContext(UserContext);
   
   useEffect(() => {
 
