@@ -37,7 +37,11 @@ class ReviewController extends Controller
         $recipeId = $recipe->recipe_id;
 
         $userName = $request->input('user_name');
-        $user = User::where('user_name', $userName)->first();
+        $nameParts = explode(' ', $userName, 2); // limit to 2 parts, incase of middle name
+        $firstName = $nameParts[0];
+        $lastName = $nameParts[1] ?? '';
+
+        $user = User::where('first_name', $firstName)->where('last_name', $lastName)->first();
         if(!$user) {
             return response()->json([
                 'message' => 'User not found'
