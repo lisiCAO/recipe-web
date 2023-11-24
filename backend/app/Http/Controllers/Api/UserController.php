@@ -9,7 +9,6 @@ use App\Http\Resources\UserListResource;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\Request;
-use Storage;
 
 class UserController extends Controller
 {

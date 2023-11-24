@@ -8,6 +8,7 @@ use App\Http\Resources\ReviewListResource;
 use App\Http\Resources\ReviewResource;
 use App\Models\Recipe;
 use App\Models\Review;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
@@ -25,14 +26,34 @@ class ReviewController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
+        // 获取请求数据
+        $recipeName = $request->input('recipe_name');
+        $recipe = Recipe::where('recipe_name', $recipeName)->first();
+        if(!$recipe) {
+            return response()->json([
+                'message' => 'Recipe not found'
+            ], 404);
+        }
+        $recipeId = $recipe->recipe_id;
+
+        $userName = $request->input('user_name');
+        $user = User::where('user_name', $userName)->first();
+        if(!$user) {
+            return response()->json([
+                'message' => 'User not found'
+            ], 404);
+        }
+        $userId = $user->user_id;
+
         $validatedData = $request->validate([
-            'recipe_id' => 'required|exists:recipes,recipe_id',
-            'user_id' => 'required|exists:users,user_id',
             'comment' => 'required|string',
             'rating' => 'required|numeric|between:1,5',
         ]);
 
         $review = Review::create($validatedData);
+        $review->recipe_id = $recipeId;
+        $review->user_id = $userId;
+        $review->save();
 
         return response()->json([
             'message' => 'Review created successfully',
@@ -54,7 +75,13 @@ class ReviewController extends Controller
      */
     public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
-        $review = Review::findOrFail($id);
+        try {
+            $review = Review::findOrFail($id);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Review not found'
+            ], 404);
+        }
 
         $validatedData = $request->validate([
             'comment' => 'nullable|string',
