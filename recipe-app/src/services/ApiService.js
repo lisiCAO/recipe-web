@@ -128,6 +128,68 @@ const ApiService = {
     }
   },
 
+  /* Ingredients */
+     // 获取食谱列表
+     async fetchIngredients() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/ingredients`);
+        return handleResponse(response);
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+  
+    // 获取特定食谱的详情
+    async fetchIngredient(ingredientId) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/ingredients/${ingredientId}`);
+        return handleResponse(response);
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+  
+    // 创建新食谱
+    async createIngredient(recipeData) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/ingredients`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: recipeData
+        });
+        return handleResponse(response);
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+     
+    // 更新食谱信息
+    async updateIngredient(ingredientId, ingredientData) {
+  
+      try {
+        const response = await fetch(`${API_BASE_URL}/ingredients/${ingredientId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: ingredientData
+        });
+        return handleResponse(response);
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+  
+    // 删除食谱
+    async deleteIngredient(ingredientId) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/ingredients/${ingredientId}`, {
+          method: 'DELETE'
+        });
+        return handleResponse(response);
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+
   // 上传文件
   async uploadFile(formData) {
     try {
@@ -158,16 +220,16 @@ async login(credentials) {
 },
 
 // 获取当前用户信息
-async fetchCurrentUser() {
-  try {
-    const response = await fetch(`${API_BASE_URL}/me`, {
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    });
-    return handleResponse(response);
-  } catch (error) {
-    return handleError(error);
-  }
-}
+// async fetchCurrentUser() {
+//   try {
+//     const response = await fetch(`${API_BASE_URL}/me`, {
+//       headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+//     });
+//     return handleResponse(response);
+//   } catch (error) {
+//     return handleError(error);
+//   }
+// }
 
   // 为其他 API 路由添加类似的方法（如 recipes, ingredients, reviews）
 
