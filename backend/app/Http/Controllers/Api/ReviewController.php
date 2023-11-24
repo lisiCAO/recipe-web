@@ -128,8 +128,8 @@ class ReviewController extends Controller
 
     return response()->json([
         'totalReviews' => $totalReviews,
-        'latestReviews' => $latestReviews,
-        'highRatingReviews' => $highRatingReviews,
+        // 'latestReviews' => $latestReviews,
+        // 'highRatingReviews' => $highRatingReviews,
     ]);
 }
 }

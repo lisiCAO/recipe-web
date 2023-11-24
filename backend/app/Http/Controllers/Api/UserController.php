@@ -108,7 +108,7 @@ class UserController extends Controller
         return response()->json([
             'total_users' => $totalUsers,
             'total_users_today' => $totalUsersToday,
-            'lastest_users' => $lastestUsers,
+            // 'lastest_users' => $lastestUsers,
             // 'active_users' => $activeUsers,
         ], 200);
     }

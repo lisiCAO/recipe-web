@@ -126,12 +126,19 @@ class RecipeController extends Controller
         $totalRecipes = Recipe::count();
         $popularRecipes = Recipe::withCount('reviews') // 假设您有 reviews 关联
         ->orderBy('reviews_count', 'desc')->take(5)->get();
-        $lastestRecipes = Recipe::latest()->take(5)->get();
+
+        $popluarRecipeNames = $popularRecipes->map(function ($recipe) {
+            return $recipe->recipe_name;
+        });
+        $latestRecipes = Recipe::latest()->take(5)->get();
+        $latestRecipeNames = $latestRecipes->map(function ($recipe) {
+            return $recipe->recipe_name;
+        });
 
         return response()->json([
             'total_recipes' => $totalRecipes,
-            'poplular_recipes' => $popularRecipes,
-            'lastest_recipes' => $lastestRecipes,
+            'poplular_recipes' => $popluarRecipeNames,
+            'lastest_recipes' => $latestRecipeNames,
         ], 200);
     }
 }

@@ -85,7 +85,7 @@ class IngredientController extends Controller
     public function summary() 
     {
         $totalIngredients = Ingredient::count();
-        $commonIngredients = DB::table('ingredient_recipe')
+        $commonIngredients = DB::table('recipe_ingredients')
             ->select('ingredient_id', DB::raw('count(*) as total'))
             ->groupBy('ingredient_id')
             ->orderBy('total', 'desc')
@@ -95,8 +95,8 @@ class IngredientController extends Controller
 
         return response()->json([
             'totalIngredients' => $totalIngredients,
-            'commonIngredients' => $commonIngredients,
-            'lastestIngredients' => $lastestIngredients
+            // 'commonIngredients' => $commonIngredients,
+            // 'lastestIngredients' => $lastestIngredients
         ], 200);
     }
 }
