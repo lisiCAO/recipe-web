@@ -27,14 +27,9 @@ class IngredientController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:50',
-            'img_path' => 'nullable|image|max:2048', // 假设图片文件
+            'img_path' => 'nullable|string|max:255', // 假设图片文件
             'description' => 'nullable|string',
         ]);
-
-        if ($request->hasFile('img_path')) {
-            $path = $request->file('img_path')->store('public/ingredients');
-            $validatedData['img_path'] = Storage::url($path);
-        }
 
         $ingredient = Ingredient::create($request->all());
 
@@ -62,17 +57,9 @@ class IngredientController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'nullable|string|max:50',
-            'img_path' => 'nullable|image|max:2048',
+            'img_path' => 'nullable|string|max:255',
             'description' => 'nullable|string',
         ]);
-
-        if ($request->hasFile('img_path')) {
-            // 删除旧的图片
-            if ($ingredient->img_path && Storage::exists($ingredient->img_path)) {
-                Storage::delete($ingredient->img_path);
-            }
-            $validatedData['img_path'] = $request->file('img_path')->store('public/ingredients');
-        }
 
         $ingredient->update($validatedData);
 
