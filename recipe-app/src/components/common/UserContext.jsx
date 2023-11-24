@@ -2,6 +2,7 @@ import { createContext, useState, useContext, useEffect } from 'react';
 import { MessageContext } from './MessageContext';
 import ApiService from '../../services/ApiService';
 
+
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -12,13 +13,7 @@ export const UserProvider = ({ children }) => {
     useEffect(() =>{
         const token = localStorage.getItem('token');
         if (token) {    
-            // ApiService.fetchCurrentUser(token).then((response) => {
-            //     setUser(response.user);
-            //     setIsLoggedIn(true);
-            // }).catch(() => {
-            //     // 处理无法获取用户信息的情况
-            //     console.log('Failed to fetch user info');
-            // });
+            setUser({ email: 'admin@email.com' });
             setIsLoggedIn(true);
         }
     }, []);
