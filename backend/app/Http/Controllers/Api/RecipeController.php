@@ -117,4 +117,21 @@ class RecipeController extends Controller
         ], 200); // 使用状态码 200 表示请求成功
 
     }
+
+    /**
+     * Display the specified resource.
+     */
+    public function summary()
+    {
+        $totalRecipes = Recipe::count();
+        $popularRecipes = Recipe::withCount('reviews') // 假设您有 reviews 关联
+        ->orderBy('reviews_count', 'desc')->take(5)->get();
+        $lastestRecipes = Recipe::latest()->take(5)->get();
+
+        return response()->json([
+            'total_recipes' => $totalRecipes,
+            'poplular_recipes' => $popularRecipes,
+            'lastest_recipes' => $lastestRecipes,
+        ], 200);
+    }
 }

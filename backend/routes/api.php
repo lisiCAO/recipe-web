@@ -25,15 +25,23 @@ use Illuminate\Support\Facades\Route;
 // });
 // User 相关的 API
 Route:: apiResource('users', UserController::class);
+// 用户摘要统计
+Route::get('/user/summary', [UserController::class, 'summary']);
 
 // Recipe 相关的 API
 Route::apiResource('recipes', RecipeController::class);
+// 食谱摘要统计
+Route::get('/recipe/summary', [RecipeController::class, 'summary']);
 
 // Ingredient 相关的 API
 Route::apiResource('ingredients', IngredientController::class);
+// 配料摘要统计
+Route::get('/ingredient/summary', [IngredientController::class, 'summary']);
 
 // Review 相关的 API
 Route::apiResource('reviews', ReviewController::class);
+// 评论摘要统计
+Route::get('/review/summary', [ReviewController::class, 'summary']);
 
 // 上传图片
 Route::post('/upload', FileUploadController::class . '@upload');

@@ -95,4 +95,21 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User deleted successfully'],200);
     }
+
+    /**
+     * Display the specified resource.
+     */
+    public function summary() 
+    {
+        $totalUsers = User::count();
+        $totalUsersToday = User::whereDate('created_at', today())->count();
+        $lastestUsers = User::orderBy('created_at', 'desc')->take(5)->get();
+        // $activeUsers = User::where('last_login_at', '>=', today()->subDays(7))->count();
+        return response()->json([
+            'total_users' => $totalUsers,
+            'total_users_today' => $totalUsersToday,
+            'lastest_users' => $lastestUsers,
+            // 'active_users' => $activeUsers,
+        ], 200);
+    }
 }

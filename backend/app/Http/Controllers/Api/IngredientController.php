@@ -7,7 +7,7 @@ use App\Http\Resources\IngredientDetailResource;
 use App\Http\Resources\IngredientListResource;
 use App\Models\Ingredient;
 use Illuminate\Http\Request;
-use Storage;
+use Illuminate\Support\Facades\DB;
 
 class IngredientController extends Controller
 {
@@ -77,5 +77,26 @@ class IngredientController extends Controller
         $ingredient = Ingredient::findOrFail($id);
         $ingredient->delete();
         return response()->json(['message' => 'Ingredient deleted successfully']);
+    }
+
+    /**
+     * Search the specified resource from storage.
+     */
+    public function summary() 
+    {
+        $totalIngredients = Ingredient::count();
+        $commonIngredients = DB::table('ingredient_recipe')
+            ->select('ingredient_id', DB::raw('count(*) as total'))
+            ->groupBy('ingredient_id')
+            ->orderBy('total', 'desc')
+            ->take(5)
+            ->get();
+        $lastestIngredients = Ingredient::latest()->take(5)->get();
+
+        return response()->json([
+            'totalIngredients' => $totalIngredients,
+            'commonIngredients' => $commonIngredients,
+            'lastestIngredients' => $lastestIngredients
+        ], 200);
     }
 }

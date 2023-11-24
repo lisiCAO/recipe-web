@@ -63,7 +63,7 @@ class ReviewController extends Controller
             'rating' => $validatedData['rating'],
             // 其他需要设置的字段
         ]);
-        
+
         $review->save();
 
         return response()->json([
@@ -116,4 +116,20 @@ class ReviewController extends Controller
         $review->delete();
         return response()->json(['message' => 'Review deleted successfully'], 200);
     }
+
+    /**
+     * Search the specified resource from storage.
+     */
+    public function summary()
+{
+    $totalReviews = Review::count();
+    $latestReviews = Review::latest()->take(5)->get();
+    $highRatingReviews = Review::where('rating', '>=', 4.5)->latest()->take(5)->get();
+
+    return response()->json([
+        'totalReviews' => $totalReviews,
+        'latestReviews' => $latestReviews,
+        'highRatingReviews' => $highRatingReviews,
+    ]);
+}
 }
