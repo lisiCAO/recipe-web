@@ -9,31 +9,31 @@ const reviewConfig = [
         name: 'recipe_name',
         label: 'Recipe Name',
         type: 'text',
-        mapTo: 'recipeName' // Maps to 'name' in initialData
+        mapTo: 'recipeName' 
     },
     {
-        name: 'userName',
+        name: 'user_name',
         label: 'User Name',
-        type: 'text', // Assuming cooking time is a number
-        mapTo: 'user_name' // Maps to 'cookingTime' in initialData
+        type: 'text', 
+        mapTo: 'userName' 
     },
     {
         name: 'comment',
         label: 'Comment',
         type: 'textarea',
-        mapTo: 'comment' // Maps to 'stepInstruction' in initialData
+        mapTo: 'comment' 
     },
     {
         name: 'rating',
         label: 'Rating',
         type: 'number',
-        mapTo: 'rating' // Maps to 'stepInstruction' in initialData
+        mapTo: 'rating' 
     },
     {
-        name: 'createdAt',
+        name: 'created_at',
         label: 'Created At',
-        type: 'number',
-        mapTo: 'created_at' // Maps to 'stepInstruction' in initialData
+        type: 'date',
+        mapTo: 'createdAt' 
     },
     // Additional fields can be added as required
 ];

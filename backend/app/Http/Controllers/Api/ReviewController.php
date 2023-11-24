@@ -26,6 +26,13 @@ class ReviewController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
+        // 验证请求数据
+        $validatedData = $request->validate([
+            'comment' => 'required|string',
+            'rating' => 'required|numeric|between:1,5',
+            // 可以在这里添加其他需要验证的字段
+        ]);
+
         // 获取请求数据
         $recipeName = $request->input('recipe_name');
         $recipe = Recipe::where('recipe_name', $recipeName)->first();
@@ -49,14 +56,14 @@ class ReviewController extends Controller
         }
         $userId = $user->user_id;
 
-        $validatedData = $request->validate([
-            'comment' => 'required|string',
-            'rating' => 'required|numeric|between:1,5',
+        $review = Review::create([
+            'recipe_id' => $recipeId,
+            'user_id' => $userId,
+            'comment' => $validatedData['comment'],
+            'rating' => $validatedData['rating'],
+            // 其他需要设置的字段
         ]);
-
-        $review = Review::create($validatedData);
-        $review->recipe_id = $recipeId;
-        $review->user_id = $userId;
+        
         $review->save();
 
         return response()->json([
