@@ -33,7 +33,7 @@ class Ingredient extends Model
 
     protected $table = 'ingredients';
     protected $primaryKey = 'ingredient_id';
-    public $timestamps = false; // 假设 'ingredients' 表没有时间戳字段
+    public $timestamps = true; // 如果为 false 则 created_at 和 updated_at 字段不会被更新
 
     protected $fillable = [
         'name',

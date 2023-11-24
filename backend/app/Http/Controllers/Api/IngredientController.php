@@ -31,11 +31,11 @@ class IngredientController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $ingredient = Ingredient::create($request->all());
+        $ingredient = Ingredient::create($validatedData);
 
         return response()->json([
             'message' => 'Ingredient created successfully',
-            'recipe' => new IngredientDetailResource($ingredient)
+            'ingredient' => new IngredientDetailResource($ingredient)
         ], 201);
     }
 

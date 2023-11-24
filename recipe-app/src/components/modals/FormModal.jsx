@@ -9,6 +9,9 @@ import ApiService from '../../services/ApiService';
 import './FormModal.scss';
 
 const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => {
+    const shouldShowPasswordCheckbox = useMemo(() => {
+        return mode === 'edit' && config.some(field => field.type === 'password');
+    }, [config, mode]);
 
     // Initialize formData with default values
     const defaultFormData = useMemo(() => {
@@ -166,7 +169,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
                 onSubmit(jsonFormData);
                 onClose();
             }}>
-                {mode === 'edit' && (
+                { shouldShowPasswordCheckbox && (
                     <label>
                         Change Password:
                         <input

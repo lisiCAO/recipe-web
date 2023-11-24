@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from '../components/layout/Sidebar';
 import Recipes from '../components/pages/Recipes'; 
 import Users from '../components/pages/Users'; 
+import Ingredients from '../components/pages/Ingredients';
 import './AdminPanel.scss'; 
 
 // Create your AdminPanel component
@@ -16,6 +17,8 @@ const AdminPanel = () => {
                 return <Recipes />;
             case 'users':
                 return <Users />;
+            case 'ingredients':
+                return <Ingredients />;
             // Add cases for other tabs as they become functional
             default:
                 return <div>Select a tab</div>;

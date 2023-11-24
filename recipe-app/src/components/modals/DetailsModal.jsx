@@ -11,9 +11,9 @@ const displayConfig = {
         ignoreFields: ['id', 'createdBy', 'createdAt'] // 忽略的字段
     },
     ingredient: {
-        title: 'ingredient_name',
-        image: 'ingredient_image_path',
-        ignoreFields: ['ingredient_id']
+        title: 'name',
+        image: 'imagePath',
+        ignoreFields: ['id']
     },
     review: {
         title: 'review_title',
