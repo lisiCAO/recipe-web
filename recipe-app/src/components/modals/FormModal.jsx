@@ -66,6 +66,10 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
                 return null;
             }
 
+            if (field.name && field.name.includes('createdAt')) {
+                return null;
+            }
+
             if( field.type === 'password'){
                 if( mode === 'edit' && !isPasswordChanging){
                     return null;

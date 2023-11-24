@@ -1,19 +1,19 @@
 import React from 'react';
 import DetailsModal from '../DetailsModal.jsx';
 
-const RecipeDetailsModal = ({ isOpen, onClose, recipe, onEdit }) => {
+const ReviewDetailsModal = ({ isOpen, onClose, review, onEdit }) => {
     return (
         <DetailsModal 
             isOpen = {isOpen}
             onClose = {onClose}
-            data = {recipe.data}
-            type = 'recipe'
-            className="recipe-details-modal"
+            data = {review.data}
+            type = 'review'
+            className="review-details-modal"
             onEdit={onEdit}
         />
     );
 };
 
-export default RecipeDetailsModal;
+export default ReviewDetailsModal;
 
-// Path: recipe-app/src/components/modals/RecipeDetailsModal.jsx
+// Path: recipe-app/src/components/modals/ReviewDetailsModal.jsx

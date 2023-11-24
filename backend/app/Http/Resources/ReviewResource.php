@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +21,7 @@ class ReviewResource extends JsonResource
             'userName' => $this->user->first_name . ' ' . $this->user->last_name,
             'comment' => $this->comment,
             'rating' => $this->rating,
-            'createdAt' => $this->created_at,
+            'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,9 +18,9 @@ ReviewListResource extends JsonResource
     {
         return [
             'id' => $this->review_id,
-            'recipe_name' => $this->recipe->recipe_name, // 假设您的 Recipe 模型有 recipe_name 字段
-            'user_name' => $this->user->first_name . ' ' . $this->user->last_name,
-            'created_at' => $this->created_at
+            'recipeName' => $this->recipe->recipe_name, // 假设您的 Recipe 模型有 recipe_name 字段
+            'userName' => $this->user->first_name . ' ' . $this->user->last_name,
+            'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
         ];
     }
 }
