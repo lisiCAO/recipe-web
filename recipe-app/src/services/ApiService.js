@@ -3,6 +3,21 @@
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const ApiService = {
+  fetchDashboardData: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/dashboard`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          // 添加任何必要的头部信息，例如认证令牌
+        }
+      });
+      return handleResponse(response);
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
 
   /* Users */
   // 获取用户列表

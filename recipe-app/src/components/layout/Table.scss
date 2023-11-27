@@ -19,4 +19,26 @@
     tr:hover {
         background-color: #f1f1f1;
     }
+
+    .btn-danger {
+        background-color: #dc3545; /* 明显的红色背景 */
+        color: white;
+        border: 1px solid #dc3545;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+
+        &:hover {
+            background-color: #c82333; /* 悬停时更深的红色 */
+            border-color: #bd2130;
+        }
+
+        &:active {
+            background-color: #bd2130; /* 点击时的颜色 */
+            border-color: #b21f2d;
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5); /* 焦点时的边框阴影 */
+        }
+    }
+
 }

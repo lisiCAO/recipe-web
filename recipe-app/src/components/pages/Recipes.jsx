@@ -109,7 +109,7 @@ const Recipes = () => {
     return (
         <div>
             <div className="top-bar">
-                <Button onClick={() => setShowCreateModal(true)}>Add New</Button>
+                <Button className="btn-create"  onClick={() => setShowCreateModal(true)}>Add New</Button>
                 <SearchBar value={searchTerm} onChange={handleSearch} />
             </div>
             <Table 

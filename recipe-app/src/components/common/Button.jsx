@@ -1,9 +1,10 @@
 import React from 'react';
 import './Button.scss'; // 假设你使用SCSS进行样式管理
 
-const Button = ({ children, onClick, disabled = false }) => {
+const Button = ({ children, onClick, className, disabled = false }) => {
+  const buttonClass = `button ${className || ''}`.trim();
   return (
-    <button className={`button`} onClick={onClick} disabled={disabled}>
+    <button className={buttonClass} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   );
