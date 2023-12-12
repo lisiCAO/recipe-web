@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
-
+use Tymon\JWTAuth\Contracts\JWTSubject;
 /**
  * App\Models\User
  *
@@ -41,7 +41,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUserId($value)
  * @mixin \Eloquent
  */
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use Notifiable, HasApiTokens;
 
@@ -76,6 +76,15 @@ class User extends Authenticatable
             $this->attributes['password'] = Hash::make($value);
         }
     }
+
+    public function getJWTIdentifier() {
+        return $this->getKey();
+    }
+    
+    public function getJWTCustomClaims() {
+        return [];
+    }
+    
 
     public function recipe(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

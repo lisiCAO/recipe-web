@@ -9,6 +9,7 @@ use App\Http\Resources\UserListResource;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -111,5 +112,24 @@ class UserController extends Controller
             // 'lastest_users' => $lastestUsers,
             // 'active_users' => $activeUsers,
         ], 200);
+    }
+
+    public function getCurrentUser(Request $request)
+    {
+        try {
+            // 尝试通过JWT获取用户
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['user_not_found'], 404);
+            }
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+            return response()->json(['token_expired'], $e->getStatusCode());
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return response()->json(['token_invalid'], $e->getStatusCode());
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json(['token_absent'], $e->getStatusCode());
+        }
+
+        // 用户找到
+        return response()->json(compact('user'));
     }
 }

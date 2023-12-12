@@ -2,7 +2,19 @@
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
+const fetchWithConfig = (url, options = {}) => {
+  const defaultOptions = {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include'
+  };
+
+  return fetch(url, { ...defaultOptions, ...options });
+};
+
 const ApiService = {
+  
   fetchDashboardData: async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/dashboard`, {
@@ -23,7 +35,10 @@ const ApiService = {
   // 获取用户列表
   async fetchUsers() {
     try {
-      const response = await fetch(`${API_BASE_URL}/users`);
+      const response = await fetchWithConfig(`${API_BASE_URL}/users`, {
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      });
       return handleResponse(response);
     } catch (error) {
       return handleError(error);
@@ -33,7 +48,7 @@ const ApiService = {
   // 获取特定用户的详情
   async fetchUser(userId) {
     try {
-      const response = await fetch(`${API_BASE_URL}/users/${userId}`);
+      const response = await fetchWithConfig(`${API_BASE_URL}/users/${userId}`);
       return handleResponse(response);
     } catch (error) {
       return handleError(error);
@@ -44,7 +59,7 @@ const ApiService = {
   async createUser(userData) {
     try {
       console.log('createUser api is called')
-      const response = await fetch(`${API_BASE_URL}/users`, {
+      const response = await fetchWithConfig(`${API_BASE_URL}/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: userData
@@ -57,11 +72,9 @@ const ApiService = {
 
   // 更新用户信息
   async updateUser(userId, userData) {
-    console.log('updateUser api is called')
-    console.log(userData)
-    console.log(userId)
+
     try {
-      const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+      const response = await fetchWithConfig(`${API_BASE_URL}/users/${userId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: userData
@@ -75,7 +88,7 @@ const ApiService = {
   // 删除用户
   async deleteUser(userId) {
     try {
-      const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+      const response = await fetchWithConfig(`${API_BASE_URL}/users/${userId}`, {
         method: 'DELETE'
       });
       return handleResponse(response);
@@ -83,6 +96,7 @@ const ApiService = {
       return handleError(error);
     }
   },
+  
   // 获取食谱列表
   async fetchRecipes() {
     try {
@@ -290,28 +304,43 @@ const ApiService = {
       const response = await fetch(`${API_BASE_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(credentials)
       });
       const data = await handleResponse(response);
       // 保存JWT到localStorage
-      localStorage.setItem('token', data.token);
+      // localStorage.setItem('token', data.token);
       return data;
     } catch (error) {
       return handleError(error);
     }
   },
+  async fetchCurrentUser() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/user`, {
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      });
+      return handleResponse(response);
+    } catch (error) {
+      return handleError(error);
+    }
+  },
 
-  // 获取当前用户信息
-  // async fetchCurrentUser() {
-  //   try {
-  //     const response = await fetch(`${API_BASE_URL}/me`, {
-  //       headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-  //     });
-  //     return handleResponse(response);
-  //   } catch (error) {
-  //     return handleError(error);
-  //   }
-  // }
+  // 注销用户
+  async logout() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/logout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      });
+      return handleResponse(response);
+    } catch (error) {
+      return handleError(error);
+    }
+  }
+  
 
   // 为其他 API 路由添加类似的方法（如 recipes, ingredients, reviews）
 
