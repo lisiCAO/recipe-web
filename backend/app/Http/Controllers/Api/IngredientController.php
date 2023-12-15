@@ -7,17 +7,27 @@ use App\Http\Resources\IngredientDetailResource;
 use App\Http\Resources\IngredientListResource;
 use App\Models\Ingredient;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Storage;
 
 class IngredientController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public function index()
     {
-        $ingredients = Ingredient::all();
-        return IngredientListResource::collection($ingredients);
+        try {
+            $ingredients = Ingredient::all();
+            return IngredientListResource::collection($ingredients);
+        } catch (\Illuminate\Database\QueryException $e) {
+            Log::error('Database query error in fetching ingredients: ' . $e->getMessage());
+            return $this->sendError('Database query error', [], 500);
+        } catch (\Exception $e) {
+            Log::error('Error fetching ingredients: ' . $e->getMessage());
+            return $this->sendError('Error fetching ingredients', [], 500);
+        }
     }
 
     /**
@@ -25,18 +35,20 @@ class IngredientController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:50',
-            'img_path' => 'nullable|string|max:255', // 假设图片文件
-            'description' => 'nullable|string',
-        ]);
+        try{
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:50',
+                'img_path' => 'nullable|string|max:255',
+                'description' => 'nullable|string',
+            ]);
+            $ingredient = Ingredient::create($validatedData);
 
-        $ingredient = Ingredient::create($validatedData);
+            return $this->sendResponse(new IngredientDetailResource($ingredient), 'Ingredient created successfully');
+        } catch (\Exception $e) {
+            Log::error('Error creating ingredient: ' . $e->getMessage());
+            return $this->sendError('Error creating ingredient', [], 500);
+        }
 
-        return response()->json([
-            'message' => 'Ingredient created successfully',
-            'ingredient' => new IngredientDetailResource($ingredient)
-        ], 201);
     }
 
     /**
@@ -44,8 +56,13 @@ class IngredientController extends Controller
      */
     public function show(string $id): IngredientDetailResource
     {
-        $ingredient = Ingredient::findOrFail($id);
-        return new IngredientDetailResource($ingredient);
+        try{
+            $ingredient = Ingredient::findOrFail($id);
+            return new IngredientDetailResource($ingredient);
+        } catch (\Exception $e) {
+            Log::error('Error fetching ingredient: ' . $e->getMessage());
+            return $this->sendError('Error fetching ingreident', [], 500);
+        }
     }
 
     /**
@@ -53,20 +70,22 @@ class IngredientController extends Controller
      */
     public function update(Request $request, string $id):  \Illuminate\Http\JsonResponse
     {
-        $ingredient = Ingredient::findOrFail($id);
-
-        $validatedData = $request->validate([
-            'name' => 'nullable|string|max:50',
-            'img_path' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-        ]);
-
-        $ingredient->update($validatedData);
-
-        return response()->json([
-            'message' => 'Ingredient updated successfully',
-            'recipe' => new IngredientDetailResource($ingredient)
-        ], 200);
+        try{
+            $ingredient = Ingredient::findOrFail($id);
+            $validatedData = $request->validate([
+                'name' => 'nullable|string|max:50',
+                'img_path' => 'nullable|string|max:255',
+                'description' => 'nullable|string',
+            ]);
+            if (!empty($validatedData['img_path']) && !empty($ingredient->img_path)) {
+                Storage::delete($ingredient->img_path);
+            }
+            $ingredient->update($validatedData);
+            return $this->sendResponse(new IngredientDetailResource($ingredient), 'Ingredient updated successfully');
+        } catch (\Exception $e) {
+            Log::error('Error updating ingredient: ' . $e->getMessage());
+            return $this->sendError('Error updating ingredient', [], 500);
+        }
     }
 
     /**
@@ -74,29 +93,14 @@ class IngredientController extends Controller
      */
     public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
-        $ingredient = Ingredient::findOrFail($id);
-        $ingredient->delete();
-        return response()->json(['message' => 'Ingredient deleted successfully']);
-    }
+        try {
+            $ingredient = Ingredient::findOrFail($id);
+            $ingredient->delete();
 
-    /**
-     * Search the specified resource from storage.
-     */
-    public function summary() 
-    {
-        $totalIngredients = Ingredient::count();
-        $commonIngredients = DB::table('recipe_ingredients')
-            ->select('ingredient_id', DB::raw('count(*) as total'))
-            ->groupBy('ingredient_id')
-            ->orderBy('total', 'desc')
-            ->take(5)
-            ->get();
-        $lastestIngredients = Ingredient::latest()->take(5)->get();
-
-        return response()->json([
-            'totalIngredients' => $totalIngredients,
-            // 'commonIngredients' => $commonIngredients,
-            // 'lastestIngredients' => $lastestIngredients
-        ], 200);
+            return $this->sendResponse(null, 'Ingredient deleted successfully');
+        } catch (\Exception $e) {
+            Log::error('Error deleting ingredient: ' . $e->getMessage());
+            return $this->sendError('Error deleting ingredient', [], 500);
+        }
     }
 }

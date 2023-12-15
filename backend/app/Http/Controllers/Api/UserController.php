@@ -9,6 +9,10 @@ use App\Http\Resources\UserListResource;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
@@ -19,7 +23,13 @@ class UserController extends Controller
     public function index(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         // Get all users
-        return UserListResource::collection(User::all());
+        try {
+            $users = User::all();
+            return UserListResource::collection($users);
+        } catch (\Exception $e) {
+            Log::error('Error fetching users: ' . $e->getMessage());
+            return $this->sendError('Error fetching users', [], 500);
+        }
     }
 
     /**
@@ -27,25 +37,31 @@ class UserController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
-        \Log::info('Request Data:', $request->all());
+        Log::info('User creation request: ', $request->except('password'));
 
-        $validatedData = $request->validate([
-            'first_name' => 'required|string|max:50',
-            'last_name' => 'required|string|max:50',
-            'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|min:6',
-            'profile_image_path' => 'nullable|string',
-            'category' => 'nullable|string|max:50',
-        ]);
+        try{
+            $validatedData = $request->validate([
+                'first_name' => 'required|string|max:50',
+                'last_name' => 'required|string|max:50',
+                'email' => 'required|string|email|max:100|unique:users',
+                'password' => 'required|string|min:6',
+                'profile_image_path' => 'nullable|string',
+                'category' => 'nullable|string|max:50',
+            ]);
 
-        $validatedData['password'] = Hash::make($validatedData['password']);
+            $validatedData['password'] = Hash::make($validatedData['password']);
+            $user = User::create($validatedData);
+            Log::info('User created successfully: ', ['id' => $user->user_id]);
 
-        $user = User::create($validatedData);
+            return $this->sendResponse(new UserDetailResource($user), 'User created successfully');
+        } catch (QueryException $e) {
+            Log::error('User creation failed: ' . $e->getMessage());
+            return $this->sendError('User creation failed(Database issue)', [], 500);
+        } catch (\Exception $e) {
+            Log::error('Unexpected error during user creation: '. $e->getMessage());
+            return $this->sendError('Unexpected error', [], 500);
+        }
 
-        return response()->json([
-            'message' => 'User created successfully',
-            'user' => new UserDetailResource($user)
-        ], 201);
     }
 
     /**
@@ -62,28 +78,32 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
-        $user = User::findOrFail($id);
+        try{
+            $user = User::findOrFail($id);
 
-        $validatedData = $request->validate([
-            'first_name' => 'nullable|string|max:50',
-            'last_name' => 'nullable|string|max:50',
-            'email' => 'nullable|string|email|max:100|unique:users,email,' .  $id . ',user_id',
-            'password' => 'nullable|string|min:6',
-            'profile_image_path' => 'nullable|string',
-            'category' => 'nullable|string|max:50',
-        ]);
+            $validatedData = $request->validate([
+                'first_name' => 'nullable|string|max:50',
+                'last_name' => 'nullable|string|max:50',
+                'email' => 'nullable|string|email|max:100|unique:users,email,' .  $id . ',user_id',
+                'password' => 'nullable|string|min:6',
+                'profile_image_path' => 'nullable|string',
+                'category' => 'nullable|string|max:50',
+            ]);
+            if (!empty($validatedData['password'])) {
+                $validatedData['password'] = Hash::make($validatedData['password']);
+            }
 
+            if (!empty($validatedData['profile_image_path']) && !empty($user->profile_image_path)) {
+                // delete previous img
+                Storage::delete($user->profile_image_path);
+            }
 
-        if (!empty($validatedData['password'])) {
-            $validatedData['password'] = Hash::make($validatedData['password']);
+            $user->update($validatedData);
+            return $this->sendResponse(new UserDetailResource($user), 'User updated successfully');
+        } catch (\Exception $e) {
+            Log::error('User update failed: ' . $e->getMessage());
+            return $this->sendError('User update failed', [], 500);
         }
-
-        $user->update($validatedData);
-
-        return response()->json([
-            'message' => 'User updated successfully',
-            'user' => new UserDetailResource($user)
-        ], 201);
     }
 
     /**
@@ -94,24 +114,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return response()->json(['message' => 'User deleted successfully'],200);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function summary() 
-    {
-        $totalUsers = User::count();
-        $totalUsersToday = User::whereDate('created_at', today())->count();
-        $lastestUsers = User::orderBy('created_at', 'desc')->take(5)->get();
-        // $activeUsers = User::where('last_login_at', '>=', today()->subDays(7))->count();
-        return response()->json([
-            'total_users' => $totalUsers,
-            'total_users_today' => $totalUsersToday,
-            // 'lastest_users' => $lastestUsers,
-            // 'active_users' => $activeUsers,
-        ], 200);
+        return $this->sendResponse(null, 'User deleted successfully');
     }
 
     public function getCurrentUser(Request $request)
@@ -119,17 +122,21 @@ class UserController extends Controller
         try {
             // 尝试通过JWT获取用户
             if (! $user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['user_not_found'], 404);
+                return $this->sendError('User not found', [], 404);
             }
+            return $this->sendResponse(new UserDetailResource($user), 'User retrieved successfully');
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-            return response()->json(['token_expired'], $e->getStatusCode());
+            Log::error('Token epired error: ' . $e->getMessage());
+            return $this->sendError('token_expired', [], $e->getStatusCode());
         } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-            return response()->json(['token_invalid'], $e->getStatusCode());
+            Log::error('Token invalid error: ' . $e->getMessage());
+            return $this->sendError('token_invalid', [], $e->getStatusCode());
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-            return response()->json(['token_absent'], $e->getStatusCode());
+            Log::error('Error retrieving user: ' . $e->getMessage());
+            return $this->sendError('token_absent', [], $e->getStatusCode());
         }
 
-        // 用户找到
-        return response()->json(compact('user'));
+//        // 用户找到
+//        return response()->json(compact('user'));
     }
 }

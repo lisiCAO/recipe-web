@@ -10,6 +10,7 @@ use App\Models\Recipe;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ReviewController extends Controller
 {
@@ -89,22 +90,23 @@ class ReviewController extends Controller
         try {
             $review = Review::findOrFail($id);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Review not found'
-            ], 404);
+            return $this->sendError('Review not found', 404);
         }
 
-        $validatedData = $request->validate([
-            'comment' => 'nullable|string',
-            'rating' => 'nullable|numeric|between:1,5',
-        ]);
+        try{
+            $validatedData = $request->validate([
+                'comment' => 'nullable|string',
+                'rating' => 'nullable|numeric|between:1,5',
+            ]);
 
-        $review->update($validatedData);
+            $review->update($validatedData);
 
-        return response()->json([
-            'message' => 'Review updated successfully',
-            'review' => $review
-        ], 200);
+            return $this->sendResponse($review, 'Review updated successfully', 200);
+        } catch (\Exception $e) {
+            Log::error("Review update failed: " . $e->getMessage());
+            return  $this->sendError('Review update failed', 500);
+        }
+
     }
 
     /**
@@ -117,19 +119,4 @@ class ReviewController extends Controller
         return response()->json(['message' => 'Review deleted successfully'], 200);
     }
 
-    /**
-     * Search the specified resource from storage.
-     */
-    public function summary()
-{
-    $totalReviews = Review::count();
-    $latestReviews = Review::latest()->take(5)->get();
-    $highRatingReviews = Review::where('rating', '>=', 4.5)->latest()->take(5)->get();
-
-    return response()->json([
-        'totalReviews' => $totalReviews,
-        // 'latestReviews' => $latestReviews,
-        // 'highRatingReviews' => $highRatingReviews,
-    ]);
-}
 }

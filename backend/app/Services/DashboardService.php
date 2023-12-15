@@ -8,17 +8,24 @@ use App\Models\Recipe;
 use App\Models\Review;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class DashboardService
 {
     public function getDashboardData(): array
     {
-        return [
-            'userStats' => $this->getUserStats(),
-            'recipeStats' => $this->getRecipeStats(),
-            'ingredientStats' => $this->getIngredientStats(),
-            'reviewStats' => $this->getReviewStats(),
-        ];
+        try {
+            return [
+                'userStats' => $this->getUserStats(),
+                'recipeStats' => $this->getRecipeStats(),
+                'ingredientStats' => $this->getIngredientStats(),
+                'reviewStats' => $this->getReviewStats(),
+            ];
+        } catch (\Exception $e) {
+            Log::error('Error fetching dashboard data: ' . $e->getMessage());
+            // 根据需要返回默认值或抛出异常
+            return []; // 可以返回空数组或其他默认值
+        }
     }
 
     protected function getUserStats(): array

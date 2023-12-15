@@ -16,7 +16,7 @@ export const UserProvider = ({ children }) => {
             const response = await ApiService.fetchCurrentUser();
             console.log(response);
             setIsLoggedIn(true);
-            setUser(response.user);
+            setUser(response.data);
           } catch (error) {
             setIsLoggedIn(false);
             setUser(null);
