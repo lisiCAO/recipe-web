@@ -82,7 +82,7 @@ class IngredientController extends Controller
             }
             $ingredient->update($validatedData);
             return $this->sendResponse(new IngredientDetailResource($ingredient), 'Ingredient updated successfully');
-        } catch (\Exception) {
+        } catch (\Exception $e) {
             Log::error('Error updating ingredient: ' . $e->getMessage());
             return $this->sendError('Error updating ingredient', [], 500);
         }
