@@ -33,6 +33,7 @@ Route::middleware(['parse.jwt', 'jwt.auth'])->group(function () {
     Route::apiResource('recipes', RecipeController::class);
     Route::apiResource('ingredients', IngredientController::class);
     Route::apiResource('reviews', ReviewController::class);
+    
     // Functions
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/upload', [FileUploadController::class, 'upload']);
