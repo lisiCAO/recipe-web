@@ -25,7 +25,7 @@ class RecipeDetailResource extends JsonResource
         return [
             'id' => $this->recipe_id,
             'name' => $this->recipe_name,
-            'imagePath' => $this->recipe_image_path,
+            'imagePath' => $this->Storage::url(recipe_image_path),
             'cookingTime' => $this->cooking_time,
             'stepInstruction' => $this->step_instruction,
             'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
