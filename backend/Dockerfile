@@ -38,8 +38,11 @@ ENV DB_PASSWORD=myDBpw
 # 更改 Laravel 应用的文件和目录所有权
 RUN chown -R www-data:www-data /var/www/html
 
-# 安装 Laravel 项目依赖
-RUN composer install --no-scripts
+# 更新 Composer 依赖并安装
+RUN composer update --no-scripts && composer install --no-scripts
+
+# 清除 Composer 缓存
+RUN composer clear-cache
 
 # 运行 Laravel 应用
 CMD [ "php", "artisan", "serve", "--host=0.0.0.0"]
