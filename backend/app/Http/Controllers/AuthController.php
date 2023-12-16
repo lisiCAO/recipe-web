@@ -29,8 +29,6 @@ class AuthController extends Controller
     return response()->json(['message' => 'Successfully logged out'])->withCookie($cookie);
 }
 
-
-    
     protected function createNewToken($token){
         return response()->json([
             'token_type' => 'bearer',
