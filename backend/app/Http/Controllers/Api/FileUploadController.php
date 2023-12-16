@@ -9,6 +9,12 @@ use App\Http\Controllers\Controller;
 
 class FileUploadController extends Controller
 {
+    /**
+     * Uploads a file.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function upload(Request $request)
     {
         try {

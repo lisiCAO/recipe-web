@@ -10,6 +10,7 @@ class IngredientDetailResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -17,7 +18,7 @@ class IngredientDetailResource extends JsonResource
         return [
             'id' => $this->ingredient_id,
             'name' => $this->name,
-            'imagePath' =>$this->img_path,
+            'imagePath' =>$this->Storage::url($this->img_path),
             'description' =>$this->description,
             'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
             'updatedAt' => Carbon::parse($this->updated_at)->format('Y-m-d H:i:s'),

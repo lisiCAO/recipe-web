@@ -14,18 +14,24 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tymon\JWTAuth\Facades\JWTAuth;
-
+/**
+ * UserController
+ * 
+ * This class is responsible for handling user-related API requests.
+ */
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public function index(): \Illuminate\Http\JsonResponse
     {
         // Get all users
         try {
             $users = User::all();
-            return UserListResource::collection($users);
+            return  $this->sendResponse(UserListResource::collection($users), 'Users fetched successfully'); 
         } catch (\Exception $e) {
             Log::error('Error fetching users: ' . $e->getMessage());
             return $this->sendError('Error fetching users', [], 500);
@@ -34,6 +40,9 @@ class UserController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
@@ -66,6 +75,9 @@ class UserController extends Controller
 
     /**
      * Display the specified resource.
+     *
+     * @param string $id
+     * @return UserDetailResource
      */
     public function show(string $id): UserDetailResource
     {
@@ -75,6 +87,10 @@ class UserController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
@@ -108,6 +124,9 @@ class UserController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
@@ -117,16 +136,22 @@ class UserController extends Controller
         return $this->sendResponse(null, 'User deleted successfully');
     }
 
+    /**
+     * Get the current user.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getCurrentUser(Request $request)
     {
         try {
-            // 尝试通过JWT获取用户
+            // Try to get the user using JWT
             if (! $user = JWTAuth::parseToken()->authenticate()) {
                 return $this->sendError('User not found', [], 404);
             }
             return $this->sendResponse(new UserDetailResource($user), 'User retrieved successfully');
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-            Log::error('Token epired error: ' . $e->getMessage());
+            Log::error('Token expired error: ' . $e->getMessage());
             return $this->sendError('token_expired', [], $e->getStatusCode());
         } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
             Log::error('Token invalid error: ' . $e->getMessage());
@@ -135,8 +160,5 @@ class UserController extends Controller
             Log::error('Error retrieving user: ' . $e->getMessage());
             return $this->sendError('token_absent', [], $e->getStatusCode());
         }
-
-//        // 用户找到
-//        return response()->json(compact('user'));
     }
 }

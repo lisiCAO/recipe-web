@@ -5,20 +5,27 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
+/**
+ * Class RecipeDetailResource
+ *
+ * This class represents a resource for transforming a recipe detail into an array.
+ *
+ * @package App\Http\Resources
+ */
 class RecipeDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @return array<string, mixed>
+     * @param Request $request The request object.
+     * @return array<string, mixed> The transformed resource as an array.
      */
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->recipe_id,
             'name' => $this->recipe_name,
-            'imagePath' => $this->recipe_image_path,
+            'imagePath' => $this->Storage::url(recipe_image_path),
             'cookingTime' => $this->cooking_time,
             'stepInstruction' => $this->step_instruction,
             'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),

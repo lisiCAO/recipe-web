@@ -7,39 +7,39 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
-
 /**
  * App\Models\Recipe
  *
- * @property int $recipe_id
- * @property string $recipe_name
- * @property int $user_id
- * @property int|null $cooking_time
- * @property string|null $step_instruction
- * @property string|null $description
- * @property string|null $recipe_image_path
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read Collection<int, \App\Models\Ingredient> $ingredients
- * @property-read int|null $ingredients_count
- * @property-read Collection<int, \App\Models\Review> $reviews
- * @property-read int|null $reviews_count
- * @property-read User $user
- * @method static \Database\Factories\RecipeFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|Recipe newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Recipe newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Recipe query()
- * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereCookingTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereRecipeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereRecipeImagePath($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereRecipeName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereStepInstruction($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereUserId($value)
+ * @property int $recipe_id The ID of the recipe.
+ * @property string $recipe_name The name of the recipe.
+ * @property int $user_id The ID of the user who created the recipe.
+ * @property int|null $cooking_time The cooking time of the recipe in minutes.
+ * @property string|null $step_instruction The step-by-step instructions for preparing the recipe.
+ * @property string|null $description The description of the recipe.
+ * @property string|null $recipe_image_path The file path of the recipe image.
+ * @property Carbon|null $created_at The timestamp when the recipe was created.
+ * @property Carbon|null $updated_at The timestamp when the recipe was last updated.
+ * @property-read Collection<int, \App\Models\Ingredient> $ingredients The collection of ingredients used in the recipe.
+ * @property-read int|null $ingredients_count The count of ingredients used in the recipe.
+ * @property-read Collection<int, \App\Models\Review> $reviews The collection of reviews for the recipe.
+ * @property-read int|null $reviews_count The count of reviews for the recipe.
+ * @property-read User $user The user who created the recipe.
+ * @method static \Database\Factories\RecipeFactory factory($count = null, $state = []) Creates a new recipe factory instance.
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe newModelQuery() Creates a new query builder for the model.
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe newQuery() Creates a new query builder for the model.
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe query() Creates a new query builder for the model.
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereCookingTime($value) Adds a where clause for the cooking time.
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereCreatedAt($value) Adds a where clause for the creation timestamp.
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereDescription($value) Adds a where clause for the description.
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereRecipeId($value) Adds a where clause for the recipe ID.
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereRecipeImagePath($value) Adds a where clause for the recipe image path.
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereRecipeName($value) Adds a where clause for the recipe name.
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereStepInstruction($value) Adds a where clause for the step instruction.
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereUpdatedAt($value) Adds a where clause for the update timestamp.
+ * @method static \Illuminate\Database\Eloquent\Builder|Recipe whereUserId($value) Adds a where clause for the user ID.
  * @mixin \Eloquent
  */
+
 class Recipe extends Model
 {
     use HasFactory;

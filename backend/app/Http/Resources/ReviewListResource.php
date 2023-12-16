@@ -6,19 +6,19 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class
-ReviewListResource extends JsonResource
+class ReviewListResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @return array<string, mixed>
+     * @param Request $request The request object.
+     * @return array<string, mixed> The transformed resource array.
      */
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->review_id,
-            'recipeName' => $this->recipe->recipe_name, // 假设您的 Recipe 模型有 recipe_name 字段
+            'recipeName' => $this->recipe->recipe_name, // recipe_name is a column in the recipes table
             'userName' => $this->user->first_name . ' ' . $this->user->last_name,
             'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
         ];

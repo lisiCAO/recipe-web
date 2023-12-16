@@ -11,79 +11,107 @@ use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-
+/**
+ * ReviewController
+ * 
+ * This class is responsible for handling the API requests related to reviews.
+ */
 class ReviewController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public function index()
     {
-        return ReviewListResource::collection(Review::all());
+        try {
+            $reviews = Review::all();
+            return $this->sendResponse(ReviewListResource::collection($reviews), 'Reviews fetched successfully');
+        } catch (\Exception $e) {
+            Log::error('Error fetching reviews: ' . $e->getMessage());
+            return $this->sendError('Error fetching reviews', [], 500);
+        }
     }
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
-        // 验证请求数据
-        $validatedData = $request->validate([
-            'comment' => 'required|string',
-            'rating' => 'required|numeric|between:1,5',
-            // 可以在这里添加其他需要验证的字段
-        ]);
+        try {
+            // Validate request data
+            $validatedData = $request->validate([
+                'comment' => 'required|string',
+                'rating' => 'required|numeric|between:1,5',
+                // You can add other fields to be validated here
+            ]);
 
-        // 获取请求数据
-        $recipeName = $request->input('recipe_name');
-        $recipe = Recipe::where('recipe_name', $recipeName)->first();
-        if(!$recipe) {
-            return response()->json([
-                'message' => 'Recipe not found'
-            ], 404);
+            // Get request data
+            $recipeName = $request->input('recipe_name');
+            $recipe = Recipe::where('recipe_name', $recipeName)->first();
+            if (!$recipe) {
+                return response()->json([
+                    'message' => 'Recipe not found'
+                ], 404);
+            }
+            $recipeId = $recipe->recipe_id;
+
+            $userName = $request->input('user_name');
+            $nameParts = explode(' ', $userName, 2); // limit to 2 parts, in case of middle name
+            $firstName = $nameParts[0];
+            $lastName = $nameParts[1] ?? '';
+
+            $user = User::where('first_name', $firstName)->where('last_name', $lastName)->first();
+            if (!$user) {
+                return response()->json([
+                    'message' => 'User not found'
+                ], 404);
+            }
+            $userId = $user->user_id;
+
+            $review = Review::create([
+                'recipe_id' => $recipeId,
+                'user_id' => $userId,
+                'comment' => $validatedData['comment'],
+                'rating' => $validatedData['rating'],
+            ]);
+
+            $review->save();
+            Log::info('Review created successfully.', ['review_id' => $review->id]);
+            return $this->sendResponse(new ReviewResource($review), 'Review created successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error creating review: ' . $e->getMessage());
+            return $this->sendError('Error creating review', [], 500);
         }
-        $recipeId = $recipe->recipe_id;
-
-        $userName = $request->input('user_name');
-        $nameParts = explode(' ', $userName, 2); // limit to 2 parts, incase of middle name
-        $firstName = $nameParts[0];
-        $lastName = $nameParts[1] ?? '';
-
-        $user = User::where('first_name', $firstName)->where('last_name', $lastName)->first();
-        if(!$user) {
-            return response()->json([
-                'message' => 'User not found'
-            ], 404);
-        }
-        $userId = $user->user_id;
-
-        $review = Review::create([
-            'recipe_id' => $recipeId,
-            'user_id' => $userId,
-            'comment' => $validatedData['comment'],
-            'rating' => $validatedData['rating'],
-            // 其他需要设置的字段
-        ]);
-
-        $review->save();
-
-        return response()->json([
-            'message' => 'Review created successfully',
-            'review' => $review
-        ], 201);
     }
 
     /**
      * Display the specified resource.
+     *
+     * @param string $id
+     * @return ReviewResource
      */
     public function show(string $id): ReviewResource
     {
-        $review = Review::findOrFail($id);
-        return new ReviewResource($review);
+        try {
+            $review = Review::findOrFail($id);
+            return $this->sendResponse(new ReviewResource($review), 'Review fetched successfully.');
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch review: ' . $e->getMessage());
+            return $this->sendError('Error fetching review', [], 404);
+        }
     }
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
@@ -93,7 +121,7 @@ class ReviewController extends Controller
             return $this->sendError('Review not found', 404);
         }
 
-        try{
+        try {
             $validatedData = $request->validate([
                 'comment' => 'nullable|string',
                 'rating' => 'nullable|numeric|between:1,5',
@@ -106,17 +134,24 @@ class ReviewController extends Controller
             Log::error("Review update failed: " . $e->getMessage());
             return  $this->sendError('Review update failed', 500);
         }
-
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
-        $review = Review::findOrFail($id);
-        $review->delete();
-        return response()->json(['message' => 'Review deleted successfully'], 200);
+        try {
+            $review = Review::findOrFail($id);
+            $review->delete();
+            Log::info('Review deleted successfully.', ['review_id' => $id]);
+            return $this->sendResponse(null, 'Review deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Failed to delete review: ' . $e->getMessage());
+            return $this->sendError('Error deleting review', [], 500);
+        }
     }
-
 }
