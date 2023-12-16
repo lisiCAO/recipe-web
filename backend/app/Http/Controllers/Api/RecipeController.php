@@ -56,7 +56,7 @@ class RecipeController extends Controller
             ]);
 
             // get current ID
-            $user = $request->JWTAuth::parseToken()->authenticate();
+            $user = JWTAuth::parseToken()->authenticate();
             $validatedData['user_id'] = $user->user_id;
 
             // create new recipe
@@ -73,13 +73,13 @@ class RecipeController extends Controller
      * Display the specified resource.
      *
      * @param string $id The ID of the recipe.
-     * @return RecipeDetailResource
+     * @return JsonResponse
      */
-    public function show(string $id): RecipeDetailResource
+    public function show(string $id): JsonResponse
     {
         try {
             $recipe = Recipe::findOrFail($id);
-            return new RecipeDetailResource($recipe);
+            return $this->sendResponse(new RecipeDetailResource($recipe), 'Recipe fetched by ID successfully');
         } catch (\Exception $e) {
             Log::error('Error fetching recipe: ' . $e->getMessage());
             return $this->sendError('Error fetching recipe', [], 500);

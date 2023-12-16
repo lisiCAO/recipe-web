@@ -28,6 +28,7 @@ const displayConfig = {
 };
 
 const DetailsModal =  ({ isOpen, onClose, data, type, onEdit }) => {
+    console.log('data from Details modal', data);
     if(!data || !isOpen) return null;
 
     const config = displayConfig[type];

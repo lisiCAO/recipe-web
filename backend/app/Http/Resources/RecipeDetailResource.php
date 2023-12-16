@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage; // Add this line to import the Storage class
 /**
  * Class RecipeDetailResource
  *
@@ -25,7 +26,7 @@ class RecipeDetailResource extends JsonResource
         return [
             'id' => $this->recipe_id,
             'name' => $this->recipe_name,
-            'imagePath' => $this->Storage::url(recipe_image_path),
+            'imagePath' => $this->recipe_image_path,
             'cookingTime' => $this->cooking_time,
             'stepInstruction' => $this->step_instruction,
             'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),

@@ -27,7 +27,7 @@ class UserDetailResource extends JsonResource
             'lastName' => $this->last_name,
             'name' => $this->first_name . ' ' . $this->last_name,
             'email' => $this->email,
-            'imagePath' => Storage::url($this->profile_image_path) ,
+            'imagePath' => $this->profile_image_path,
             'category' => $this->category,
             'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
             'updatedAt' => Carbon::parse($this->updated_at)->format('Y-m-d H:i:s')

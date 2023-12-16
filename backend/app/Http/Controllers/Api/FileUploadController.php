@@ -27,7 +27,7 @@ class FileUploadController extends Controller
 
                 Log::info('File uploaded successfully: ' . $url);
 
-                return response()->json(['url' => $url], 200);
+                return $this->sendResponse($url, 'File uploaded successfully');
             }
 
             Log::warning('No valid file provided in upload');

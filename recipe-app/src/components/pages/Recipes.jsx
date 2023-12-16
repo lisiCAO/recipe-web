@@ -16,7 +16,6 @@ const Recipes = () => {
     const [selectedRecipe, setSelectedRecipe] = useState(null);
     const [editingRecipe, setEditingRecipe] = useState(null);
 
-
     // 加载初始数据
     useEffect(() => {
         ApiService.fetchRecipes()
@@ -34,12 +33,12 @@ const Recipes = () => {
         });
     }, []);
     
-
     const handleCreate = (newRecipe) => {
         console.log('Creating new recipe:', newRecipe);
         ApiService.createRecipe(newRecipe)
         .then(addedRecipe => {
-            setRecipes([...recipes, addedRecipe.recipe]);
+            console.log('Added recipe:', addedRecipe);
+            setRecipes([...recipes, addedRecipe]);
             setShowCreateModal(false);
         })
         .catch(error => console.error(error)); 
@@ -49,6 +48,7 @@ const Recipes = () => {
         const recipeId = recipe.id;
             ApiService.fetchRecipe(recipeId) // 假设这是一个获取单个食谱详细信息的函数
               .then(data => {
+                console.log('Recipe details from recipes page, by id:', data);
                   setSelectedRecipe(data);
                   setShowDetailsModal(true);
               })
