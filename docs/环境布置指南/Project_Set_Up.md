@@ -52,7 +52,7 @@ cp .env.example .env
 Input command at the root of the parent project
 
   ```bash
-  docker-compose exec -it lavaral-app bash
+  docker-compose exec -it laravel-app bash
   ```
 #### Generate APP KEY and JWT Secret
 - The application key and JWT secret should be set up, you can enter the container to run these commands:
