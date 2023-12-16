@@ -20,8 +20,8 @@ const Ingredients = () => {
     useEffect(() => {
         ApiService.fetchIngredients()
         .then(response => {
-            if (Array.isArray(response.data)) {
-                setIngredients(response.data);
+            if (Array.isArray(response)) {
+                setIngredients(response);
             } else {
                 console.error('Unable to fetch ingredients.');
                 return [];

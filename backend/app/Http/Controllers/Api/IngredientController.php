@@ -28,7 +28,7 @@ class IngredientController extends Controller
         // Retrieve all ingredients from the database
         try {
             $ingredients = Ingredient::all();
-            return IngredientListResource::collection($ingredients);
+            return $this->sendResponse(IngredientListResource::collection($ingredients),'Ingredients fetched successfully.') ;
         } catch (\Illuminate\Database\QueryException $e) {
             Log::error('Database query error in fetching ingredients: ' . $e->getMessage());
             return $this->sendError('Database query error', [], 500);

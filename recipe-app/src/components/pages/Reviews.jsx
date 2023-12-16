@@ -21,8 +21,8 @@ const Reviews = () => {
     useEffect(() => {
         ApiService.fetchReviews()
         .then(response => {
-            if (Array.isArray(response.data)) {
-                setReviews(response.data);
+            if (Array.isArray(response)) {
+                setReviews(response);
             } else {
                 console.error('Unable to fetch reviews.');
                 return [];

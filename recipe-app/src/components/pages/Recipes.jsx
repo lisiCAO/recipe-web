@@ -21,8 +21,8 @@ const Recipes = () => {
     useEffect(() => {
         ApiService.fetchRecipes()
         .then(response => {
-            if (Array.isArray(response.data)) {
-                setRecipes(response.data);
+            if (Array.isArray(response)) {
+                setRecipes(response);
             } else {
                 console.error('Unable to fetch recipes.');
                 return [];

@@ -16,7 +16,7 @@ export const UserProvider = ({ children }) => {
             const response = await ApiService.fetchCurrentUser();
             console.log(response);
             setIsLoggedIn(true);
-            setUser(response.data);
+            setUser(response);
           } catch (error) {
             setIsLoggedIn(false);
             setUser(null);
@@ -36,7 +36,7 @@ export const UserProvider = ({ children }) => {
       setTimeout(() => {
         setIsLoggedIn(true);           // 设置用户已经登录
         setShowLoginModal(false);      // 关闭登录模态框
-        setUser(response.user);        // 保存当前用户信息
+        setUser(response.data);        // 保存当前用户信息
       }, 2000);
   
     } catch (error) {

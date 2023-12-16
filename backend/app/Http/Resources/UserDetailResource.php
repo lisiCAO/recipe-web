@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage; // Add this line to import the Storage class
 
 /**
  * Class UserDetailResource
@@ -26,7 +27,7 @@ class UserDetailResource extends JsonResource
             'lastName' => $this->last_name,
             'name' => $this->first_name . ' ' . $this->last_name,
             'email' => $this->email,
-            'imagePath' => $this->Storage::url(profile_image_path),
+            'imagePath' => Storage::url($this->profile_image_path) ,
             'category' => $this->category,
             'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
             'updatedAt' => Carbon::parse($this->updated_at)->format('Y-m-d H:i:s')

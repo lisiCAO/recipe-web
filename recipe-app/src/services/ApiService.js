@@ -310,22 +310,41 @@ const ApiService = {
 };
 
 /* Handle Api response */
+// const handleResponse = async (response) => {
+//   if (response.ok) {
+//     const contentType = response.headers.get('Content-Type');
+//     if (contentType && contentType.includes('application/json')) {
+//       return await response.json();
+//     } else {
+//       // non JSON response
+//       const text = await response.text();
+//       throw new Error(`Non-JSON response: ${text}`);
+//     }
+//   } else {
+//     // handle HTTP error status
+//     const errorText = await response.text();
+//     throw new Error(`HTTP error ${response.status}: ${errorText}`);
+//   }
+// }
+
 const handleResponse = async (response) => {
-  if (response.ok) {
-    const contentType = response.headers.get('Content-Type');
-    if (contentType && contentType.includes('application/json')) {
-      return await response.json();
+  const contentType = response.headers.get('Content-Type');
+  if (contentType && contentType.includes('application/json')) {
+    const data = await response.json();
+    console.log(data);
+    if (data.success) {
+      return data.data;
     } else {
-      // non JSON response
-      const text = await response.text();
-      throw new Error(`Non-JSON response: ${text}`);
+      console.log(data.message);
+      return data.message;
     }
   } else {
-    // handle HTTP error status
-    const errorText = await response.text();
-    throw new Error(`HTTP error ${response.status}: ${errorText}`);
+    // non JSON response
+    const text = await response.text();
+    throw new Error(`Non-JSON response: ${text}`);
   }
-}
+};
+    
 
 function handleError(error) {
   console.error('API call failed:', error);
