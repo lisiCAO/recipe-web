@@ -4,13 +4,18 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
+/**
+ * Class UserListResource
+ *
+ * This class represents a resource for transforming a user into an array.
+ */
 class UserListResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @return array<string, mixed>
+     * @param Request $request The request object.
+     * @return array<string, mixed> The transformed user array.
      */
     public function toArray(Request $request): array
     {

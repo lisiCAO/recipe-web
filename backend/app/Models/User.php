@@ -41,35 +41,52 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUserId($value)
  * @mixin \Eloquent
  */
+/**
+ * Class User
+ * 
+ * Represents a user in the application.
+ * This class extends the Authenticatable class and implements the JWTSubject interface.
+ */
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable, HasFactory;
 
-    // 指定关联到模型的数据库表
+    // database table name
     protected $table = 'users';
 
-    // 指定主键
+    // primary key
     protected $primaryKey = 'user_id';
 
-    //如果不实用自动增长的整数作为主键 ID，需要设置以下属性
+    // If the primary key is not an integer, set the $incrementing property to false
     // public $incrementing =false;
 
-    // 如果不希望 Eloquent 自动管理created_at 和 updated_at 时间戳，设置为 false
+    // If the primary key is not an integer, set the $keyType property to string
     public $timestamps = true;
 
-    // 可以批量赋值的属性
+    // fillable attributes
     protected $fillable = ['first_name', 'last_name', 'email', 'password', 'profile_image_path', 'category'];
 
-    // 隐藏属性
+    // hidden attributes
     protected $hidden =['password'];
 
-    // 日期字段的存储格式
+    /**
+     * Get the format for storing dates in the database.
+     *
+     * @param  \DateTimeInterface  $date
+     * @return string
+     */
     protected function serializeDate(\DateTimeInterface $date): string
     {
         return $date->format('Y-m-d H:i:s');
     }
 
-    //密码修改器： 在保存到数据库前自动加密
+    /**
+     * Set the password attribute.
+     * Automatically encrypts the password before saving it to the database.
+     *
+     * @param  string  $value
+     * @return void
+     */
     public function setPasswordAttribute($value): void
     {
         if($value){
@@ -77,20 +94,40 @@ class User extends Authenticatable implements JWTSubject
         }
     }
 
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
     public function getJWTIdentifier() {
         return $this->getKey();
     }
     
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
     public function getJWTCustomClaims() {
         return [];
     }
     
 
+    /**
+     * Get the recipes associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function recipe(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Recipe::class, 'user_id');
     }
 
+    /**
+     * Get the reviews associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function reviews(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Review::class, 'user_id');

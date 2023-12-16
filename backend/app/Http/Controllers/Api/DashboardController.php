@@ -11,7 +11,12 @@ class DashboardController extends Controller {
     public function __construct(DashboardService $dashboardService) {
         $this->dashboardService = $dashboardService;
     }
-
+    
+    /**
+     * Retrieve the dashboard data.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(): \Illuminate\Http\JsonResponse
     {
         try {

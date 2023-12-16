@@ -47,10 +47,11 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
         formData.append('file', file);
         try{
             const response = await ApiService.uploadFile(formData);
-            if(response.url){
+            if(response){
+                console.log('File upload response:', response);
                 setFormData(prevFormData => ({
                     ...prevFormData,
-                    [fieldName]: response.url
+                    [fieldName]: response
                 }));
             } else {
                 console.error('File upload response does not contain a URL.');

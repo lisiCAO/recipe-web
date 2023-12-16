@@ -8,7 +8,7 @@ const Dashboard = ({ onCardClick })=> {
     useEffect(() => {
         ApiService.fetchDashboardData()
             .then(response => {
-                setDashboardData(response.data);
+                setDashboardData(response);
             })
             .catch(err => {
                 setError(err);

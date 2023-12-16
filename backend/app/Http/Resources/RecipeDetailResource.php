@@ -5,13 +5,21 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use Illuminate\Support\Facades\Storage; // Add this line to import the Storage class
+/**
+ * Class RecipeDetailResource
+ *
+ * This class represents a resource for transforming a recipe detail into an array.
+ *
+ * @package App\Http\Resources
+ */
 class RecipeDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @return array<string, mixed>
+     * @param Request $request The request object.
+     * @return array<string, mixed> The transformed resource as an array.
      */
     public function toArray(Request $request): array
     {

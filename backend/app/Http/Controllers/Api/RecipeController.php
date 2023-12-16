@@ -13,17 +13,24 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+/**
+ * Class RecipeController
+ * 
+ * This class is responsible for handling API requests related to recipes.
+ */
 class RecipeController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @return JsonResponse
      */
-    public function index(): AnonymousResourceCollection
+    public function index(): JsonResponse
     {
         // Get all recipes
         try {
             $recipes = Recipe::all();
-            return RecipeListResource::collection($recipes);
+            return $this->sendResponse(RecipeListResource::collection($recipes), 'Recipes fetched successfully');
         } catch (\Exception $e) {
             Log::error('Error fetching recipes: ' . $e->getMessage());
             return $this->sendError('Error fetching recipes', [], 500);
@@ -32,6 +39,9 @@ class RecipeController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param Request $request The HTTP request object.
+     * @return JsonResponse
      */
     public function store(Request $request): JsonResponse
     {
@@ -46,10 +56,10 @@ class RecipeController extends Controller
             ]);
 
             // get current ID
-            $user = $request->JWTAuth::parseToken()->authenticate();
+            $user = JWTAuth::parseToken()->authenticate();
             $validatedData['user_id'] = $user->user_id;
 
-            // 创建新的 Recipe 实例
+            // create new recipe
             $recipe = new Recipe($validatedData);
             $recipe->save(); // 保存食谱
             return $this->sendResponse(new RecipeDetailResource($recipe), 'Recipe created successfully');
@@ -61,12 +71,15 @@ class RecipeController extends Controller
 
     /**
      * Display the specified resource.
+     *
+     * @param string $id The ID of the recipe.
+     * @return JsonResponse
      */
-    public function show(string $id): RecipeDetailResource
+    public function show(string $id): JsonResponse
     {
         try {
             $recipe = Recipe::findOrFail($id);
-            return new RecipeDetailResource($recipe);
+            return $this->sendResponse(new RecipeDetailResource($recipe), 'Recipe fetched by ID successfully');
         } catch (\Exception $e) {
             Log::error('Error fetching recipe: ' . $e->getMessage());
             return $this->sendError('Error fetching recipe', [], 500);
@@ -75,8 +88,12 @@ class RecipeController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param Request $request The HTTP request object.
+     * @param string $id The ID of the recipe.
+     * @return JsonResponse
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): JsonResponse
     {
         try {
             $recipe = Recipe::findOrFail($id);
@@ -108,6 +125,9 @@ class RecipeController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param string $id The ID of the recipe.
+     * @return JsonResponse
      */
     public function destroy(string $id): JsonResponse
     {

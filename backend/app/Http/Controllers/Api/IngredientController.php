@@ -11,16 +11,24 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Class IngredientController
+ *
+ * This class is responsible for handling API requests related to ingredients.
+ */
 class IngredientController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
+        // Retrieve all ingredients from the database
         try {
             $ingredients = Ingredient::all();
-            return IngredientListResource::collection($ingredients);
+            return $this->sendResponse(IngredientListResource::collection($ingredients),'Ingredients fetched successfully.') ;
         } catch (\Illuminate\Database\QueryException $e) {
             Log::error('Database query error in fetching ingredients: ' . $e->getMessage());
             return $this->sendError('Database query error', [], 500);
@@ -32,9 +40,13 @@ class IngredientController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
+        // Validate the request data and create a new ingredient
         try{
             $validatedData = $request->validate([
                 'name' => 'required|string|max:50',
@@ -53,9 +65,13 @@ class IngredientController extends Controller
 
     /**
      * Display the specified resource.
+     *
+     * @param  string  $id
+     * @return IngredientDetailResource
      */
     public function show(string $id): IngredientDetailResource
     {
+        // Retrieve a specific ingredient by its ID
         try{
             $ingredient = Ingredient::findOrFail($id);
             return new IngredientDetailResource($ingredient);
@@ -67,9 +83,14 @@ class IngredientController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, string $id):  \Illuminate\Http\JsonResponse
     {
+        // Update a specific ingredient by its ID
         try{
             $ingredient = Ingredient::findOrFail($id);
             $validatedData = $request->validate([
@@ -90,9 +111,13 @@ class IngredientController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param  string  $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
+        // Delete a specific ingredient by its ID
         try {
             $ingredient = Ingredient::findOrFail($id);
             $ingredient->delete();

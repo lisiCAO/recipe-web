@@ -22,8 +22,8 @@ const Users = () => {
     useEffect(() => {
         ApiService.fetchUsers()
         .then(response => {
-            if (Array.isArray(response.data)) {
-                setUsers(response.data);
+            if (Array.isArray(response)) {
+                setUsers(response);
             } else {
                 console.error('Unable to fetch Users.');
                 return [];
