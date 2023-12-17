@@ -65,7 +65,7 @@ class RecipeController extends Controller
             return $this->sendResponse(new RecipeDetailResource($recipe), 'Recipe created successfully');
         } catch (\Exception $e) {
             Log::error('Error creating recipe: ' . $e->getMessage());
-            return $this->sendError('Error creating recipe', [], 500);
+            return $this->sendError($e->getMessage(), [], 500);
         }
     }
 

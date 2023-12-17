@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from '../common/Button';
 import Table from '../layout/Table';
 import SearchBar from '../common/Searchbar';
@@ -6,6 +6,7 @@ import CreateRecipeModal from '../modals/recipes/CreateRecipeModal';
 import EditRecipeModal from '../modals/recipes/EditReipeModal';
 import RecipeDetailsModal from '../modals/recipes/RecipeDetailsModal';
 import ApiService from '../../services/ApiService';
+import { MessageContext } from './../common/MessageContext';
 import './Recipes.scss';
 
 const Recipes = () => {
@@ -15,6 +16,7 @@ const Recipes = () => {
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
     const [editingRecipe, setEditingRecipe] = useState(null);
+    const { showMessage } = useContext(MessageContext); 
 
     // 加载初始数据
     useEffect(() => {
@@ -33,16 +35,28 @@ const Recipes = () => {
         });
     }, []);
     
-    const handleCreate = (newRecipe) => {
-        console.log('Creating new recipe:', newRecipe);
-        ApiService.createRecipe(newRecipe)
-        .then(addedRecipe => {
+    // const handleCreate = (newRecipe) => {
+    //     console.log('Creating new recipe:', newRecipe);
+    //     ApiService.createRecipe(newRecipe)
+    //     .then(addedRecipe => {
+    //         console.log('Added recipe:', addedRecipe);
+    //         setRecipes([...recipes, addedRecipe]);
+    //         setShowCreateModal(false);
+    //         showMessage('success', 'Recipe created successfully'); 
+    //     })
+    //     .catch(error => {console.error(error);
+    //         showMessage('error', 'Error creating recipe');
+    //     }); 
+    // };
+
+    const handleCreate = async (newRecipe) => { // async/await
+            console.log('Creating new recipe:', newRecipe);
+            const addedRecipe = await ApiService.createRecipe(newRecipe);
             console.log('Added recipe:', addedRecipe);
             setRecipes([...recipes, addedRecipe]);
             setShowCreateModal(false);
-        })
-        .catch(error => console.error(error)); 
-    };
+            showMessage('success', 'Recipe created successfully');
+    }
 
     const handleViewDetails = (recipe) => {
         const recipeId = recipe.id;
@@ -70,9 +84,11 @@ const Recipes = () => {
                 ));
                 setEditingRecipe(null); // Reset the editing state to close the modal
                 setShowDetailsModal(false); // Close the details modal
+                showMessage('success', 'Recipe updated successfully');
             })
             .catch(error => {
                 console.error('Error updating recipe:', error);
+                showMessage('error', 'Error updating recipe');
                 // Handle error (e.g., show a notification to the user)
             });
     };
@@ -103,7 +119,6 @@ const Recipes = () => {
     // 过滤或排序食谱列表
     const filteredRecipes = recipes.filter(recipe =>
         recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
-
     );
 
     return (

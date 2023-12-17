@@ -22,7 +22,6 @@ export const UserProvider = ({ children }) => {
             setUser(null);
           }
         };
-
         checkLoginStatus();
     }, []);
 
@@ -30,13 +29,13 @@ export const UserProvider = ({ children }) => {
   const handleLogin = async (email, password) => {
     try {
       const response = await ApiService.login({ email, password });
-      
+      console.log('handle Login:' +response);
       showMessage('success', 'Login successful');
       // 模拟延迟
       setTimeout(() => {
         setIsLoggedIn(true);           // 设置用户已经登录
         setShowLoginModal(false);      // 关闭登录模态框
-        setUser(response.data);        // 保存当前用户信息
+        setUser(response.user);        // 保存当前用户信息
       }, 2000);
   
     } catch (error) {
@@ -52,7 +51,6 @@ export const UserProvider = ({ children }) => {
     try {
       // 发送请求到后端以清除 JWT Cookie
       await ApiService.logout(); // 确保您有一个处理注销的后端路由
-  
       setIsLoggedIn(false);
       setUser(null);
       showMessage('success', 'Logged out successfully');

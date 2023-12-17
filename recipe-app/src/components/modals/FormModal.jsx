@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import Modal from './Modal';
 import Button from '../common/Button';
 import FormInput from '../common/FormInput';
@@ -6,6 +6,8 @@ import FormTextArea from '../common/FormTextArea';
 import FormFileInput from '../common/FormFileInput';
 import Select from '../common/Select';
 import ApiService from '../../services/ApiService';
+import { MessageContext } from '../common/MessageContext';
+import Message from '../common/Message';
 import './FormModal.scss';
 
 const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => {
@@ -23,6 +25,9 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
 
     const [formData, setFormData] = useState(defaultFormData);
     const [isPasswordChanging, setIsPasswordChanging] = useState(mode === 'create');
+    const { message } =useContext(MessageContext);
+    const { showMessage, hideMessage } = useContext(MessageContext);
+
 
     // Set formData to initialData when in edit mode
     useEffect(() => {
@@ -160,20 +165,39 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
         });
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        hideMessage();
+        let submittedFormData = formData;
+        if (mode === 'edit' && !isPasswordChanging) {
+            const { password, ...rest } = formData;
+            submittedFormData = rest;
+        }
+        const jsonFormData = JSON.stringify(submittedFormData);
+        try {
+            await onSubmit(jsonFormData);
+            onClose();
+        } catch (error) {
+            showMessage('error', error.message || 'Error occurred');
+        }
+    };
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
-            <form onSubmit={(e) => {
-                e.preventDefault();
-                let submittedFormData = formData;
-                if (mode === 'edit' && !isPasswordChanging) {
-                    const { password, ...rest } = formData;
-                    submittedFormData = rest;
-                }    
-                const jsonFormData = JSON.stringify(submittedFormData);
-                console.log('Form data:', jsonFormData)
-                onSubmit(jsonFormData);
-                onClose();
-            }}>
+            <form onSubmit={ handleSubmit
+                // (e) => {
+                // e.preventDefault();
+                // let submittedFormData = formData;
+                // if (mode === 'edit' && !isPasswordChanging) {
+                //     const { password, ...rest } = formData;
+                //     submittedFormData = rest;
+                // }    
+                // const jsonFormData = JSON.stringify(submittedFormData);
+                // console.log('Form data:', jsonFormData)
+                // onSubmit(jsonFormData);
+                // onClose();
+            // }
+            }>
                 { shouldShowPasswordCheckbox && (
                     <label>
                         Change Password:
@@ -185,6 +209,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
                     </label>
                 )}
                 {renderFormFields(config)}
+                <Message message = {message} />
                 <Button type="submit">{mode === 'edit' ? 'Save Changes' : 'Create'}</Button>
             </form>
         </Modal>

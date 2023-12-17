@@ -25,7 +25,7 @@ class AuthController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return $this->sendError('Invalid email or password', [], 401);
         }
     
         $cookie = cookie('jwt', $token, 60); // Create a cookie with a 60-minute expiration time
@@ -39,10 +39,11 @@ class AuthController extends Controller
      * @return JsonResponse The JSON response indicating successful logout.
      */
     public function logout() {
+        $user = Auth::user();
         // Clear the cookie
         $cookie = \Cookie::forget('jwt');
 
-        return response()->json(['message' => 'Successfully logged out'])->withCookie($cookie);
+        return $this->sendResponse($user->email,'Successfully logged out')->withCookie($cookie);
     }
 
     /**
@@ -52,11 +53,12 @@ class AuthController extends Controller
      * @return JsonResponse The JSON response containing the token type, expiration time, and user information.
      */
     protected function createNewToken($token){
-        return response()->json([
+        $result = [
             'token_type' => 'bearer',
             'expires_in' => JWTAuth::factory()->getTTL() * 60,
-            'data' => Auth::user(),
-            'message' => 'Login successful'
-        ]);
+            'user' => Auth::user(),
+            'token' => $token
+        ];
+        return $this->sendResponse($result, 'Login successful');
     }
 }
