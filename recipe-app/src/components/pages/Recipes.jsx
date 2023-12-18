@@ -34,20 +34,6 @@ const Recipes = () => {
             // 错误处理逻辑
         });
     }, []);
-    
-    // const handleCreate = (newRecipe) => {
-    //     console.log('Creating new recipe:', newRecipe);
-    //     ApiService.createRecipe(newRecipe)
-    //     .then(addedRecipe => {
-    //         console.log('Added recipe:', addedRecipe);
-    //         setRecipes([...recipes, addedRecipe]);
-    //         setShowCreateModal(false);
-    //         showMessage('success', 'Recipe created successfully'); 
-    //     })
-    //     .catch(error => {console.error(error);
-    //         showMessage('error', 'Error creating recipe');
-    //     }); 
-    // };
 
     const handleCreate = async (newRecipe) => { // async/await
             console.log('Creating new recipe:', newRecipe);
@@ -60,7 +46,7 @@ const Recipes = () => {
 
     const handleViewDetails = (recipe) => {
         const recipeId = recipe.id;
-            ApiService.fetchRecipe(recipeId) // 假设这是一个获取单个食谱详细信息的函数
+            ApiService.fetchRecipe(recipeId) 
               .then(data => {
                 console.log('Recipe details from recipes page, by id:', data);
                   setSelectedRecipe(data);
@@ -71,26 +57,34 @@ const Recipes = () => {
 
     const handleEditRecipe = (recipe) => {
         setEditingRecipe(recipe);
-        // Open the edit modal here
+        setShowDetailsModal(false);
     };
 
     const saveEditedRecipe = (updatedRecipeData) => {
+        console.log('Updated recipe data:', updatedRecipeData);
+        const updatedRecipe = { ...editingRecipe, ...updatedRecipeData };
+        console.log('Updated recipe:', updatedRecipe);
+        setRecipes(recipes.map(recipe => 
+            recipe.id === updatedRecipe.id ? updatedRecipe : recipe
+        ));
+        setEditingRecipe(null); // Reset the editing state to close the modal
+        setShowDetailsModal(false); // Close the details modal
 
-        ApiService.updateRecipe(editingRecipe.id, updatedRecipeData)
-            .then(updatedRecipe => {
-                // Update the recipes list with the updated recipe
-                setRecipes(recipes.map(recipe => 
-                    recipe.id === updatedRecipe.id ? updatedRecipe : recipe
-                ));
-                setEditingRecipe(null); // Reset the editing state to close the modal
-                setShowDetailsModal(false); // Close the details modal
-                showMessage('success', 'Recipe updated successfully');
-            })
-            .catch(error => {
-                console.error('Error updating recipe:', error);
-                showMessage('error', 'Error updating recipe');
-                // Handle error (e.g., show a notification to the user)
-            });
+        // ApiService.updateRecipe(editingRecipe.id, updatedRecipeData)
+        //     .then(updatedRecipe => {
+        //         // Update the recipes list with the updated recipe
+        //         setRecipes(recipes.map(recipe => 
+        //             recipe.id === updatedRecipe.id ? updatedRecipe : recipe
+        //         ));
+        //         setEditingRecipe(null); // Reset the editing state to close the modal
+        //         setShowDetailsModal(false); // Close the details modal
+        //         showMessage('success', 'Recipe updated successfully');
+        //     })
+        //     .catch(error => {
+        //         console.error('Error updating recipe:', error);
+        //         showMessage('error', 'Error updating recipe');
+        //         // Handle error (e.g., show a notification to the user)
+        //     });
     };
     
     
@@ -151,7 +145,7 @@ const Recipes = () => {
             {editingRecipe && (
                 <EditRecipeModal
                     isOpen={!!editingRecipe}
-                    onClose={() => setEditingRecipe(null)}
+                    onClose={() => {setEditingRecipe(null); setShowDetailsModal(true)}}
                     onEdit={saveEditedRecipe}
                     recipeData={editingRecipe}
                 /> 
