@@ -82,7 +82,7 @@ class RecipeController extends Controller
             return $this->sendResponse(new RecipeDetailResource($recipe), 'Recipe fetched by ID successfully');
         } catch (\Exception $e) {
             Log::error('Error fetching recipe: ' . $e->getMessage());
-            return $this->sendError('Error fetching recipe', [], 500);
+            return $this->sendError($e->getMessage(), [], 500);
         }
     }
 
@@ -111,14 +111,13 @@ class RecipeController extends Controller
                 // delete old img
                 Storage::delete($recipe->recipe_image_path);
             }
-
             // update model
             $recipe->update($validatedData);
 
             return $this->sendResponse(new RecipeDetailResource($recipe), 'Recipe updated successfully');
         } catch (\Exception $e) {
             Log::error('Error updating recipe: ' . $e->getMessage());
-            return $this->sendError('Error updating recipe', [], 500);
+            return $this->sendError($e->getMessage(), [], 500);
         }
 
     }

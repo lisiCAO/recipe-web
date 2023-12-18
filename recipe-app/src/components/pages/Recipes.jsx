@@ -60,15 +60,16 @@ const Recipes = () => {
         setShowDetailsModal(false);
     };
 
-    const saveEditedRecipe = (updatedRecipeData) => {
+    const saveEditedRecipe = async (updatedRecipeData) => {
         console.log('Updated recipe data:', updatedRecipeData);
-        const updatedRecipe = { ...editingRecipe, ...updatedRecipeData };
+        const updatedRecipe = await ApiService.updateRecipe(editingRecipe.id, updatedRecipeData);
         console.log('Updated recipe:', updatedRecipe);
         setRecipes(recipes.map(recipe => 
             recipe.id === updatedRecipe.id ? updatedRecipe : recipe
         ));
         setEditingRecipe(null); // Reset the editing state to close the modal
         setShowDetailsModal(false); // Close the details modal
+        showMessage('success', 'Recipe updated successfully');
 
         // ApiService.updateRecipe(editingRecipe.id, updatedRecipeData)
         //     .then(updatedRecipe => {
@@ -144,7 +145,7 @@ const Recipes = () => {
             )}
             {editingRecipe && (
                 <EditRecipeModal
-                    isOpen={!!editingRecipe}
+                    isOpen={editingRecipe}
                     onClose={() => {setEditingRecipe(null); setShowDetailsModal(true)}}
                     onEdit={saveEditedRecipe}
                     recipeData={editingRecipe}
