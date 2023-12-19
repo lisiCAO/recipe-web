@@ -7,7 +7,6 @@ import EditRecipeModal from '../modals/recipes/EditReipeModal';
 import RecipeDetailsModal from '../modals/recipes/RecipeDetailsModal';
 import ApiService from '../../services/ApiService';
 import { MessageContext } from './../common/MessageContext';
-import Message from './../common/Message';
 import './Recipes.scss';
 
 /** 
