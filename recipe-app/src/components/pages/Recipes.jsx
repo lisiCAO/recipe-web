@@ -7,31 +7,43 @@ import EditRecipeModal from '../modals/recipes/EditReipeModal';
 import RecipeDetailsModal from '../modals/recipes/RecipeDetailsModal';
 import ApiService from '../../services/ApiService';
 import { MessageContext } from './../common/MessageContext';
+import Message from './../common/Message';
 import './Recipes.scss';
 
+/** 
+ * Recipes page component
+ * 
+ * @returns {JSX.Element}
+ * 
+ * @example
+ * <Recipes />
+ * 
+ * @category Components
+ * 
+ */
 const Recipes = () => {
+
     const [recipes, setRecipes] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
     const [editingRecipe, setEditingRecipe] = useState(null);
-    const { showMessage } = useContext(MessageContext); 
 
-    // 加载初始数据
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
+
+    const { showMessage, hideMessage } = useContext(MessageContext); 
+    const [message] = useState({type: '', text: ''});
+
+    // load initial data
     useEffect(() => {
         ApiService.fetchRecipes()
         .then(response => {
-            if (Array.isArray(response)) {
                 setRecipes(response);
-            } else {
-                console.error('Unable to fetch recipes.');
-                return [];
-            }
         })
         .catch(error => {
             console.error(error);
-            // 错误处理逻辑
+            // showMessage('error', 'Unable to fetch recipes.');
         });
     }, []);
 
@@ -52,14 +64,16 @@ const Recipes = () => {
                   setSelectedRecipe(data);
                   setShowDetailsModal(true);
               })
-              .catch(error => console.error(error));   
+              .catch(error => {console.error(error) });   
     };
 
+    // Open and pass the recipe data to the edit modal, then close the details modal
     const handleEditRecipe = (recipe) => {
         setEditingRecipe(recipe);
         setShowDetailsModal(false);
     };
 
+    // Save the edited recipe data
     const saveEditedRecipe = async (updatedRecipeData) => {
         console.log('Updated recipe data:', updatedRecipeData);
         const updatedRecipe = await ApiService.updateRecipe(editingRecipe.id, updatedRecipeData);
@@ -70,26 +84,9 @@ const Recipes = () => {
         setEditingRecipe(null); // Reset the editing state to close the modal
         setShowDetailsModal(false); // Close the details modal
         showMessage('success', 'Recipe updated successfully');
-
-        // ApiService.updateRecipe(editingRecipe.id, updatedRecipeData)
-        //     .then(updatedRecipe => {
-        //         // Update the recipes list with the updated recipe
-        //         setRecipes(recipes.map(recipe => 
-        //             recipe.id === updatedRecipe.id ? updatedRecipe : recipe
-        //         ));
-        //         setEditingRecipe(null); // Reset the editing state to close the modal
-        //         setShowDetailsModal(false); // Close the details modal
-        //         showMessage('success', 'Recipe updated successfully');
-        //     })
-        //     .catch(error => {
-        //         console.error('Error updating recipe:', error);
-        //         showMessage('error', 'Error updating recipe');
-        //         // Handle error (e.g., show a notification to the user)
-        //     });
     };
     
     
-
     const handleDelete = (recipe) => {
         ApiService.deleteRecipe(recipe.id).then(() => {
             setRecipes(recipes.filter(r => r.id !== recipe.id));
@@ -102,7 +99,12 @@ const Recipes = () => {
         // searchRecipes(term); // 假设这是一个搜索食谱的函数
     };
 
-    // 定义表格列
+    // Filter or sort the recipes list
+    const filteredRecipes = recipes.filter(recipe =>
+        recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    // Table columns
     const columns = [
         { header: 'Name', cell: (row) => row.name },
         { header: 'Created At', cell: (row) => row.createdAt },
@@ -110,18 +112,13 @@ const Recipes = () => {
         { header: 'Created By', cell: (row) => row.createdBy },
     ];
     
-
-    // 过滤或排序食谱列表
-    const filteredRecipes = recipes.filter(recipe =>
-        recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
     return (
         <div>
             <div className="top-bar">
                 <Button className="btn-create"  onClick={() => setShowCreateModal(true)}>Add New</Button>
                 <SearchBar value={searchTerm} onChange={handleSearch} />
             </div>
+            {/* <Message message = {message}/> */}
             <Table 
                 columns={columns} 
                 data={filteredRecipes} 
@@ -131,7 +128,7 @@ const Recipes = () => {
             {showCreateModal && (
                 <CreateRecipeModal 
                     isOpen={showCreateModal} 
-                    onClose={() => setShowCreateModal(false)} 
+                    onClose={() => {setShowCreateModal(false);  hideMessage();}} 
                     onCreate={handleCreate}
                 />
             )}
@@ -146,7 +143,7 @@ const Recipes = () => {
             {editingRecipe && (
                 <EditRecipeModal
                     isOpen={editingRecipe}
-                    onClose={() => {setEditingRecipe(null); setShowDetailsModal(true)}}
+                    onClose={() => {setEditingRecipe(null); setShowDetailsModal(true); hideMessage();}}
                     onEdit={saveEditedRecipe}
                     recipeData={editingRecipe}
                 /> 

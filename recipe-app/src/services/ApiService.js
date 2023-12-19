@@ -205,23 +205,6 @@ const ApiService = {
 
 };
 
-/* Handle Api response */
-// const handleResponse = async (response) => {
-//   if (response.ok) {
-//     const contentType = response.headers.get('Content-Type');
-//     if (contentType && contentType.includes('application/json')) {
-//       return await response.json();
-//     } else {
-//       // non JSON response
-//       const text = await response.text();
-//       throw new Error(`Non-JSON response: ${text}`);
-//     }
-//   } else {
-//     // handle HTTP error status
-//     const errorText = await response.text();
-//     throw new Error(`HTTP error ${response.status}: ${errorText}`);
-//   }
-// }
 
 const handleResponse = async (response) => {
   const contentType = response.headers.get('Content-Type');
