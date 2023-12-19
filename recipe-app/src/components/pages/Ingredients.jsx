@@ -6,26 +6,24 @@ import CreateIngredientModal from '../modals/ingredients/CreateIngredientModal';
 import EditIngredientModal from '../modals/ingredients/EditIngredientModal';
 import IngredientDetailsModal from '../modals/ingredients/IngredientDetailsModal';
 import ApiService from '../../services/ApiService';
+import { MessageContext } from './../common/MessageContext';
 import './Ingredients.scss';
 
 const Ingredients = () => {
     const [ingredients, setIngredients] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [selectedIngredient, setSelectedIngredient] = useState(null);
     const [editingIngredient, setEditingIngredient] = useState(null);
+
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
 
     // 加载初始数据
     useEffect(() => {
         ApiService.fetchIngredients()
         .then(response => {
-            if (Array.isArray(response)) {
                 setIngredients(response);
-            } else {
-                console.error('Unable to fetch ingredients.');
-                return [];
-            }
         })
         .catch(error => {
             console.error(error);
