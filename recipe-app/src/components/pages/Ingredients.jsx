@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from '../common/Button';
 import Table from '../layout/Table';
 import SearchBar from '../common/Searchbar';
@@ -19,7 +19,9 @@ const Ingredients = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
 
-    // 加载初始数据
+    const { showMessage, hideMessage } = useContext(MessageContext);
+    
+    // load initial data
     useEffect(() => {
         ApiService.fetchIngredients()
         .then(response => {
@@ -27,51 +29,54 @@ const Ingredients = () => {
         })
         .catch(error => {
             console.error(error);
-            // 错误处理逻辑
+            // showMessage('error', 'Unable to fetch recipes.');
+            setIngredients([]);
         });
     }, []);
     
 
-    const handleCreate = (newIngredient) => {
+    const handleCreate = async (newIngredient) => {
         console.log('Creating new ingredient:', newIngredient);
-        ApiService.createIngredient(newIngredient)
+        await ApiService.createIngredient(newIngredient)
         .then(addedIngredient => {
             setIngredients([...ingredients, addedIngredient.ingredient]);
             setShowCreateModal(false);
+            showMessage('success', 'Ingredient created successfully');
         })
-        .catch(error => console.error(error)); 
     };
 
     const handleViewDetails = (ingredient) => {
         const ingredientId = ingredient.id;
-            ApiService.fetchIngredient(ingredientId) // 假设这是一个获取单个食材详细信息的函数
+            ApiService.fetchIngredient(ingredientId) // fetch the recipe details
               .then(data => {
+                console.log('Ingredient details from ingredient page:', data);
                   setSelectedIngredient(data);
+                  console.log('Selected ingredient:', selectedIngredient);
                   setShowDetailsModal(true);
               })
-              .catch(error => console.error(error));   
+              .catch(error => {console.error(error); setEditingIngredient(null)});   
     };
 
-    const handleEditIngredient = (ingredient) => {
+    
+    const handleEditIngredient = (ingredient) => { // open the edit modal
         setEditingIngredient(ingredient);
-        // Open the edit modal here
+        setShowDetailsModal(false);
     };
 
-    const saveEditedIngredient = (updatedIngredientData) => {
-
-        ApiService.updateIngredient(editingIngredient.id, updatedIngredientData)
+    // Save the edited ingredient
+    const saveEditedIngredient = async (updatedIngredientData) => {
+        console.log('Updating ingredient data:', updatedIngredientData);
+        await ApiService.updateIngredient(editingIngredient.id, updatedIngredientData)
             .then(updatedIngredient => {
+                console.log('Updated ingredient:', updatedIngredient);
                 // Update the Ingredients list with the updated Ingredient
                 setIngredients(ingredients.map(ingredient => 
                     ingredient.id === updatedIngredient.id ? updatedIngredient : ingredient
                 ));
                 setEditingIngredient(null); // Reset the editing state to close the modal
                 setShowDetailsModal(false); // Close the details modal
+                showMessage('success', 'Ingredient updated successfully');
             })
-            .catch(error => {
-                console.error('Error updating ingredient:', error);
-                // Handle error (e.g., show a notification to the user)
-            });
     };
     
     const handleDelete = (ingredient) => {
@@ -82,21 +87,21 @@ const Ingredients = () => {
     
     const handleSearch = (term) => {
         setSearchTerm(term);
-        // searchIngredients(term); // 假设这是一个搜索食材的函数
+        // searchIngredients(term); // TODO: Implement search
     };
 
-    // 定义表格列
+    // Table columns
     const columns = [
         { header: 'Name', cell: (row) => row.name },
         { header: 'Created At', cell: (row) => row.createdAt },
         { header: 'Updated At', cell: (row) => row.updatedAt },
     ];
 
-    // 过滤或排序食材列表
+    // Filter or sort the ingredients list
     const filteredIngredients = ingredients.filter(ingredient =>
         ingredient.name.toLowerCase().includes(searchTerm.toLowerCase())
 
-    );
+    )|| [];
 
     return (
         <div>
@@ -113,7 +118,7 @@ const Ingredients = () => {
             {showCreateModal && (
                 <CreateIngredientModal 
                     isOpen={showCreateModal} 
-                    onClose={() => setShowCreateModal(false)} 
+                    onClose={() => {setShowCreateModal(false);  hideMessage();}} 
                     onCreate={handleCreate}
                 />
             )}
@@ -128,7 +133,7 @@ const Ingredients = () => {
             {editingIngredient && (
                 <EditIngredientModal
                     isOpen={!!editingIngredient}
-                    onClose={() => setEditingIngredient(null)}
+                    onClose={() => {setEditingIngredient(null); setShowDetailsModal(false); hideMessage();}}
                     onEdit={saveEditedIngredient}
                     ingredientData={editingIngredient}
                 /> 

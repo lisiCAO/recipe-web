@@ -22,17 +22,16 @@ import './Recipes.scss';
  */
 const Recipes = () => {
 
-    const [recipes, setRecipes] = useState([]);
-    const [selectedRecipe, setSelectedRecipe] = useState(null);
-    const [editingRecipe, setEditingRecipe] = useState(null);
+    const [recipes, setRecipes] = useState([]); // recipes list
+    const [selectedRecipe, setSelectedRecipe] = useState(null); // selected recipe
+    const [editingRecipe, setEditingRecipe] = useState(null); // editing recipe
 
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState(''); // search term
 
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [showDetailsModal, setShowDetailsModal] = useState(false);
+    const [showCreateModal, setShowCreateModal] = useState(false); // show/hide create modal
+    const [showDetailsModal, setShowDetailsModal] = useState(false); // show/hide details modal
 
-    const { showMessage, hideMessage } = useContext(MessageContext); 
-    const [message] = useState({type: '', text: ''});
+    const { showMessage, hideMessage } = useContext(MessageContext); // Show/hide message
 
     // load initial data
     useEffect(() => {
@@ -43,6 +42,7 @@ const Recipes = () => {
         .catch(error => {
             console.error(error);
             // showMessage('error', 'Unable to fetch recipes.');
+            setRecipes([]);
         });
     }, []);
 
@@ -63,7 +63,8 @@ const Recipes = () => {
                   setSelectedRecipe(data);
                   setShowDetailsModal(true);
               })
-              .catch(error => {console.error(error) });   
+              .catch(error => {console.error(error);setEditingRecipe(null);}) // Reset the editing state to close the modal 
+              
     };
 
     // Open and pass the recipe data to the edit modal, then close the details modal
@@ -95,13 +96,13 @@ const Recipes = () => {
 
     const handleSearch = (term) => {
         setSearchTerm(term);
-        // searchRecipes(term); // 假设这是一个搜索食谱的函数
+        // searchRecipes(term); // TODO: Implement search
     };
 
     // Filter or sort the recipes list
     const filteredRecipes = recipes.filter(recipe =>
         recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    )|| [];
 
     // Table columns
     const columns = [

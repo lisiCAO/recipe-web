@@ -27,8 +27,6 @@ const ApiService = {
   // user list
   async fetchUsers() {
       const response = await fetchWithConfig(`${API_BASE_URL}/users`, {
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include'
       });
       return handleResponse(response);
   },
@@ -42,7 +40,6 @@ const ApiService = {
       console.log('createUser api is called')
       const response = await fetchWithConfig(`${API_BASE_URL}/users`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: userData
       });
       return handleResponse(response);
@@ -51,7 +48,6 @@ const ApiService = {
   async updateUser(userId, userData) {
       const response = await fetchWithConfig(`${API_BASE_URL}/users/${userId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: userData
       });
       return handleResponse(response);
