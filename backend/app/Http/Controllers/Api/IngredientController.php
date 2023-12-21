@@ -58,7 +58,7 @@ class IngredientController extends Controller
             return $this->sendResponse(new IngredientDetailResource($ingredient), 'Ingredient created successfully');
         } catch (\Exception $e) {
             Log::error('Error creating ingredient: ' . $e->getMessage());
-            return $this->sendError('Error creating ingredient', [], 500);
+            return $this->sendError($e->getMessage(), [], 500);
         }
 
     }
@@ -105,7 +105,7 @@ class IngredientController extends Controller
             return $this->sendResponse(new IngredientDetailResource($ingredient), 'Ingredient updated successfully');
         } catch (\Exception $e) {
             Log::error('Error updating ingredient: ' . $e->getMessage());
-            return $this->sendError('Error updating ingredient', [], 500);
+            return $this->sendError($e->getMessage(), [], 500);
         }
     }
 

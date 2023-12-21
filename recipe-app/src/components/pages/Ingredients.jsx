@@ -39,7 +39,7 @@ const Ingredients = () => {
         console.log('Creating new ingredient:', newIngredient);
         await ApiService.createIngredient(newIngredient)
         .then(addedIngredient => {
-            setIngredients([...ingredients, addedIngredient.ingredient]);
+            setIngredients([...ingredients, addedIngredient]);
             setShowCreateModal(false);
             showMessage('success', 'Ingredient created successfully');
         })
@@ -99,9 +99,8 @@ const Ingredients = () => {
 
     // Filter or sort the ingredients list
     const filteredIngredients = ingredients.filter(ingredient =>
-        ingredient.name.toLowerCase().includes(searchTerm.toLowerCase())
-
-    )|| [];
+        ingredient.name.toLowerCase().includes(searchTerm.toLowerCase())|| []
+    );
 
     return (
         <div>
