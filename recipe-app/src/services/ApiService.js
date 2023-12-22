@@ -143,7 +143,6 @@ const ApiService = {
   async createReview(reviewData) {
       const response = await fetchWithConfig(`${API_BASE_URL}/reviews`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: reviewData
       });
       return handleResponse(response);

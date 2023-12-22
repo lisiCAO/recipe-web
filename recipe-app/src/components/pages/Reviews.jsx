@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from '../common/Button';
 import Table from '../layout/Table';
 import SearchBar from '../common/Searchbar';
@@ -6,18 +6,35 @@ import CreateReviewModal from '../modals/reviews/CreateReviewModal';
 import EditReviewModal from '../modals/reviews/EditReviewModal';
 import ReviewDetailsModal from '../modals/reviews/ReviewDetailsModal';
 import ApiService from '../../services/ApiService';
+import { MessageContext } from './../common/MessageContext';
 import './Reviews.scss';
 
+/**
+ * Reviews page component
+ *  
+ * @returns {JSX.Element}
+ * 
+ * @example
+ * <Reviews />
+ * 
+ * @category Components
+ * 
+ * @todo Add error handling
+ * 
+ */
 const Reviews = () => {
     const [reviews, setReviews] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [selectedReview, setSelectedReview] = useState(null);
     const [editingReview, setEditingReview] = useState(null);
 
+    const [searchTerm, setSearchTerm] = useState('');
 
-    // 加载初始数据
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
+
+    const { showMessage, hideMessage } = useContext(MessageContext); // Show/hide message
+
+    // load initial data
     useEffect(() => {
         ApiService.fetchReviews()
         .then(response => {
@@ -30,51 +47,50 @@ const Reviews = () => {
         })
         .catch(error => {
             console.error(error);
-            // 错误处理逻辑
+            setReviews([]);
         });
     }, []);
     
 
-    const handleCreate = (newReview) => {
+    const handleCreate = async (newReview) => {
         console.log('Creating new review:', newReview);
-        ApiService.createReview(newReview)
+        await ApiService.createReview(newReview)
         .then(addedReview => {
-            setReviews([...reviews, addedReview.review]);
+            setReviews([...reviews, addedReview]);
             setShowCreateModal(false);
+            showMessage('success', 'Review created successfully.');
         })
-        .catch(error => console.error(error)); 
     };
 
     const handleViewDetails = (review) => {
         const reviewId = review.id;
-            ApiService.fetchReview(reviewId) // 假设这是一个获取单个评论详细信息的函数
+            ApiService.fetchReview(reviewId) // Fetch the review details
               .then(data => {
-                  setSelectedReview(data);
-                  setShowDetailsModal(true);
+                console.log('Review details from reviews page, by id:', data);
+                setSelectedReview(data);
+                setShowDetailsModal(true);
               })
-              .catch(error => console.error(error));   
+              .catch(error => {console.error(error); setEditingReview(null);}) // Handle error
     };
 
     const handleEditReview = (review) => {
         setEditingReview(review);
-        // Open the edit modal here
+        setShowDetailsModal(false);
     };
 
-    const saveEditedReview = (updatedReviewData) => {
-
-        ApiService.updateReview(editingReview.id, updatedReviewData)
+    const saveEditedReview = async (updatedReviewData) => {
+        console.log('Updating review:', updatedReviewData);
+        await ApiService.updateReview(editingReview.id, updatedReviewData)
             .then(updatedReview => {
+                console.log('Updated review:', updatedReview);
                 // Update the reviews list with the updated review
                 setReviews(reviews.map(review => 
                     review.id === updatedReview.id ? updatedReview : review
                 ));
                 setEditingReview(null); // Reset the editing state to close the modal
                 setShowDetailsModal(false); // Close the details modal
+                showMessage('success', 'Review updated successfully.');
             })
-            .catch(error => {
-                console.error('Error updating review:', error);
-                // Handle error (e.g., show a notification to the user)
-            });
     };
     
     
@@ -88,21 +104,19 @@ const Reviews = () => {
 
     const handleSearch = (term) => {
         setSearchTerm(term);
-        // searchReviews(term); // 假设这是一个搜索评论的函数
+        // searchReviews(term); // Search reviews
     };
 
-    // 定义表格列
+    // Table columns
     const columns = [
         { header: 'Title', cell: (row) => row.recipeName },
         { header: 'Created At', cell: (row) => row.createdAt },
         { header: 'Created By', cell: (row) => row.userName },
     ];
     
-
-    // 过滤或排序评论列表
+    // Filter or sort the reviews list
     const filteredReviews = reviews.filter(review =>
         review.recipeName.toLowerCase().includes(searchTerm.toLowerCase())
-
     );
 
     return (
@@ -120,7 +134,7 @@ const Reviews = () => {
             {showCreateModal && (
                 <CreateReviewModal 
                     isOpen={showCreateModal} 
-                    onClose={() => setShowCreateModal(false)} 
+                    onClose={() => {setShowCreateModal(false); hideMessage();}} 
                     onCreate={handleCreate}
                 />
             )}
@@ -135,7 +149,7 @@ const Reviews = () => {
             {editingReview && (
                 <EditReviewModal
                     isOpen={!!editingReview}
-                    onClose={() => setEditingReview(null)}
+                    onClose={() => {setEditingReview(null); setShowDetailsModal(true); hideMessage();}}
                     onEdit={saveEditedReview}
                     reviewData={editingReview}
                 /> 

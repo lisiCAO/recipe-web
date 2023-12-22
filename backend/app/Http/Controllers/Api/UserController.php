@@ -113,7 +113,7 @@ class UserController extends Controller
                 'first_name' => 'required|string|max:50',
                 'last_name' => 'required|string|max:50',
                 'email' => 'required|string|email|max:100|unique:users,email,' .  $id . ',user_id',
-                'password' => 'required|string|min:6',
+                'password' => 'nullable|string|min:6',
                 'profile_image_path' => 'nullable|string',
                 'category' => 'nullable|string|max:50',
             ]);

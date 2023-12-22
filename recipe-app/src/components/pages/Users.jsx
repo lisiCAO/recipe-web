@@ -44,7 +44,7 @@ const Users = () => {
         console.log('Creating new User:', newUser);
         await ApiService.createUser(newUser)
         .then(addedUser => {
-            setUsers([...users, addedUser.user]);
+            setUsers([...users, addedUser]);
             setShowCreateModal(false);
             showMessage('success', 'User created successfully');
         })
@@ -75,7 +75,7 @@ const Users = () => {
                 console.log('updatedUser',updatedUser);
                 // Update the Users list with the updated User
                 setUsers(users.map(user => 
-                    user.id === updatedUser.user.id ? updatedUser.user : user
+                    user.id === updatedUser.id ? updatedUser : user
                 ));
                 setEditingUser(null); // Reset the editing state to close the modal
                 setShowDetailsModal(false); // Close the details modal
@@ -123,7 +123,7 @@ const Users = () => {
             {showCreateModal && (
                 <CreateUserModal 
                     isOpen={showCreateModal} 
-                    onClose={() => {setShowCreateModal(false);  hideMessage();}} 
+                    onClose={() => {setShowCreateModal(false); hideMessage();}} 
                     onCreate={handleCreate}
                 />
             )}
@@ -138,7 +138,7 @@ const Users = () => {
             {editingUser && (
                 <EditUserModal
                     isOpen={!!editingUser}
-                    onClose={() => { setEditingUser(null); setShowDetailsModal(false); hideMessage(); }}
+                    onClose={() => { setEditingUser(null); setShowDetailsModal(true); hideMessage(); }}
                     onEdit={saveEditedUser}
                     userData={editingUser}
                 /> 

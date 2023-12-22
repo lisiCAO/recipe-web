@@ -37,7 +37,13 @@ const Recipes = () => {
     useEffect(() => {
         ApiService.fetchRecipes()
         .then(response => {
+            if (Array.isArray(response)) {
                 setRecipes(response);
+            }
+            else {
+                console.error('Unable to fetch recipes.');
+                return [];
+            }
         })
         .catch(error => {
             console.error(error);
@@ -60,8 +66,8 @@ const Recipes = () => {
             ApiService.fetchRecipe(recipeId) 
               .then(data => {
                 console.log('Recipe details from recipes page, by id:', data);
-                  setSelectedRecipe(data);
-                  setShowDetailsModal(true);
+                setSelectedRecipe(data);
+                setShowDetailsModal(true);
               })
               .catch(error => {console.error(error);setEditingRecipe(null);}) // Reset the editing state to close the modal 
               
@@ -128,7 +134,7 @@ const Recipes = () => {
             {showCreateModal && (
                 <CreateRecipeModal 
                     isOpen={showCreateModal} 
-                    onClose={() => {setShowCreateModal(false);  hideMessage();}} 
+                    onClose={() => {setShowCreateModal(false); hideMessage();}} 
                     onCreate={handleCreate}
                 />
             )}
