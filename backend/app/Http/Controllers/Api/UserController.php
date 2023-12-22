@@ -68,7 +68,7 @@ class UserController extends Controller
             return $this->sendError('User creation failed(Database issue)', [], 500);
         } catch (\Exception $e) {
             Log::error('Unexpected error during user creation: '. $e->getMessage());
-            return $this->sendError('Unexpected error', [], 500);
+            return $this->sendError( $e->getMessage(), [], 500);
         }
 
     }
@@ -77,12 +77,24 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param string $id
-     * @return UserDetailResource
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(string $id): UserDetailResource
+    public function show(string $id) 
     {
-        $user =User::findOrFail($id);
-        return new UserDetailResource($user);
+        try {
+            $user = User::findOrFail($id);
+            return $this->sendResponse(new UserDetailResource($user), 'User retrieved successfully');
+        } catch (QueryException $e) {
+            Log::error('Error fetching user: ' . $e->getMessage());
+            $errorMessage = $this->simplifySqlErrorMessage($e->getMessage());
+            return $this->sendError($e->getMessage(), [], 500);
+        } catch (ModelNotFoundException $e) {
+            Log::error('Error fetching user: ' . $e->getMessage());
+            return $this->sendError('User not found', [], 404);
+        } catch (\Exception $e) {
+            Log::error('Error fetching user: ' . $e->getMessage());
+            return $this->sendError('Error fetching user', [], 500);
+        }
     }
 
     /**
@@ -98,10 +110,10 @@ class UserController extends Controller
             $user = User::findOrFail($id);
 
             $validatedData = $request->validate([
-                'first_name' => 'nullable|string|max:50',
-                'last_name' => 'nullable|string|max:50',
-                'email' => 'nullable|string|email|max:100|unique:users,email,' .  $id . ',user_id',
-                'password' => 'nullable|string|min:6',
+                'first_name' => 'required|string|max:50',
+                'last_name' => 'required|string|max:50',
+                'email' => 'required|string|email|max:100|unique:users,email,' .  $id . ',user_id',
+                'password' => 'required|string|min:6',
                 'profile_image_path' => 'nullable|string',
                 'category' => 'nullable|string|max:50',
             ]);
@@ -116,9 +128,12 @@ class UserController extends Controller
 
             $user->update($validatedData);
             return $this->sendResponse(new UserDetailResource($user), 'User updated successfully');
+        } catch (QueryException $e) {
+            Log::error('Error Updating user: ' . $e->getMessage());
+            return $this->sendError($e->getMessage(), [], 500);
         } catch (\Exception $e) {
             Log::error('User update failed: ' . $e->getMessage());
-            return $this->sendError('User update failed', [], 500);
+            return $this->sendError($e->getMessage(), [], 500);
         }
     }
 

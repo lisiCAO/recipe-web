@@ -6,7 +6,7 @@ const UserDetailsModal = ({ isOpen, onClose, user, onEdit }) => {
         <DetailsModal 
             isOpen = {isOpen}
             onClose = {onClose}
-            data = {user.data}
+            data = {user}
             type = 'user'
             className="user-details-modal"
             onEdit={onEdit}

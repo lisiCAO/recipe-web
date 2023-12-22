@@ -11,14 +11,18 @@ import './Users.scss';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [showDetailsModal, setShowDetailsModal] = useState(false);
+
     const [selectedUser, setSelectedUser] = useState(null);
     const [editingUser, setEditingUser] = useState(null);
-    const { showMessage } = useContext(MessageContext);
 
-    // 加载初始数据
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
+
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const { showMessage, hideMessage } = useContext(MessageContext);
+
+    // load initial data
     useEffect(() => {
         ApiService.fetchUsers()
         .then(response => {
@@ -31,43 +35,42 @@ const Users = () => {
         })
         .catch(error => {
             console.error(error);
-            // 错误处理逻辑
+            // showMessage('error', 'Unable to fetch recipes.');
+            setUsers([]);
         });
     }, []);
 
-    const handleCreate = (newUser) => {
+    const handleCreate = async (newUser) => {
         console.log('Creating new User:', newUser);
-        ApiService.createUser(newUser)
+        await ApiService.createUser(newUser)
         .then(addedUser => {
             setUsers([...users, addedUser.user]);
             setShowCreateModal(false);
             showMessage('success', 'User created successfully');
-       
         })
-        .catch(error => {
-            console.error(error)
-            showMessage('error', 'Error creating user');
-  
-        }); 
     };
 
     const handleViewDetails = (user) => {
         const userId = user.id;
-            ApiService.fetchUser(userId) // 假设这是一个获取单个用户详细信息的函数
+            ApiService.fetchUser(userId) 
               .then(data => {
-                  setSelectedUser(data);
-                  setShowDetailsModal(true);
+                console.log('User details from user page:', data);
+                setSelectedUser(data);
+                console.log('Selected user:', selectedUser);
+                setShowDetailsModal(true);
               })
-              .catch(error => console.error(error));   
+              .catch(error => {console.error(error); setEditingUser(null)});   
     };
 
     const handleEditUser = (user) => {
         setEditingUser(user);
+        setShowDetailsModal(false);
         // Open the edit modal here
     };
 
-    const saveEditedUser = (updatedUserData) => {
-        ApiService.updateUser(editingUser.id, updatedUserData)
+    const saveEditedUser = async (updatedUserData) => {
+        console.log('Updating User:', updatedUserData);
+        await ApiService.updateUser(editingUser.id, updatedUserData)
             .then(updatedUser => {
                 console.log('updatedUser',updatedUser);
                 // Update the Users list with the updated User
@@ -76,11 +79,8 @@ const Users = () => {
                 ));
                 setEditingUser(null); // Reset the editing state to close the modal
                 setShowDetailsModal(false); // Close the details modal
+                showMessage('success', 'User updated successfully');
             })
-            .catch(error => {
-                console.error('Error updating User:', error);
-                // Handle error (e.g., show a notification to the user)
-            });
     };
 
     const handleDelete = (user) => {
@@ -91,10 +91,10 @@ const Users = () => {
 
     const handleSearch = (term) => {
         setSearchTerm(term);
-        // searchUsers(term); // 假设这是一个搜索食谱的函数
+        // searchUsers(term); // searchUsers is a function that searches the users
     };
 
-    // 定义表格列
+    // Table columns
     const columns = [
         { header: 'Name', cell: (row) => row.name },
         { header: 'Email', cell: (row) => row.email },
@@ -103,9 +103,9 @@ const Users = () => {
     ];
     
 
-    // 过滤或排序用户列表
+    // Filter the users based on the search term
     const filteredUsers = users.filter(user =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase())
+        user.name.toLowerCase().includes(searchTerm.toLowerCase()) || []
     );
 
     return (
@@ -123,7 +123,7 @@ const Users = () => {
             {showCreateModal && (
                 <CreateUserModal 
                     isOpen={showCreateModal} 
-                    onClose={() => setShowCreateModal(false)} 
+                    onClose={() => {setShowCreateModal(false);  hideMessage();}} 
                     onCreate={handleCreate}
                 />
             )}
@@ -138,7 +138,7 @@ const Users = () => {
             {editingUser && (
                 <EditUserModal
                     isOpen={!!editingUser}
-                    onClose={() => setEditingUser(null)}
+                    onClose={() => { setEditingUser(null); setShowDetailsModal(false); hideMessage(); }}
                     onEdit={saveEditedUser}
                     userData={editingUser}
                 /> 
