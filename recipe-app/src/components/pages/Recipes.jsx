@@ -57,8 +57,11 @@ const Recipes = () => {
             const addedRecipe = await ApiService.createRecipe(newRecipe);
             console.log('Added recipe:', addedRecipe);
             setRecipes([...recipes, addedRecipe]);
-            setShowCreateModal(false);
             showMessage('success', 'Recipe created successfully');
+            setTimeout(() => {
+                setShowCreateModal(false);
+                hideMessage();
+            }, 3000);
     }
 
     const handleViewDetails = (recipe) => {
@@ -87,9 +90,12 @@ const Recipes = () => {
         setRecipes(recipes.map(recipe => 
             recipe.id === updatedRecipe.id ? updatedRecipe : recipe
         ));
-        setEditingRecipe(null); // Reset the editing state to close the modal
-        setShowDetailsModal(false); // Close the details modal
         showMessage('success', 'Recipe updated successfully');
+        setTimeout(() => {
+            setEditingRecipe(null); 
+            setShowDetailsModal(false); 
+            hideMessage();}
+            , 3000);
     };
     
     
@@ -134,7 +140,11 @@ const Recipes = () => {
             {showCreateModal && (
                 <CreateRecipeModal 
                     isOpen={showCreateModal} 
-                    onClose={() => {setShowCreateModal(false); hideMessage();}} 
+                    onClose={() => {            
+                        setTimeout(() => {
+                        setShowCreateModal(false);
+                        hideMessage();
+                    }, 3000);}} 
                     onCreate={handleCreate}
                 />
             )}
@@ -149,7 +159,12 @@ const Recipes = () => {
             {editingRecipe && (
                 <EditRecipeModal
                     isOpen={editingRecipe}
-                    onClose={() => {setEditingRecipe(null); setShowDetailsModal(true); hideMessage();}}
+                    onClose={() => {
+                        setTimeout(() => {
+                            setEditingRecipe(null); 
+                            setShowDetailsModal(false); 
+                            hideMessage();}
+                            , 3000);}}
                     onEdit={saveEditedRecipe}
                     recipeData={editingRecipe}
                 /> 

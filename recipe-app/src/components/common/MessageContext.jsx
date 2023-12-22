@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import './MessageContext.scss';
 
 export const MessageContext =  createContext();
@@ -8,15 +8,23 @@ export const useMessage = () => useContext(MessageContext);
 export const MessageProvider = ({children}) => {
     const [message, setMessage] = useState({type: '', text: ''});
 
-    const showMessage = (type, text, timeout = 3000) => {
-        setMessage({ type, text});
-
-        // Hide message after timeout if type is success
-        if (type === 'success') {
-            setTimeout(() => {
-                hideMessage();
-            }, timeout);
+    useEffect(() => {
+        let timer;
+        if (message.type === 'success' && message.text) {
+            timer = setTimeout(() => {
+                setMessage({ type: '', text: '' });
+            }, 3000);
         }
+
+        return () => {
+            if (timer) {
+                clearTimeout(timer);
+            }
+        };
+    }, [message]);
+
+    const showMessage = (type, text) => {
+        setMessage({ type, text });
     };
 
     const hideMessage = () => {

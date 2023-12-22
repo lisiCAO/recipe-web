@@ -45,8 +45,11 @@ const Users = () => {
         await ApiService.createUser(newUser)
         .then(addedUser => {
             setUsers([...users, addedUser]);
-            setShowCreateModal(false);
             showMessage('success', 'User created successfully');
+            setTimeout(() => {
+                setShowCreateModal(false);
+                hideMessage();
+            }, 3000);
         })
     };
 
@@ -77,9 +80,12 @@ const Users = () => {
                 setUsers(users.map(user => 
                     user.id === updatedUser.id ? updatedUser : user
                 ));
-                setEditingUser(null); // Reset the editing state to close the modal
-                setShowDetailsModal(false); // Close the details modal
                 showMessage('success', 'User updated successfully');
+                setTimeout(() => {
+                    setEditingUser(null); 
+                    setShowDetailsModal(false); 
+                    hideMessage();}
+                    , 3000);
             })
     };
 
@@ -123,7 +129,11 @@ const Users = () => {
             {showCreateModal && (
                 <CreateUserModal 
                     isOpen={showCreateModal} 
-                    onClose={() => {setShowCreateModal(false); hideMessage();}} 
+                    onClose={() => {                        
+                        setTimeout(() => {
+                        setShowCreateModal(false);
+                        hideMessage();
+                    }, 3000);}} 
                     onCreate={handleCreate}
                 />
             )}
@@ -138,7 +148,12 @@ const Users = () => {
             {editingUser && (
                 <EditUserModal
                     isOpen={!!editingUser}
-                    onClose={() => { setEditingUser(null); setShowDetailsModal(true); hideMessage(); }}
+                    onClose={() => {
+                        setTimeout(() => {
+                            setEditingUser(null); 
+                            setShowDetailsModal(false); 
+                            hideMessage();}
+                            , 3000);}}
                     onEdit={saveEditedUser}
                     userData={editingUser}
                 /> 

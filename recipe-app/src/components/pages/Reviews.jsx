@@ -87,9 +87,12 @@ const Reviews = () => {
                 setReviews(reviews.map(review => 
                     review.id === updatedReview.id ? updatedReview : review
                 ));
-                setEditingReview(null); // Reset the editing state to close the modal
-                setShowDetailsModal(false); // Close the details modal
                 showMessage('success', 'Review updated successfully.');
+                setTimeout(() => {
+                    setEditingReview(null); 
+                    setShowDetailsModal(false); 
+                    hideMessage();}
+                    , 3000);
             })
     };
     
@@ -134,7 +137,11 @@ const Reviews = () => {
             {showCreateModal && (
                 <CreateReviewModal 
                     isOpen={showCreateModal} 
-                    onClose={() => {setShowCreateModal(false); hideMessage();}} 
+                    onClose={() => {      
+                        setTimeout(() => {
+                        setShowCreateModal(false);
+                        hideMessage();
+                    }, 3000);}} 
                     onCreate={handleCreate}
                 />
             )}
@@ -149,7 +156,12 @@ const Reviews = () => {
             {editingReview && (
                 <EditReviewModal
                     isOpen={!!editingReview}
-                    onClose={() => {setEditingReview(null); setShowDetailsModal(true); hideMessage();}}
+                    onClose={() => {
+                        setTimeout(() => {
+                            setEditingReview(null); 
+                            setShowDetailsModal(false); 
+                            hideMessage();}
+                            , 3000);}}
                     onEdit={saveEditedReview}
                     reviewData={editingReview}
                 /> 

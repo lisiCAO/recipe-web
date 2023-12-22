@@ -78,9 +78,12 @@ const Ingredients = () => {
                 setIngredients(ingredients.map(ingredient => 
                     ingredient.id === updatedIngredient.id ? updatedIngredient : ingredient
                 ));
-                setEditingIngredient(null); // Reset the editing state to close the modal
-                setShowDetailsModal(false); // Close the details modal
                 showMessage('success', 'Ingredient updated successfully');
+                setTimeout(() => {
+                    setEditingIngredient(null); 
+                    setShowDetailsModal(false); 
+                    hideMessage();}
+                    , 3000);
             })
     };
     
@@ -122,7 +125,11 @@ const Ingredients = () => {
             {showCreateModal && (
                 <CreateIngredientModal 
                     isOpen={showCreateModal} 
-                    onClose={() => {setShowCreateModal(false);  hideMessage();}} 
+                    onClose={() => {
+                        setTimeout(() => {
+                        setShowCreateModal(false);
+                        hideMessage();
+                    }, 3000);}} 
                     onCreate={handleCreate}
                 />
             )}
@@ -137,7 +144,12 @@ const Ingredients = () => {
             {editingIngredient && (
                 <EditIngredientModal
                     isOpen={!!editingIngredient}
-                    onClose={() => {setEditingIngredient(null); setShowDetailsModal(false); hideMessage();}}
+                    onClose={() => {
+                        setTimeout(() => {
+                            setEditingIngredient(null); 
+                            setShowDetailsModal(false); 
+                            hideMessage();}
+                            , 3000);}}
                     onEdit={saveEditedIngredient}
                     ingredientData={editingIngredient}
                 /> 
