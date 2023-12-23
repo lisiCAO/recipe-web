@@ -174,7 +174,7 @@ const ApiService = {
   },
 
   /* Auth */
-  // 登录用户
+  // login user
   async login(credentials) {
       const response = await fetchWithConfig(`${API_BASE_URL}/login`, {
         method: 'POST',
@@ -188,7 +188,7 @@ const ApiService = {
       return handleResponse(response);
   },
 
-  // 注销用户
+  // logout user
   async logout() {
       const response = await fetchWithConfig(`${API_BASE_URL}/logout`, {
         method: 'POST',
@@ -199,7 +199,6 @@ const ApiService = {
   // other APIs
 
 };
-
 
 const handleResponse = async (response) => {
   const contentType = response.headers.get('Content-Type');

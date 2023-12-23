@@ -98,7 +98,6 @@ const Recipes = () => {
             , 3000);
     };
     
-    
     const handleDelete = (recipe) => {
         ApiService.deleteRecipe(recipe.id).then(() => {
             setRecipes(recipes.filter(r => r.id !== recipe.id));

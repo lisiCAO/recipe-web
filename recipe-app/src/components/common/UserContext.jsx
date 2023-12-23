@@ -8,8 +8,9 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [user, setUser] =useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [showLoginModal, setShowLoginModal] = useState(false); // 管理登录模态框状态
-    const { showMessage } = useContext(MessageContext);             // 保存消息提示的方法
+    const [showLoginModal, setShowLoginModal] = useState(false); // show/hide login modal
+    const { showMessage } = useContext(MessageContext);          // save the message context
+
     useEffect(() =>{
         const checkLoginStatus = async () => {
           try {
