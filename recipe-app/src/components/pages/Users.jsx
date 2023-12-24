@@ -5,6 +5,7 @@ import SearchBar from '../common/Searchbar';
 import CreateUserModal from '../modals/users/CreateUserModal';
 import EditUserModal from '../modals/users/EditUserModal';
 import UserDetailsModal from '../modals/users/UserDetailsModal';
+import ConfirmModal from '../modals/ConfirmModal';
 import ApiService from '../../services/ApiService';
 import { MessageContext } from '../common/MessageContext';
 import './Users.scss';
@@ -14,10 +15,10 @@ const Users = () => {
 
     const [selectedUser, setSelectedUser] = useState(null);
     const [editingUser, setEditingUser] = useState(null);
-
+    const [userToDelete, setUserToDelete] = useState(null); 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
-
+    const [showConfirmModal, setShowConfirmModal] = useState(false); // 控制确认模态框的显示
     const [searchTerm, setSearchTerm] = useState('');
 
     const { showMessage, hideMessage } = useContext(MessageContext);
@@ -80,12 +81,26 @@ const Users = () => {
             })
     };
 
-    const handleDelete = (user) => {
-        ApiService.deleteUser(user.id).then(() => {
-            setUsers(users.filter(r => r.id !== user.id));
-        });
+    const confirmDelete = (user) => {
+        setUserToDelete(user);
+        setShowConfirmModal(true);
     };
 
+    const handleDeleteConfirmed = () => {
+        if (userToDelete) {
+            ApiService.deleteUser(userToDelete.id).then(() => {
+                setUsers(users.filter(r => r.id !== userToDelete.id));
+                setUserToDelete(null);
+            });
+        }
+        setShowConfirmModal(false);
+    };
+
+    const handleCancelDelete = () => {
+        setUserToDelete(null);
+        setShowConfirmModal(false);
+    };
+    
     const handleSearch = (term) => {
         setSearchTerm(term);
         // searchUsers(term); // searchUsers is a function that searches the users
@@ -115,7 +130,7 @@ const Users = () => {
                 columns={columns} 
                 data={filteredUsers} 
                 onViewDetails={handleViewDetails} 
-                onDelete={handleDelete}
+                onDelete={confirmDelete}
             />
             {showCreateModal && (
                 <CreateUserModal 
@@ -146,6 +161,13 @@ const Users = () => {
                     userData={editingUser}
                 /> 
             )}
+            <ConfirmModal 
+                isOpen={showConfirmModal}
+                title="Confirm Delete"
+                message="Are you sure you want to delete this user?"
+                onConfirm={handleDeleteConfirmed}
+                onCancel={handleCancelDelete}
+            />
         </div>
     );
 };

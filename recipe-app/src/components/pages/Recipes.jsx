@@ -5,6 +5,7 @@ import SearchBar from '../common/Searchbar';
 import CreateRecipeModal from '../modals/recipes/CreateRecipeModal';
 import EditRecipeModal from '../modals/recipes/EditReipeModal';
 import RecipeDetailsModal from '../modals/recipes/RecipeDetailsModal';
+import ConfirmModal from '../modals/ConfirmModal';
 import ApiService from '../../services/ApiService';
 import { MessageContext } from './../common/MessageContext';
 import './Recipes.scss';
@@ -25,11 +26,14 @@ const Recipes = () => {
     const [recipes, setRecipes] = useState([]); // recipes list
     const [selectedRecipe, setSelectedRecipe] = useState(null); // selected recipe
     const [editingRecipe, setEditingRecipe] = useState(null); // editing recipe
+    const [recipeToDelete, setRecipeToDelete] = useState(null); // recipe to delete
 
     const [searchTerm, setSearchTerm] = useState(''); // search term
 
     const [showCreateModal, setShowCreateModal] = useState(false); // show/hide create modal
     const [showDetailsModal, setShowDetailsModal] = useState(false); // show/hide details modal
+    const [showConfirmModal, setShowConfirmModal] = useState(false); // 控制确认模态框的显示
+
 
     const { showMessage, hideMessage } = useContext(MessageContext); // Show/hide message
 
@@ -86,12 +90,26 @@ const Recipes = () => {
         showMessage('success', 'Recipe updated successfully');
     };
     
-    const handleDelete = (recipe) => {
-        ApiService.deleteRecipe(recipe.id).then(() => {
-            setRecipes(recipes.filter(r => r.id !== recipe.id));
-        });
+    const confirmDelete = (recipe) => {
+        setRecipeToDelete(recipe);
+        setShowConfirmModal(true);
     };
-    
+
+    const handleDeleteConfirmed = () => {
+        if (recipeToDelete) {
+            ApiService.deleteRecipe(recipeToDelete.id).then(() => {
+                setRecipes(recipes.filter(r => r.id !== recipeToDelete.id));
+                setRecipeToDelete(null);
+            });
+        }
+        setShowConfirmModal(false);
+    };
+
+    const handleCancelDelete = () => {
+        setRecipeToDelete(null);
+        setShowConfirmModal(false);
+    };
+
     const handleSearch = (term) => {
         setSearchTerm(term);
         // searchRecipes(term); // TODO: Implement search
@@ -121,7 +139,7 @@ const Recipes = () => {
                 columns={columns} 
                 data={filteredRecipes} 
                 onViewDetails={handleViewDetails} 
-                onDelete={handleDelete}
+                onDelete={confirmDelete}
             />
             {showCreateModal && (
                 <CreateRecipeModal 
@@ -153,6 +171,14 @@ const Recipes = () => {
                     recipeData={editingRecipe}
                 /> 
             )}
+            <ConfirmModal 
+                isOpen={showConfirmModal}
+                title="Confirm Delete"
+                message="Are you sure you want to delete this recipe?"
+                onConfirm={handleDeleteConfirmed}
+                onCancel={handleCancelDelete}
+            />
+            
         </div>
     );
 };

@@ -1,17 +1,90 @@
 .confirm-modal-content {
-    // 特定于确认模态框的样式
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 400px; 
 }
 
 .confirm-modal-header {
-    // 标题样式
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center; 
 }
 
 .confirm-modal-body {
-    // 消息体样式
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+    text-align: center; 
 }
 
 .confirm-modal-footer {
-    // 按钮区域样式
     display: flex;
-    justify-content: space-around; // 举例
+    justify-content: space-around;
+    align-items: center;
+}
+
+// apply Button component's base styles
+.confirm-modal-footer button {
+    // apply Button component's base styles
+    padding: 0.5em 1em;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: #0069d9;
+    }
+
+    &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+}
+
+
+// confirm button style
+.confirm-modal-footer button:first-child {
+    background-color: #dc3545; // alert-danger
+    color: white;
+    border: 1px solid #dc3545;
+
+    &:hover {
+        background-color: #c82333; // darker red
+        border-color: #bd2130;
+    }
+
+    &:active {
+        background-color: #bd2130; // click red
+        border-color: #b21f2d;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5); // focus red
+    }
+}
+
+// Cancel button style
+.confirm-modal-footer button:last-child {
+    background-color: #6c757d; // secondary
+    color: white;
+    border: 1px solid #6c757d;
+
+    &:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+
+    &:active {
+        background-color: #545b62;
+        border-color: #4e555b;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.5);
+    }
 }

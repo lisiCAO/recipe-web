@@ -5,6 +5,7 @@ import SearchBar from '../common/Searchbar';
 import CreateReviewModal from '../modals/reviews/CreateReviewModal';
 import EditReviewModal from '../modals/reviews/EditReviewModal';
 import ReviewDetailsModal from '../modals/reviews/ReviewDetailsModal';
+import ConfirmModal from '../modals/ConfirmModal';
 import ApiService from '../../services/ApiService';
 import { MessageContext } from './../common/MessageContext';
 import './Reviews.scss';
@@ -26,11 +27,13 @@ const Reviews = () => {
     const [reviews, setReviews] = useState([]);
     const [selectedReview, setSelectedReview] = useState(null);
     const [editingReview, setEditingReview] = useState(null);
+    const [reviewToDelete, setReviewToDelete] = useState(null); // review to delete
 
     const [searchTerm, setSearchTerm] = useState('');
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false); // 控制确认模态框的显示
 
     const { showMessage, hideMessage } = useContext(MessageContext); // Show/hide message
 
@@ -89,14 +92,25 @@ const Reviews = () => {
             })
     };
     
-    
-
-    const handleDelete = (review) => {
-        ApiService.deleteReview(review.id).then(() => {
-            setReviews(reviews.filter(r => r.id !== review.id));
-        });
+    const confirmDelete = (review) => {
+        setReviewToDelete(review);
+        setShowConfirmModal(true);
     };
-    
+
+    const handleDeleteConfirmed = () => {
+        if (reviewToDelete) {
+            ApiService.deleteReview(reviewToDelete.id).then(() => {
+                setReviews(reviews.filter(r => r.id !== reviewToDelete.id));
+                setReviewToDelete(null);
+            });
+        }
+        setShowConfirmModal(false);
+    };
+
+    const handleCancelDelete = () => {
+        setReviewToDelete(null);
+        setShowConfirmModal(false);
+    };
 
     const handleSearch = (term) => {
         setSearchTerm(term);
@@ -125,7 +139,7 @@ const Reviews = () => {
                 columns={columns} 
                 data={filteredReviews} 
                 onViewDetails={handleViewDetails} 
-                onDelete={handleDelete}
+                onDelete={confirmDelete}
             />
             {showCreateModal && (
                 <CreateReviewModal 
@@ -157,6 +171,13 @@ const Reviews = () => {
                     reviewData={editingReview}
                 /> 
             )}
+            <ConfirmModal 
+                isOpen={showConfirmModal}
+                title="Confirm Delete"
+                message="Are you sure you want to delete this review?"
+                onConfirm={handleDeleteConfirmed}
+                onCancel={handleCancelDelete}
+            />
         </div>
     );
 };

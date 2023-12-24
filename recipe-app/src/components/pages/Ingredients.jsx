@@ -5,6 +5,7 @@ import SearchBar from '../common/Searchbar';
 import CreateIngredientModal from '../modals/ingredients/CreateIngredientModal';
 import EditIngredientModal from '../modals/ingredients/EditIngredientModal';
 import IngredientDetailsModal from '../modals/ingredients/IngredientDetailsModal';
+import ConfirmModal from '../modals/ConfirmModal';
 import ApiService from '../../services/ApiService';
 import { MessageContext } from './../common/MessageContext';
 import './Ingredients.scss';
@@ -13,9 +14,9 @@ const Ingredients = () => {
     const [ingredients, setIngredients] = useState([]);
     const [selectedIngredient, setSelectedIngredient] = useState(null);
     const [editingIngredient, setEditingIngredient] = useState(null);
-
+    const [ingredientToDelete, setIngredientToDelete] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
 
@@ -38,7 +39,6 @@ const Ingredients = () => {
             setIngredients([]);
         });
     }, []);
-    
 
     const handleCreate = async (newIngredient) => {
         console.log('Creating new ingredient:', newIngredient);
@@ -80,10 +80,24 @@ const Ingredients = () => {
             })
     };
     
-    const handleDelete = (ingredient) => {
-        ApiService.deleteIngredient(ingredient.id).then(() => {
-            setIngredients(ingredients.filter(r => r.id !== ingredient.id));
-        });
+    const confirmDelete = (ingredient) => {
+        setIngredientToDelete(ingredient);
+        setShowConfirmModal(true);
+    };
+
+    const handleDeleteConfirmed = () => {
+        if (ingredientToDelete) {
+            ApiService.deleteIngredient(ingredientToDelete.id).then(() => {
+                setIngredients(ingredients.filter(r => r.id !== ingredientToDelete.id));
+                setIngredientToDelete(null);
+            });
+        }
+        setShowConfirmModal(false);
+    };
+
+    const handleCancelDelete = () => {
+        setIngredientToDelete(null);
+        setShowConfirmModal(false);
     };
     
     const handleSearch = (term) => {
@@ -113,7 +127,7 @@ const Ingredients = () => {
                 columns={columns} 
                 data={filteredIngredients} 
                 onViewDetails={handleViewDetails} 
-                onDelete={handleDelete}
+                onDelete={confirmDelete}
             />
             {showCreateModal && (
                 <CreateIngredientModal 
@@ -146,6 +160,13 @@ const Ingredients = () => {
                     ingredientData={editingIngredient}
                 /> 
             )}
+            <ConfirmModal 
+                isOpen={showConfirmModal}
+                title="Confirm Delete"
+                message="Are you sure you want to delete this ingredient?"
+                onConfirm={handleDeleteConfirmed}
+                onCancel={handleCancelDelete}
+            />
         </div>
     );
 };
