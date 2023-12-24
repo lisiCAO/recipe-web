@@ -167,7 +167,6 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        hideMessage();
         let submittedFormData = formData;
         if (mode === 'edit' && !isPasswordChanging) {
             const { password, ...rest } = formData;
@@ -176,7 +175,15 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
         const jsonFormData = JSON.stringify(submittedFormData);
         try {
             await onSubmit(jsonFormData);
-            onClose();
+            console.log('Form submitted successfully' + message.type);
+            if(message){
+                setTimeout(() => {
+                    console.log('Timer' + message.type);
+                    onClose();
+                }, 3000);
+            } else {
+                onClose();
+            }
         } catch (error) {
             showMessage('error', error.message || 'Error occurred');
         }
@@ -184,20 +191,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
-            <form onSubmit={ handleSubmit
-                // (e) => {
-                // e.preventDefault();
-                // let submittedFormData = formData;
-                // if (mode === 'edit' && !isPasswordChanging) {
-                //     const { password, ...rest } = formData;
-                //     submittedFormData = rest;
-                // }    
-                // const jsonFormData = JSON.stringify(submittedFormData);
-                // console.log('Form data:', jsonFormData)
-                // onSubmit(jsonFormData);
-                // onClose();
-            // }
-            }>
+            <form onSubmit={ handleSubmit}>
                 { shouldShowPasswordCheckbox && (
                     <label>
                         Change Password:

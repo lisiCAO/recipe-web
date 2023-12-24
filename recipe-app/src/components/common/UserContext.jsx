@@ -18,6 +18,9 @@ export const UserProvider = ({ children }) => {
             console.log(response);
             setIsLoggedIn(true);
             setUser(response);
+            if (response.message === 'Access denied') {
+              handleLogout();
+            }
           } catch (error) {
             setIsLoggedIn(false);
             setUser(null);

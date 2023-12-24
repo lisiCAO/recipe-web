@@ -32,6 +32,7 @@ const Recipes = () => {
     const [showDetailsModal, setShowDetailsModal] = useState(false); // show/hide details modal
 
     const { showMessage, hideMessage } = useContext(MessageContext); // Show/hide message
+    const { message } = useContext(MessageContext); // Message
 
     // load initial data
     useEffect(() => {
@@ -52,16 +53,15 @@ const Recipes = () => {
         });
     }, []);
 
+
+    // Create a new recipe
     const handleCreate = async (newRecipe) => { // async/await
             console.log('Creating new recipe:', newRecipe);
             const addedRecipe = await ApiService.createRecipe(newRecipe);
             console.log('Added recipe:', addedRecipe);
             setRecipes([...recipes, addedRecipe]);
             showMessage('success', 'Recipe created successfully');
-            setTimeout(() => {
-                setShowCreateModal(false);
-                hideMessage();
-            }, 3000);
+
     }
 
     const handleViewDetails = (recipe) => {
@@ -73,7 +73,6 @@ const Recipes = () => {
                 setShowDetailsModal(true);
               })
               .catch(error => {console.error(error);setEditingRecipe(null);}) // Reset the editing state to close the modal 
-              
     };
 
     // Open and pass the recipe data to the edit modal, then close the details modal
@@ -91,11 +90,7 @@ const Recipes = () => {
             recipe.id === updatedRecipe.id ? updatedRecipe : recipe
         ));
         showMessage('success', 'Recipe updated successfully');
-        setTimeout(() => {
-            setEditingRecipe(null); 
-            setShowDetailsModal(false); 
-            hideMessage();}
-            , 3000);
+
     };
     
     const handleDelete = (recipe) => {
@@ -140,10 +135,10 @@ const Recipes = () => {
                 <CreateRecipeModal 
                     isOpen={showCreateModal} 
                     onClose={() => {            
-                        setTimeout(() => {
                         setShowCreateModal(false);
                         hideMessage();
-                    }, 3000);}} 
+                    }
+                } 
                     onCreate={handleCreate}
                 />
             )}
@@ -159,11 +154,10 @@ const Recipes = () => {
                 <EditRecipeModal
                     isOpen={editingRecipe}
                     onClose={() => {
-                        setTimeout(() => {
                             setEditingRecipe(null); 
                             setShowDetailsModal(false); 
-                            hideMessage();}
-                            , 3000);}}
+                            hideMessage();
+                            }}
                     onEdit={saveEditedRecipe}
                     recipeData={editingRecipe}
                 /> 
