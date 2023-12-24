@@ -25,8 +25,9 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
 
     const [formData, setFormData] = useState(defaultFormData);
     const [isPasswordChanging, setIsPasswordChanging] = useState(mode === 'create');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const { message } =useContext(MessageContext);
-    const { showMessage, hideMessage } = useContext(MessageContext);
+    const { showMessage } = useContext(MessageContext);
 
 
     // Set formData to initialData when in edit mode
@@ -167,6 +168,8 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true); // Disable submit button
+        console.log("submit and disable" + isSubmitting)
         let submittedFormData = formData;
         if (mode === 'edit' && !isPasswordChanging) {
             const { password, ...rest } = formData;
@@ -176,8 +179,11 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
         try {
             await onSubmit(jsonFormData);
             if(message){
+
                 setTimeout(() => {
                     onClose();
+                    setIsSubmitting(false); // Enable submit button
+                    console.log("submit and enable" + isSubmitting)
                 }, 3000);
             } else {
                 onClose();
@@ -202,7 +208,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
                 )}
                 {renderFormFields(config)}
                 <Message message = {message} />
-                <Button type="submit">{mode === 'edit' ? 'Save Changes' : 'Create'}</Button>
+                <Button type="submit" disabled={isSubmitting}>{mode === 'edit' ? 'Save Changes' : 'Create'}</Button>
             </form>
         </Modal>
     );
