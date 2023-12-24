@@ -93,8 +93,29 @@ CREATE TABLE `reviews` (
   PRIMARY KEY (`review_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `user_favorites` (
+  `favorite_id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `recipe_id` INT NOT NULL,
+  PRIMARY KEY (`favorite_id`),
+  FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`recipe_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `user_recipe_images` (
+  `image_id` INT NOT NULL AUTO_INCREMENT,
+  `recipe_id` INT NOT NULL,
+  `image_path` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`image_id`),
+  FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`recipe_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 /* Add foreign keys */
 -- Note: Foreign key constraints are added after all tables are created to prevent errors.
+ALTER TABLE `users`
+ADD `username` VARCHAR(50),
+ADD `bio` TEXT,
+ADD `location` VARCHAR(100);
 
 ALTER TABLE `recipes`
   ADD CONSTRAINT `fk_recipes_users`
@@ -122,4 +143,5 @@ ALTER TABLE `reviews`
     FOREIGN KEY (`user_id`)
     REFERENCES `users` (`user_id`)
     ON DELETE CASCADE;
+
 
