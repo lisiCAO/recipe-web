@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         DB::table('recipes')->truncate();
         DB::table('recipe_ingredients')->truncate();
         DB::table('reviews')->truncate();
+        DB::table('user_recipe_images')->truncate();
 
         // Insert data
 
@@ -42,6 +43,8 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'profile_image_path' => '/path/to/image1.jpg',
                 'category' => 'admin',
+                'bio' => 'Food blogger and recipe developer.',
+                'location' => 'London, UK',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
@@ -52,6 +55,8 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'profile_image_path' => '/path/to/image2.jpg',
                 'category' => 'user',
+                'bio' => 'Amateur cook with a love for pastries.',
+                'location' => 'Paris, France',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
 
@@ -63,6 +68,8 @@ class DatabaseSeeder extends Seeder
                 'password' => bcrypt('password'),
                 'profile_image_path' => '/path/to/image3.jpg',
                 'category' => 'user',
+                'bio' => 'Experienced chef and food enthusiast.',
+                'location' => 'New York, USA',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
@@ -186,6 +193,19 @@ class DatabaseSeeder extends Seeder
                 'created_at' => Carbon::now()
             ],
             // Add more review records as needed
+        ]);
+
+        DB::table('user_favorites')->insert([
+            ['user_id' => 1, 'recipe_id' => 1, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['user_id' => 1, 'recipe_id' => 2, 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            // 更多用户收藏记录
+        ]);
+
+        // 插入用户食谱图片数据
+        DB::table('user_recipe_images')->insert([
+            ['recipe_id' => 1, 'image_path' => '/path/to/image1.jpg', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['recipe_id' => 2, 'image_path' => '/path/to/image2.jpg', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            // 更多用户食谱图片记录
         ]);
 
         // 启用外键检查
