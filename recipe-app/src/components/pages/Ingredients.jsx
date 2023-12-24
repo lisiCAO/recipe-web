@@ -1,22 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from '../common/Button';
 import Table from '../layout/Table';
 import SearchBar from '../common/Searchbar';
 import CreateIngredientModal from '../modals/ingredients/CreateIngredientModal';
 import EditIngredientModal from '../modals/ingredients/EditIngredientModal';
 import IngredientDetailsModal from '../modals/ingredients/IngredientDetailsModal';
+import ConfirmModal from '../modals/ConfirmModal';
 import ApiService from '../../services/ApiService';
+import { MessageContext } from './../common/MessageContext';
 import './Ingredients.scss';
 
 const Ingredients = () => {
     const [ingredients, setIngredients] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [showCreateModal, setShowCreateModal] = useState(false);
-    const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [selectedIngredient, setSelectedIngredient] = useState(null);
     const [editingIngredient, setEditingIngredient] = useState(null);
+    const [ingredientToDelete, setIngredientToDelete] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
 
-    // 加载初始数据
+    const { showMessage, hideMessage } = useContext(MessageContext);
+    
+    // load initial data
     useEffect(() => {
         ApiService.fetchIngredients()
         .then(response => {
@@ -29,75 +35,86 @@ const Ingredients = () => {
         })
         .catch(error => {
             console.error(error);
-            // 错误处理逻辑
+            // showMessage('error', 'Unable to fetch ingredients.');
+            setIngredients([]);
         });
     }, []);
-    
 
-    const handleCreate = (newIngredient) => {
+    const handleCreate = async (newIngredient) => {
         console.log('Creating new ingredient:', newIngredient);
-        ApiService.createIngredient(newIngredient)
+        await ApiService.createIngredient(newIngredient)
         .then(addedIngredient => {
-            setIngredients([...ingredients, addedIngredient.ingredient]);
-            setShowCreateModal(false);
+            setIngredients([...ingredients, addedIngredient]);
+            showMessage('success', 'Ingredient created successfully');
         })
-        .catch(error => console.error(error)); 
     };
 
     const handleViewDetails = (ingredient) => {
         const ingredientId = ingredient.id;
-            ApiService.fetchIngredient(ingredientId) // 假设这是一个获取单个食材详细信息的函数
+            ApiService.fetchIngredient(ingredientId) // fetch the recipe details
               .then(data => {
+                console.log('Ingredient details from ingredient page:', data);
                   setSelectedIngredient(data);
+                  console.log('Selected ingredient:', selectedIngredient);
                   setShowDetailsModal(true);
               })
-              .catch(error => console.error(error));   
+              .catch(error => {console.error(error); setEditingIngredient(null)});   
     };
 
-    const handleEditIngredient = (ingredient) => {
+    
+    const handleEditIngredient = (ingredient) => { // open the edit modal
         setEditingIngredient(ingredient);
-        // Open the edit modal here
+        setShowDetailsModal(false);
     };
 
-    const saveEditedIngredient = (updatedIngredientData) => {
-
-        ApiService.updateIngredient(editingIngredient.id, updatedIngredientData)
+    const saveEditedIngredient = async (updatedIngredientData) => {
+        console.log('Updating ingredient data:', updatedIngredientData);
+        await ApiService.updateIngredient(editingIngredient.id, updatedIngredientData)
             .then(updatedIngredient => {
+                console.log('Updated ingredient:', updatedIngredient);
                 // Update the Ingredients list with the updated Ingredient
                 setIngredients(ingredients.map(ingredient => 
                     ingredient.id === updatedIngredient.id ? updatedIngredient : ingredient
                 ));
-                setEditingIngredient(null); // Reset the editing state to close the modal
-                setShowDetailsModal(false); // Close the details modal
+                showMessage('success', 'Ingredient updated successfully');
             })
-            .catch(error => {
-                console.error('Error updating ingredient:', error);
-                // Handle error (e.g., show a notification to the user)
-            });
     };
     
-    const handleDelete = (ingredient) => {
-        ApiService.deleteIngredient(ingredient.id).then(() => {
-            setIngredients(ingredients.filter(r => r.id !== ingredient.id));
-        });
+    const confirmDelete = (ingredient) => {
+        setIngredientToDelete(ingredient);
+        setShowConfirmModal(true);
+    };
+
+    const handleDeleteConfirmed = () => {
+        if (ingredientToDelete) {
+            ApiService.deleteIngredient(ingredientToDelete.id).then(() => {
+                setIngredients(ingredients.filter(r => r.id !== ingredientToDelete.id));
+                setIngredientToDelete(null);
+            });
+        }
+        setShowConfirmModal(false);
+    };
+
+    const handleCancelDelete = () => {
+        setIngredientToDelete(null);
+        setShowConfirmModal(false);
     };
     
     const handleSearch = (term) => {
         setSearchTerm(term);
-        // searchIngredients(term); // 假设这是一个搜索食材的函数
+        // searchIngredients(term); // TODO: Implement search
     };
 
-    // 定义表格列
+    // Table columns
     const columns = [
         { header: 'Name', cell: (row) => row.name },
         { header: 'Created At', cell: (row) => row.createdAt },
         { header: 'Updated At', cell: (row) => row.updatedAt },
     ];
 
-    // 过滤或排序食材列表
+    // Filter or sort the ingredients list
     const filteredIngredients = ingredients.filter(ingredient =>
-        ingredient.name.toLowerCase().includes(searchTerm.toLowerCase())
-
+        ingredient.name.toLowerCase().includes(searchTerm.toLowerCase())|| []
     );
 
     return (
@@ -110,12 +127,15 @@ const Ingredients = () => {
                 columns={columns} 
                 data={filteredIngredients} 
                 onViewDetails={handleViewDetails} 
-                onDelete={handleDelete}
+                onDelete={confirmDelete}
             />
             {showCreateModal && (
                 <CreateIngredientModal 
                     isOpen={showCreateModal} 
-                    onClose={() => setShowCreateModal(false)} 
+                    onClose={() => {
+                        setShowCreateModal(false);
+                        hideMessage();}
+                    }
                     onCreate={handleCreate}
                 />
             )}
@@ -130,11 +150,23 @@ const Ingredients = () => {
             {editingIngredient && (
                 <EditIngredientModal
                     isOpen={!!editingIngredient}
-                    onClose={() => setEditingIngredient(null)}
+                    onClose={() => {
+                            setEditingIngredient(null); 
+                            setShowDetailsModal(false); 
+                            hideMessage();
+                        }
+                    }
                     onEdit={saveEditedIngredient}
                     ingredientData={editingIngredient}
                 /> 
             )}
+            <ConfirmModal 
+                isOpen={showConfirmModal}
+                title="Confirm Delete"
+                message="Are you sure you want to delete this ingredient?"
+                onConfirm={handleDeleteConfirmed}
+                onCancel={handleCancelDelete}
+            />
         </div>
     );
 };

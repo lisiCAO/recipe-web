@@ -6,7 +6,7 @@ const ReviewDetailsModal = ({ isOpen, onClose, review, onEdit }) => {
         <DetailsModal 
             isOpen = {isOpen}
             onClose = {onClose}
-            data = {review.data}
+            data = {review}
             type = 'review'
             className="review-details-modal"
             onEdit={onEdit}

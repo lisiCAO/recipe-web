@@ -14,6 +14,23 @@ This guide describes how to set up the project environment using Docker for both
 
 Clone the project repository to your local machine.
 
+After clone the repository, set up the backend environment.
+
+#### Copy Environment Configuration
+
+#### Backend
+Copy the `.env.example` file to `.env`.
+
+```bash
+cp backend/.env.example backend/.env
+```
+
+#### Frontend(recipe-app)
+Set up api root path
+```bash
+echo "REACT_APP_API_URL=http://localhost:8000/api" > recipe-app/.env
+```
+
 ### 2. Starting Docker Containers
 
 Navigate to the root directory of the project and start the Docker containers:
@@ -34,16 +51,6 @@ The React application is configured to run in a Docker container.
 ### 4. Backend Setup (Laravel)
 
 The Laravel application is also configured to run in a Docker container.
-
-After the Docker containers are running, set up the backend environment.
-
-#### Copy Environment Configuration
-
-Copy the `.env.example` file to `.env`.
-
-```bash
-cp .env.example .env
-```
 
 - The backend API will be accessible at `http://localhost:8000`.
 - Make sure to configure your database connection and other environment variables in the Docker configuration or Laravel `.env` file.

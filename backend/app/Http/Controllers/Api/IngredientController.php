@@ -28,13 +28,13 @@ class IngredientController extends Controller
         // Retrieve all ingredients from the database
         try {
             $ingredients = Ingredient::all();
-            return $this->sendResponse(IngredientListResource::collection($ingredients),'Ingredients fetched successfully.') ;
+            return $this->sendResponse(IngredientListResource::collection($ingredients), 'Ingredients fetched successfully');
         } catch (\Illuminate\Database\QueryException $e) {
             Log::error('Database query error in fetching ingredients: ' . $e->getMessage());
-            return $this->sendError('Database query error', [], 500);
+            return $this->sendError($e->getMessage(), [], 500);
         } catch (\Exception $e) {
             Log::error('Error fetching ingredients: ' . $e->getMessage());
-            return $this->sendError('Error fetching ingredients', [], 500);
+            return $this->sendError($e->getMessage(), [], 500);
         }
     }
 
@@ -58,7 +58,7 @@ class IngredientController extends Controller
             return $this->sendResponse(new IngredientDetailResource($ingredient), 'Ingredient created successfully');
         } catch (\Exception $e) {
             Log::error('Error creating ingredient: ' . $e->getMessage());
-            return $this->sendError('Error creating ingredient', [], 500);
+            return $this->sendError($e->getMessage(), [], 500);
         }
 
     }
@@ -67,14 +67,14 @@ class IngredientController extends Controller
      * Display the specified resource.
      *
      * @param  string  $id
-     * @return IngredientDetailResource
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(string $id): IngredientDetailResource
+    public function show(string $id): \Illuminate\Http\JsonResponse
     {
         // Retrieve a specific ingredient by its ID
         try{
             $ingredient = Ingredient::findOrFail($id);
-            return new IngredientDetailResource($ingredient);
+            return $this->sendResponse(new IngredientDetailResource($ingredient), 'Ingredient fetched by ID successfully');
         } catch (\Exception $e) {
             Log::error('Error fetching ingredient: ' . $e->getMessage());
             return $this->sendError('Error fetching ingreident', [], 500);
@@ -105,7 +105,7 @@ class IngredientController extends Controller
             return $this->sendResponse(new IngredientDetailResource($ingredient), 'Ingredient updated successfully');
         } catch (\Exception $e) {
             Log::error('Error updating ingredient: ' . $e->getMessage());
-            return $this->sendError('Error updating ingredient', [], 500);
+            return $this->sendError($e->getMessage(), [], 500);
         }
     }
 

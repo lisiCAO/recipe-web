@@ -6,7 +6,7 @@ const IngredientDetailsModal = ({ isOpen, onClose, ingredient, onEdit }) => {
         <DetailsModal 
             isOpen = {isOpen}
             onClose = {onClose}
-            data = {ingredient.data}
+            data = {ingredient}
             type = 'ingredient'
             className="ingredient-details-modal"
             onEdit={onEdit}

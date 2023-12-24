@@ -47,16 +47,14 @@ class ReviewController extends Controller
             $validatedData = $request->validate([
                 'comment' => 'required|string',
                 'rating' => 'required|numeric|between:1,5',
-                // You can add other fields to be validated here
+                //other fields to be validated here
             ]);
 
             // Get request data
             $recipeName = $request->input('recipe_name');
             $recipe = Recipe::where('recipe_name', $recipeName)->first();
             if (!$recipe) {
-                return response()->json([
-                    'message' => 'Recipe not found'
-                ], 404);
+                return $this->sendError('Recipe not found', [], 404);
             }
             $recipeId = $recipe->recipe_id;
 
@@ -67,9 +65,7 @@ class ReviewController extends Controller
 
             $user = User::where('first_name', $firstName)->where('last_name', $lastName)->first();
             if (!$user) {
-                return response()->json([
-                    'message' => 'User not found'
-                ], 404);
+                return $this->sendError('User not found', [], 404);
             }
             $userId = $user->user_id;
 
@@ -85,7 +81,7 @@ class ReviewController extends Controller
             return $this->sendResponse(new ReviewResource($review), 'Review created successfully.');
         } catch (\Exception $e) {
             Log::error('Error creating review: ' . $e->getMessage());
-            return $this->sendError('Error creating review', [], 500);
+            return $this->sendError($e->getMessage(), [], 500);
         }
     }
 
@@ -93,16 +89,16 @@ class ReviewController extends Controller
      * Display the specified resource.
      *
      * @param string $id
-     * @return ReviewResource
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(string $id): ReviewResource
+    public function show(string $id)
     {
         try {
             $review = Review::findOrFail($id);
             return $this->sendResponse(new ReviewResource($review), 'Review fetched successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to fetch review: ' . $e->getMessage());
-            return $this->sendError('Error fetching review', [], 404);
+            return $this->sendError($e->getMessage(), [], 404);
         }
     }
 
@@ -118,9 +114,8 @@ class ReviewController extends Controller
         try {
             $review = Review::findOrFail($id);
         } catch (\Exception $e) {
-            return $this->sendError('Review not found', 404);
+            return $this->sendError($e->getMessage(), 404);
         }
-
         try {
             $validatedData = $request->validate([
                 'comment' => 'nullable|string',
@@ -132,7 +127,7 @@ class ReviewController extends Controller
             return $this->sendResponse($review, 'Review updated successfully', 200);
         } catch (\Exception $e) {
             Log::error("Review update failed: " . $e->getMessage());
-            return  $this->sendError('Review update failed', 500);
+            return  $this->sendError($e->getMessage(), 500);
         }
     }
 
@@ -151,7 +146,7 @@ class ReviewController extends Controller
             return $this->sendResponse(null, 'Review deleted successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to delete review: ' . $e->getMessage());
-            return $this->sendError('Error deleting review', [], 500);
+            return $this->sendError($e->getMessage(), [], 500);
         }
     }
 }

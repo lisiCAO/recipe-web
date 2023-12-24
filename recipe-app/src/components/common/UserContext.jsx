@@ -8,8 +8,9 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
     const [user, setUser] =useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [showLoginModal, setShowLoginModal] = useState(false); // 管理登录模态框状态
-    const { showMessage } = useContext(MessageContext);             // 保存消息提示的方法
+    const [showLoginModal, setShowLoginModal] = useState(false); // show/hide login modal
+    const { showMessage } = useContext(MessageContext);          // save the message context
+
     useEffect(() =>{
         const checkLoginStatus = async () => {
           try {
@@ -17,12 +18,14 @@ export const UserProvider = ({ children }) => {
             console.log(response);
             setIsLoggedIn(true);
             setUser(response);
+            if (response.message === 'Access denied') {
+              handleLogout();
+            }
           } catch (error) {
             setIsLoggedIn(false);
             setUser(null);
           }
         };
-
         checkLoginStatus();
     }, []);
 
@@ -30,13 +33,13 @@ export const UserProvider = ({ children }) => {
   const handleLogin = async (email, password) => {
     try {
       const response = await ApiService.login({ email, password });
-      
+      console.log('handle Login:' +response);
       showMessage('success', 'Login successful');
       // 模拟延迟
       setTimeout(() => {
         setIsLoggedIn(true);           // 设置用户已经登录
         setShowLoginModal(false);      // 关闭登录模态框
-        setUser(response.data);        // 保存当前用户信息
+        setUser(response.user);        // 保存当前用户信息
       }, 2000);
   
     } catch (error) {
@@ -52,7 +55,6 @@ export const UserProvider = ({ children }) => {
     try {
       // 发送请求到后端以清除 JWT Cookie
       await ApiService.logout(); // 确保您有一个处理注销的后端路由
-  
       setIsLoggedIn(false);
       setUser(null);
       showMessage('success', 'Logged out successfully');
