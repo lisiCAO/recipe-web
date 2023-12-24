@@ -5,9 +5,9 @@ import FormInput from '../common/FormInput';
 import FormTextArea from '../common/FormTextArea';
 import FormFileInput from '../common/FormFileInput';
 import Select from '../common/Select';
-import ApiService from '../../services/ApiService';
 import { MessageContext } from '../common/MessageContext';
 import Message from '../common/Message';
+import ApiService from '../../services/ApiService';
 import './FormModal.scss';
 
 const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => {
@@ -175,10 +175,8 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
         const jsonFormData = JSON.stringify(submittedFormData);
         try {
             await onSubmit(jsonFormData);
-            console.log('Form submitted successfully' + message.type);
             if(message){
                 setTimeout(() => {
-                    console.log('Timer' + message.type);
                     onClose();
                 }, 3000);
             } else {
