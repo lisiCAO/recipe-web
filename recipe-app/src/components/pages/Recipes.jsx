@@ -32,7 +32,6 @@ const Recipes = () => {
     const [showDetailsModal, setShowDetailsModal] = useState(false); // show/hide details modal
 
     const { showMessage, hideMessage } = useContext(MessageContext); // Show/hide message
-    const { message } = useContext(MessageContext); // Message
 
     // load initial data
     useEffect(() => {
@@ -53,15 +52,12 @@ const Recipes = () => {
         });
     }, []);
 
-
-    // Create a new recipe
     const handleCreate = async (newRecipe) => { // async/await
             console.log('Creating new recipe:', newRecipe);
             const addedRecipe = await ApiService.createRecipe(newRecipe);
             console.log('Added recipe:', addedRecipe);
             setRecipes([...recipes, addedRecipe]);
             showMessage('success', 'Recipe created successfully');
-
     }
 
     const handleViewDetails = (recipe) => {
@@ -75,13 +71,11 @@ const Recipes = () => {
               .catch(error => {console.error(error);setEditingRecipe(null);}) // Reset the editing state to close the modal 
     };
 
-    // Open and pass the recipe data to the edit modal, then close the details modal
     const handleEditRecipe = (recipe) => {
         setEditingRecipe(recipe);
         setShowDetailsModal(false);
     };
 
-    // Save the edited recipe data
     const saveEditedRecipe = async (updatedRecipeData) => {
         console.log('Updated recipe data:', updatedRecipeData);
         const updatedRecipe = await ApiService.updateRecipe(editingRecipe.id, updatedRecipeData);
@@ -90,7 +84,6 @@ const Recipes = () => {
             recipe.id === updatedRecipe.id ? updatedRecipe : recipe
         ));
         showMessage('success', 'Recipe updated successfully');
-
     };
     
     const handleDelete = (recipe) => {
@@ -99,7 +92,6 @@ const Recipes = () => {
         });
     };
     
-
     const handleSearch = (term) => {
         setSearchTerm(term);
         // searchRecipes(term); // TODO: Implement search
@@ -136,9 +128,8 @@ const Recipes = () => {
                     isOpen={showCreateModal} 
                     onClose={() => {            
                         setShowCreateModal(false);
-                        hideMessage();
-                    }
-                } 
+                        hideMessage();}
+                    } 
                     onCreate={handleCreate}
                 />
             )}

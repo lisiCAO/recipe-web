@@ -46,10 +46,6 @@ const Users = () => {
         .then(addedUser => {
             setUsers([...users, addedUser]);
             showMessage('success', 'User created successfully');
-            setTimeout(() => {
-                setShowCreateModal(false);
-                hideMessage();
-            }, 3000);
         })
     };
 
@@ -81,11 +77,6 @@ const Users = () => {
                     user.id === updatedUser.id ? updatedUser : user
                 ));
                 showMessage('success', 'User updated successfully');
-                setTimeout(() => {
-                    setEditingUser(null); 
-                    setShowDetailsModal(false); 
-                    hideMessage();}
-                    , 3000);
             })
     };
 
@@ -130,10 +121,9 @@ const Users = () => {
                 <CreateUserModal 
                     isOpen={showCreateModal} 
                     onClose={() => {                        
-                        setTimeout(() => {
                         setShowCreateModal(false);
                         hideMessage();
-                    }, 3000);}} 
+                    }} 
                     onCreate={handleCreate}
                 />
             )}
@@ -149,11 +139,9 @@ const Users = () => {
                 <EditUserModal
                     isOpen={!!editingUser}
                     onClose={() => {
-                        setTimeout(() => {
                             setEditingUser(null); 
                             setShowDetailsModal(false); 
-                            hideMessage();}
-                            , 3000);}}
+                            hideMessage();}}
                     onEdit={saveEditedUser}
                     userData={editingUser}
                 /> 

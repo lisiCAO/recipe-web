@@ -51,13 +51,11 @@ const Reviews = () => {
         });
     }, []);
     
-
     const handleCreate = async (newReview) => {
         console.log('Creating new review:', newReview);
         await ApiService.createReview(newReview)
         .then(addedReview => {
             setReviews([...reviews, addedReview]);
-            setShowCreateModal(false);
             showMessage('success', 'Review created successfully.');
         })
     };
@@ -88,11 +86,6 @@ const Reviews = () => {
                     review.id === updatedReview.id ? updatedReview : review
                 ));
                 showMessage('success', 'Review updated successfully.');
-                setTimeout(() => {
-                    setEditingReview(null); 
-                    setShowDetailsModal(false); 
-                    hideMessage();}
-                    , 3000);
             })
     };
     
@@ -138,10 +131,9 @@ const Reviews = () => {
                 <CreateReviewModal 
                     isOpen={showCreateModal} 
                     onClose={() => {      
-                        setTimeout(() => {
                         setShowCreateModal(false);
                         hideMessage();
-                    }, 3000);}} 
+                    }} 
                     onCreate={handleCreate}
                 />
             )}
@@ -157,11 +149,10 @@ const Reviews = () => {
                 <EditReviewModal
                     isOpen={!!editingReview}
                     onClose={() => {
-                        setTimeout(() => {
                             setEditingReview(null); 
                             setShowDetailsModal(false); 
-                            hideMessage();}
-                            , 3000);}}
+                            hideMessage();
+                        }}
                     onEdit={saveEditedReview}
                     reviewData={editingReview}
                 /> 

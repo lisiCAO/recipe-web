@@ -34,7 +34,7 @@ const Ingredients = () => {
         })
         .catch(error => {
             console.error(error);
-            // showMessage('error', 'Unable to fetch recipes.');
+            // showMessage('error', 'Unable to fetch ingredients.');
             setIngredients([]);
         });
     }, []);
@@ -45,7 +45,6 @@ const Ingredients = () => {
         await ApiService.createIngredient(newIngredient)
         .then(addedIngredient => {
             setIngredients([...ingredients, addedIngredient]);
-            setShowCreateModal(false);
             showMessage('success', 'Ingredient created successfully');
         })
     };
@@ -68,7 +67,6 @@ const Ingredients = () => {
         setShowDetailsModal(false);
     };
 
-    // Save the edited ingredient
     const saveEditedIngredient = async (updatedIngredientData) => {
         console.log('Updating ingredient data:', updatedIngredientData);
         await ApiService.updateIngredient(editingIngredient.id, updatedIngredientData)
@@ -79,11 +77,6 @@ const Ingredients = () => {
                     ingredient.id === updatedIngredient.id ? updatedIngredient : ingredient
                 ));
                 showMessage('success', 'Ingredient updated successfully');
-                setTimeout(() => {
-                    setEditingIngredient(null); 
-                    setShowDetailsModal(false); 
-                    hideMessage();}
-                    , 3000);
             })
     };
     
@@ -126,10 +119,9 @@ const Ingredients = () => {
                 <CreateIngredientModal 
                     isOpen={showCreateModal} 
                     onClose={() => {
-                        setTimeout(() => {
                         setShowCreateModal(false);
-                        hideMessage();
-                    }, 3000);}} 
+                        hideMessage();}
+                    }
                     onCreate={handleCreate}
                 />
             )}
@@ -145,11 +137,11 @@ const Ingredients = () => {
                 <EditIngredientModal
                     isOpen={!!editingIngredient}
                     onClose={() => {
-                        setTimeout(() => {
                             setEditingIngredient(null); 
                             setShowDetailsModal(false); 
-                            hideMessage();}
-                            , 3000);}}
+                            hideMessage();
+                        }
+                    }
                     onEdit={saveEditedIngredient}
                     ingredientData={editingIngredient}
                 /> 
