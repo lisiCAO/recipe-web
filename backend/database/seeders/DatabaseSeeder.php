@@ -16,10 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+
 
         // Disable foreign key checks
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
@@ -31,6 +28,7 @@ class DatabaseSeeder extends Seeder
         DB::table('recipe_ingredients')->truncate();
         DB::table('reviews')->truncate();
         DB::table('user_recipe_images')->truncate();
+        DB::table('user_favorites')->truncate();
 
         // Insert data
 
