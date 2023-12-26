@@ -92,7 +92,7 @@ class IngredientController extends Controller
     {
         // Update a specific ingredient by its ID
         try{
-            if(!checkRole('admin')) {
+            if(!$this->checkRole('admin')) {
                 return $this->sendError('Unauthorized', [], 401);
             }
 
@@ -123,10 +123,10 @@ class IngredientController extends Controller
     {
         // Delete a specific ingredient by its ID
         try {
-            if(!checkRole('admin')) {
+            if(!$this->checkRole('admin')) {
                 return $this->sendError('Unauthorized', [], 401);
             }
-            
+
             $ingredient = Ingredient::findOrFail($id);
             $ingredient->delete();
 
