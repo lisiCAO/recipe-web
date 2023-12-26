@@ -14,6 +14,11 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Http\Resources\UserFavoriteResource;
+use App\Models\UserFavorite;
+
+
 /**
  * UserController
  * 
@@ -277,9 +282,9 @@ class UserController extends Controller
             if ($currentUser->category != 'admin' && $currentUser->user_id != $userId) {
                 return $this->sendError('Unauthorized', [], 403);
             }
-
-            $user = User::findOrFail($userId);
-            $favorites = $user->favoriteRecipes()->get();
+            $favorites = UserFavorite::with(['user', 'recipe'])
+            ->where('user_id', $userId)
+            ->get();
     
             return $this->sendResponse(UserFavoriteResource::collection($favorites), 'Favorites fetched successfully');
         } catch (\Exception $e) {
