@@ -46,6 +46,7 @@ class RecipeController extends Controller
     public function store(Request $request): JsonResponse
     {
         try {
+            
             // Data validation
             $validatedData = $request->validate([
                 'recipe_name' => 'required|string|max:100',
@@ -61,7 +62,7 @@ class RecipeController extends Controller
 
             // create new recipe
             $recipe = new Recipe($validatedData);
-            $recipe->save(); // 保存食谱
+            $recipe->save(); // save to database
             return $this->sendResponse(new RecipeDetailResource($recipe), 'Recipe created successfully');
         } catch (\Exception $e) {
             Log::error('Error creating recipe: ' . $e->getMessage());
@@ -96,13 +97,12 @@ class RecipeController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         try {
-            $currentUser = JWTAuth::parseToken()->authenticate();
             $recipe = Recipe::findOrFail($id);
-        
-            if ($currentUser->id != $recipe->user_id && $currentUser->category != 'admin') {
+            $userId = $recipe->user_id;
+            if(!$this->checkRole('admin') && !$this->checkCurrentUser($userId))
+            {
                 return $this->sendError('Unauthorized', [], 403);
             }
-
             $validatedData = $request->validate([
                 'recipe_name' => 'required|string|max:100',
                 'cooking_time' => 'nullable|integer',
@@ -136,10 +136,10 @@ class RecipeController extends Controller
     public function destroy(string $id): JsonResponse
     {
         try {
-            $currentUser = JWTAuth::parseToken()->authenticate();
             $recipe = Recipe::findOrFail($id);
-        
-            if ($currentUser->id != $recipe->user_id && $currentUser->category != 'admin') {
+            $userId = $recipe->user_id;
+            if(!$this->checkRole('admin') && !$this->checkCurrentUser($userId))
+            {
                 return $this->sendError('Unauthorized', [], 403);
             }
             $recipe->delete();
