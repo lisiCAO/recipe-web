@@ -6,6 +6,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Response;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class Controller extends BaseController
 {
@@ -49,5 +51,22 @@ class Controller extends BaseController
         }
 
         return response()->json($response, $code);
+    }
+
+    public function checkRole($role)
+    {
+        $user = JWTAuth::parseToken()->authenticate();
+        if ($user->category === $role) {
+            return true;
+        }
+        return false;
+    }
+    public function checkCurrentUser($id)
+    {
+        $user = JWTAuth::parseToken()->authenticate();
+        if ($user->user_id === $id) {
+            return true;
+        }
+        return false;
     }
 }

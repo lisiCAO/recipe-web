@@ -35,10 +35,7 @@ class UserController extends Controller
     {
         // Get all users
         try {
-            $currentUser = JWTAuth::parseToken()->authenticate();
-        
-            // 检查当前用户是否为管理员或者请求的是自己的信息
-            if ($currentUser->category != 'admin' && $currentUser->user_id != $id) {
+            if(!$this->checkRole('admin')){
                 return $this->sendError('Unauthorized', [], 403);
             }
             $users = User::all();
@@ -66,9 +63,12 @@ class UserController extends Controller
                 'email' => 'required|string|email|max:100|unique:users',
                 'password' => 'required|string|min:6',
                 'profile_image_path' => 'nullable|string',
-                'category' => 'nullable|string|max:50',
             ]);
-
+            if($this->checkRole('admin')) {
+                $validatedData['category'] = $request->input('category');
+            } else {
+                $validatedData['category'] = 'user';
+            }
             $validatedData['password'] = Hash::make($validatedData['password']);
             $user = User::create($validatedData);
             Log::info('User created successfully: ', ['id' => $user->user_id]);
@@ -93,12 +93,10 @@ class UserController extends Controller
     public function show(string $id) 
     {
         try {
-            $currentUser = JWTAuth::parseToken()->authenticate();
-        
-            // 检查当前用户是否为管理员或者请求的是自己的信息
-            if ($currentUser->category != 'admin' && $currentUser->user_id != $id) {
+            if(!$this->checkRole('admin') && !$this->checkCurrentUser($id)){
                 return $this->sendError('Unauthorized', [], 403);
             }
+
             $user = User::findOrFail($id);
             return $this->sendResponse(new UserDetailResource($user), 'User retrieved successfully');
         } catch (QueryException $e) {
@@ -151,12 +149,9 @@ class UserController extends Controller
     public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
         try{
-            $currentUser = JWTAuth::parseToken()->authenticate();
-
-            if ($currentUser->category != 'admin' && $currentUser->user_id != $id) {
+            if(!$this->checkRole('admin') && !$this->checkCurrentUser($id)){
                 return $this->sendError('Unauthorized', [], 403);
             }
-
             $user = User::findOrFail($id);
 
             $validatedData = $request->validate([
@@ -196,16 +191,13 @@ class UserController extends Controller
     public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
         try{
-            $currentUser = JWTAuth::parseToken()->authenticate();
-
-            if ($currentUser->category != 'admin' && $currentUser->user_id != $id) {
+            if(!$this->checkRole('admin') && !$this->checkCurrentUser($id)){
                 return $this->sendError('Unauthorized', [], 403);
             }
+            $user = User::findOrFail($id);
+            $user->delete();
 
-        $user = User::findOrFail($id);
-        $user->delete();
-
-        return $this->sendResponse(null, 'User deleted successfully');
+            return $this->sendResponse(null, 'User deleted successfully');
         } catch (QueryException $e) {
             Log::error('Error deleting user: ' . $e->getMessage());
             return $this->sendError($e->getMessage(), [], 500);
@@ -250,14 +242,10 @@ class UserController extends Controller
         }
     }
 
-    public function removeFavorite(Request $request, $userId, $recipeId)
+    public function removeFavorite(Request $request, $recipeId)
     {
         try {
-            $user = JWTAuth::parseToken()->authenticate();
-
-            if ($currentUser->category != 'admin' && $currentUser->user_id != $userId) {
-                return $this->sendError('Unauthorized', [], 403);
-            }
+            $userId = $request->input('user_id');
     
             $favorite = UserFavorite::where('user_id', $userId)
                                     ->where('recipe_id', $recipeId)
@@ -275,16 +263,18 @@ class UserController extends Controller
         }
     }
 
-    public function listFavorites($userId)
+    public function listFavorites()
     {
         try {
-            $currentUser = JWTAuth::parseToken()->authenticate();
-            if ($currentUser->category != 'admin' && $currentUser->user_id != $userId) {
-                return $this->sendError('Unauthorized', [], 403);
-            }
+            $userId = JWTAuth::parseToken()->authenticate()->user_id;
+
             $favorites = UserFavorite::with(['user', 'recipe'])
             ->where('user_id', $userId)
             ->get();
+
+            // if ($favorites->isEmpty()) {
+            //     return $this->sendError('Favorites not found', [], 404);
+            // }
     
             return $this->sendResponse(UserFavoriteResource::collection($favorites), 'Favorites fetched successfully');
         } catch (\Exception $e) {
@@ -293,15 +283,10 @@ class UserController extends Controller
         }
     }
 
-    public function getFavorite($userId, $recipeId)
+    public function getFavorite($recipeId)
     {
         try {
-            $currentUser = JWTAuth::parseToken()->authenticate();
-            
-            if ($currentUser->category != 'admin' && $currentUser->user_id != $userId) {
-                return $this->sendError('Unauthorized', [], 403);
-            }
-
+            $userId = JWTAuth::parseToken()->authenticate()->user_id;
             $favorite = UserFavorite::where('user_id', $userId)
                                     ->where('recipe_id', $recipeId)
                                     ->first();
@@ -316,4 +301,39 @@ class UserController extends Controller
             return $this->sendError($e->getMessage(), [], 500);
         }
     }
+
+    public function addFavorites(Request $request)
+    {
+        try {
+            $userId = JWTAuth::parseToken()->authenticate()->user_id;
+
+            // Validate the request
+            $validatedData = $request->validate([
+                'recipe_id' => 'required|integer|exists:recipes,recipe_id', // Ensure recipe_id is provided and exists in recipes table
+            ]);
+
+            $recipeId = $validatedData['recipe_id'];
+
+            // Check if the recipe is already favorited
+            $isFavorite = UserFavorite::where('user_id', $userId)
+                                    ->where('recipe_id', $recipeId)
+                                    ->exists();
+
+            if ($isFavorite) {
+                return $this->sendError('Recipe already in favorites', [], 400);
+            }
+
+            // Add to favorites
+            $favorite = UserFavorite::create([
+                'user_id' => $userId,
+                'recipe_id' => $recipeId
+            ]);
+
+            return $this->sendResponse(new UserFavoriteResource($favorite), 'Recipe added to favorites successfully');
+        } catch (\Exception $e) {
+            Log::error('Error adding to favorites: ' . $e->getMessage());
+            return $this->sendError('Error adding to favorites', [], 500);
+        }
+    }
+
 }
