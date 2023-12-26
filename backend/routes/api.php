@@ -24,15 +24,15 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 // Login
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware(['parse.jwt', 'jwt.auth','adminorcurrentuser'])->group(function () {
+Route::middleware(['parse.jwt', 'jwt.auth','user'])->group(function () {
     // User
     Route::get('/user/recipes', [RecipeController::class, 'showByUser']);
     Route::get('/user/reviews', [ReviewController::class, 'showByUser']);
     Route::get('/user', [UserController::class, 'getCurrentUser']);
-
-    Route::delete('/users/{userId}/favorites/{recipeId}', [UserController::class, 'removeFavorite']);
-    Route::get('/users/{userId}/favorites/{recipeId}', [UserController::class, 'getFavorite']);
-    Route::get('/users/{userId}/favorites', [UserController::class, 'listFavorites']);
+    Route::get('/user/favorites/{recipeId}', [UserController::class, 'getFavorite']);
+    Route::delete('/user/favorites/{recipeId}', [UserController::class, 'removeFavorite']);
+    Route::post('/user/favorites', [UserController::class, 'addFavorites'])->middleware('jwt.auth');
+    Route::get('/user/favorites', [UserController::class, 'listFavorites']);
 
     // Tables
     Route::apiResource('users', UserController::class);
