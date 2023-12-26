@@ -24,9 +24,15 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 // Login
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware(['parse.jwt', 'jwt.auth'])->group(function () {
+Route::middleware(['parse.jwt', 'jwt.auth','adminorcurrentuser'])->group(function () {
     // User
+    Route::get('/user/recipes', [RecipeController::class, 'showByUser']);
+    Route::get('/user/reviews', [ReviewController::class, 'showByUser']);
     Route::get('/user', [UserController::class, 'getCurrentUser']);
+
+    Route::delete('/users/{userId}/favorites/{recipeId}', [UserController::class, 'removeFavorite']);
+    Route::get('/users/{userId}/favorites/{recipeId}', [UserController::class, 'getFavorite']);
+    Route::get('/users/{userId}/favorites', [UserController::class, 'listFavorites']);
 
     // Tables
     Route::apiResource('users', UserController::class);
@@ -39,11 +45,3 @@ Route::middleware(['parse.jwt', 'jwt.auth'])->group(function () {
     Route::post('/upload', [FileUploadController::class, 'upload']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
 });
-
-
-
-
-
-
-
-

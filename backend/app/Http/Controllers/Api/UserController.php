@@ -30,6 +30,12 @@ class UserController extends Controller
     {
         // Get all users
         try {
+            $currentUser = JWTAuth::parseToken()->authenticate();
+        
+            // 检查当前用户是否为管理员或者请求的是自己的信息
+            if ($currentUser->category != 'admin' && $currentUser->user_id != $id) {
+                return $this->sendError('Unauthorized', [], 403);
+            }
             $users = User::all();
             return  $this->sendResponse(UserListResource::collection($users), 'Users fetched successfully'); 
         } catch (\Exception $e) {
@@ -82,6 +88,12 @@ class UserController extends Controller
     public function show(string $id) 
     {
         try {
+            $currentUser = JWTAuth::parseToken()->authenticate();
+        
+            // 检查当前用户是否为管理员或者请求的是自己的信息
+            if ($currentUser->category != 'admin' && $currentUser->user_id != $id) {
+                return $this->sendError('Unauthorized', [], 403);
+            }
             $user = User::findOrFail($id);
             return $this->sendResponse(new UserDetailResource($user), 'User retrieved successfully');
         } catch (QueryException $e) {
@@ -97,6 +109,33 @@ class UserController extends Controller
         }
     }
 
+
+    /**
+     * Get the current user.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getCurrentUser(Request $request)
+    {
+        try {
+            // Try to get the user using JWT
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return $this->sendError('User not found', [], 404);
+            }
+            return $this->sendResponse(new UserDetailResource($user), 'User retrieved successfully');
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+            Log::error('Token expired error: ' . $e->getMessage());
+            return $this->sendError('token_expired', [], $e->getStatusCode());
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            Log::error('Token invalid error: ' . $e->getMessage());
+            return $this->sendError('token_invalid', [], $e->getStatusCode());
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            Log::error('Error retrieving user: ' . $e->getMessage());
+            return $this->sendError('token_absent', [], $e->getStatusCode());
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -107,6 +146,12 @@ class UserController extends Controller
     public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
         try{
+            $currentUser = JWTAuth::parseToken()->authenticate();
+
+            if ($currentUser->category != 'admin' && $currentUser->user_id != $id) {
+                return $this->sendError('Unauthorized', [], 403);
+            }
+
             $user = User::findOrFail($id);
 
             $validatedData = $request->validate([
@@ -145,35 +190,125 @@ class UserController extends Controller
      */
     public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
+        try{
+            $currentUser = JWTAuth::parseToken()->authenticate();
+
+            if ($currentUser->category != 'admin' && $currentUser->user_id != $id) {
+                return $this->sendError('Unauthorized', [], 403);
+            }
+
         $user = User::findOrFail($id);
         $user->delete();
 
         return $this->sendResponse(null, 'User deleted successfully');
+        } catch (QueryException $e) {
+            Log::error('Error deleting user: ' . $e->getMessage());
+            return $this->sendError($e->getMessage(), [], 500);
+        } catch (\Exception $e) {
+            Log::error('User deletion failed: ' . $e->getMessage());
+            return $this->sendError($e->getMessage(), [], 500);
+        }
     }
 
-    /**
-     * Get the current user.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getCurrentUser(Request $request)
+    public function addFavorite(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
-            // Try to get the user using JWT
-            if (! $user = JWTAuth::parseToken()->authenticate()) {
-                return $this->sendError('User not found', [], 404);
+            $user = JWTAuth::parseToken()->authenticate();
+            $recipeId = $request->input('recipe_id');
+
+            if(!$recipeId) {
+                return $this->sendError('Recipe ID is required', [], 400);
             }
-            return $this->sendResponse(new UserDetailResource($user), 'User retrieved successfully');
-        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-            Log::error('Token expired error: ' . $e->getMessage());
-            return $this->sendError('token_expired', [], $e->getStatusCode());
-        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-            Log::error('Token invalid error: ' . $e->getMessage());
-            return $this->sendError('token_invalid', [], $e->getStatusCode());
-        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-            Log::error('Error retrieving user: ' . $e->getMessage());
-            return $this->sendError('token_absent', [], $e->getStatusCode());
+            
+            // validate whether the recipe is added to favorite
+            $isFavorite = UserFavorite::where('user_id', $user->user_id)
+                ->where('recipe_id', $recipeId)
+                ->exists();
+
+            if ($isFavorite) {
+                return $this->sendError('Recipe already added to favorite', [], 400);
+            }
+
+            // add to favorite
+            $favorite = UserFavorite::create([
+                'user_id' => $user->id,
+                'recipe_id' => $recipeId
+            ]);
+
+            return $this->sendResponse(new UserFavoriteResource($favorite), 'Favorite added successfully');
+        } catch (QueryException $e) {
+            Log::error('Error adding favorite: ' . $e->getMessage());
+            return $this->sendError($e->getMessage(), [], 500);
+        } catch (\Exception $e) {
+            Log::error('Error adding favorite: ' . $e->getMessage());
+            return $this->sendError($e->getMessage(), [], 500);
+        }
+    }
+
+    public function removeFavorite(Request $request, $userId, $recipeId)
+    {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+
+            if ($currentUser->category != 'admin' && $currentUser->user_id != $userId) {
+                return $this->sendError('Unauthorized', [], 403);
+            }
+    
+            $favorite = UserFavorite::where('user_id', $userId)
+                                    ->where('recipe_id', $recipeId)
+                                    ->first();
+    
+            if (!$favorite) {
+                return $this->sendError('Favorite not found', [], 404);
+            }
+    
+            $favorite->delete();
+            return $this->sendResponse(null, 'Favorite removed successfully');
+        } catch (\Exception $e) {
+            Log::error('Error removing favorite: ' . $e->getMessage());
+            return $this->sendError($e->getMessage(), [], 500);
+        }
+    }
+
+    public function listFavorites($userId)
+    {
+        try {
+            $currentUser = JWTAuth::parseToken()->authenticate();
+            if ($currentUser->category != 'admin' && $currentUser->user_id != $userId) {
+                return $this->sendError('Unauthorized', [], 403);
+            }
+
+            $user = User::findOrFail($userId);
+            $favorites = $user->favoriteRecipes()->get();
+    
+            return $this->sendResponse(UserFavoriteResource::collection($favorites), 'Favorites fetched successfully');
+        } catch (\Exception $e) {
+            Log::error('Error listing favorites: ' . $e->getMessage());
+            return $this->sendError($e->getMessage(), [], 500);
+        }
+    }
+
+    public function getFavorite($userId, $recipeId)
+    {
+        try {
+            $currentUser = JWTAuth::parseToken()->authenticate();
+            
+            if ($currentUser->category != 'admin' && $currentUser->user_id != $userId) {
+                return $this->sendError('Unauthorized', [], 403);
+            }
+
+            $favorite = UserFavorite::where('user_id', $userId)
+                                    ->where('recipe_id', $recipeId)
+                                    ->first();
+
+            if (!$favorite) {
+                return $this->sendError('Favorite not found', [], 404);
+            }
+
+            return $this->sendResponse(new UserFavoriteResource($favorite), 'Favorite retrieved successfully');
+        } catch (\Exception $e) {
+            Log::error('Error retrieving favorite: ' . $e->getMessage());
+            return $this->sendError($e->getMessage(), [], 500);
         }
     }
 }
