@@ -112,7 +112,11 @@ class ReviewController extends Controller
     public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
         try {
+            $currentUser = JWTAuth::parseToken()->authenticate();
             $review = Review::findOrFail($id);
+            if ($currentUser->id != $recipe->user_id && $currentUser->role != 'admin') {
+                return $this->sendError('Unauthorized', [], 403);
+            }
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 404);
         }
@@ -140,13 +144,32 @@ class ReviewController extends Controller
     public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
         try {
+            $currentUser = JWTAuth::parseToken()->authenticate();
             $review = Review::findOrFail($id);
+            if ($currentUser->id != $recipe->user_id && $currentUser->role != 'admin') {
+                return $this->sendError('Unauthorized', [], 403);
+            }
             $review->delete();
             Log::info('Review deleted successfully.', ['review_id' => $id]);
             return $this->sendResponse(null, 'Review deleted successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to delete review: ' . $e->getMessage());
             return $this->sendError($e->getMessage(), [], 500);
+        }
+    }
+
+    public function showByUser(): JsonResponse
+    {
+        try {
+            $currentUser = JWTAuth::parseToken()->authenticate();
+    
+            $reviews = Review::where('user_id', $currentUser->id)->get();
+
+            return $this->sendResponse(ReviewListResource::collection($reviews), 'Reviews fetched successfully');
+
+        } catch (\Exception $e) {
+            Log::error('Error fetching recipes: ' . $e->getMessage());
+            return $this->sendError('Error fetching recipes', [], 500);
         }
     }
 }

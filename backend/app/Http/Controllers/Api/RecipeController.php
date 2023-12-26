@@ -96,7 +96,12 @@ class RecipeController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         try {
+            $currentUser = JWTAuth::parseToken()->authenticate();
             $recipe = Recipe::findOrFail($id);
+        
+            if ($currentUser->id != $recipe->user_id && $currentUser->category != 'admin') {
+                return $this->sendError('Unauthorized', [], 403);
+            }
 
             $validatedData = $request->validate([
                 'recipe_name' => 'required|string|max:100',
@@ -131,12 +136,29 @@ class RecipeController extends Controller
     public function destroy(string $id): JsonResponse
     {
         try {
+            $currentUser = JWTAuth::parseToken()->authenticate();
             $recipe = Recipe::findOrFail($id);
+        
+            if ($currentUser->id != $recipe->user_id && $currentUser->category != 'admin') {
+                return $this->sendError('Unauthorized', [], 403);
+            }
             $recipe->delete();
             return $this->sendResponse(null, 'Recipe deleted successfully');
         } catch (\Exception $e) {
             Log::error('Error deleting recipe: ' . $e->getMessage());
             return $this->sendError('Error deleting recipe', [], 500);
+        }
+    }
+
+    public function showByUser(): JsonResponse
+    {
+        try {
+            $currentUser = JWTAuth::parseToken()->authenticate();
+            $recipes = Recipe::where('user_id', $currentUser->user_id)->get();
+            return $this->sendResponse(RecipeListResource::collection($recipes), 'Recipes fetched by user ID successfully');
+        } catch (\Exception $e) {
+            Log::error('Error fetching recipes: ' . $e->getMessage());
+            return $this->sendError($e->getMessage(), [], 500);
         }
     }
 }
