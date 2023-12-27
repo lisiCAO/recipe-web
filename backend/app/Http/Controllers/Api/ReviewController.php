@@ -27,7 +27,7 @@ class ReviewController extends Controller
     public function index()
     {
         try {
-            if(!checkRole('admin')) {
+            if(!$this->checkRole('admin')) {
                 return $this->sendError('Unauthorized', [], 403);
             }
             $reviews = Review::all();
@@ -144,7 +144,7 @@ class ReviewController extends Controller
         try {
             $review = Review::findOrFail($id);
             $userId = $review->user_id;
-            if(!checkRole('admin') && !$this->checkCurrentUser($userId)) {
+            if(!$this->checkRole('admin') && !$this->checkCurrentUser($userId)) {
                 return $this->sendError('Unauthorized', [], 403);
             }
         } catch (\Exception $e) {
@@ -177,7 +177,7 @@ class ReviewController extends Controller
 
             $review = Review::findOrFail($id);
             $userId = $review->user_id;
-            if(!checkRole('admin') && !$this->checkCurrentUser($userId)) {
+            if(!$this->checkRole('admin') && !$this->checkCurrentUser($userId)) {
                 return $this->sendError('Unauthorized', [], 403);
             }
             $review->delete();
