@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import Button from '../common/Button';
-import Table from '../layout/Table';
-import SearchBar from '../common/Searchbar';
-import CreateReviewModal from '../modals/reviews/CreateReviewModal';
-import EditReviewModal from '../modals/reviews/EditReviewModal';
-import ReviewDetailsModal from '../modals/reviews/ReviewDetailsModal';
-import ConfirmModal from '../modals/ConfirmModal';
-import ApiService from '../../services/ApiService';
-import { MessageContext } from './../common/MessageContext';
+import Button from '../../common/Button';
+import Table from '../../layout/Table';
+import SearchBar from '../../common/Searchbar';
+import CreateReviewModal from '../../modals/reviews/CreateReviewModal';
+import EditReviewModal from '../../modals/reviews/EditReviewModal';
+import ReviewDetailsModal from '../../modals/reviews/ReviewDetailsModal';
+import ConfirmModal from '../../modals/ConfirmModal';
+import ApiService from '../../../services/ApiService';
+import { MessageContext } from '../../common/MessageContext';
 import './Reviews.scss';
 
 /**

@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import Button from '../common/Button';
-import Table from '../layout/Table';
-import SearchBar from '../common/Searchbar';
-import CreateUserModal from '../modals/users/CreateUserModal';
-import EditUserModal from '../modals/users/EditUserModal';
-import UserDetailsModal from '../modals/users/UserDetailsModal';
-import ConfirmModal from '../modals/ConfirmModal';
-import ApiService from '../../services/ApiService';
-import { MessageContext } from '../common/MessageContext';
+import Button from '../../common/Button';
+import Table from '../../layout/Table';
+import SearchBar from '../../common/Searchbar';
+import CreateUserModal from '../../modals/users/CreateUserModal';
+import EditUserModal from '../../modals/users/EditUserModal';
+import UserDetailsModal from '../../modals/users/UserDetailsModal';
+import ConfirmModal from '../../modals/ConfirmModal';
+import ApiService from '../../../services/ApiService';
+import { MessageContext } from '../../common/MessageContext';
 import './Users.scss';
 
 const Users = () => {

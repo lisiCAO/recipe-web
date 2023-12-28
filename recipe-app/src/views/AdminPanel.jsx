@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/layout/Sidebar';
-import Recipes from '../components/pages/Recipes'; 
-import Users from '../components/pages/Users'; 
-import Ingredients from '../components/pages/Ingredients';
-import Reviews from '../components/pages/Reviews';
+import Recipes from '../components/pages/admin/Recipes'; 
+import Users from '../components/pages/admin/Users'; 
+import Ingredients from '../components/pages/admin/Ingredients';
+import Reviews from '../components/pages/admin/Reviews';
 import './AdminPanel.scss';
-import DashBoard from "../components/pages/DashBoard";
+import DashBoard from "../components/pages/admin/DashBoard";
 
 // Create your AdminPanel component
 const AdminPanel = () => {
