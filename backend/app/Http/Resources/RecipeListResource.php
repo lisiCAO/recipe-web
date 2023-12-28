@@ -23,6 +23,8 @@ class RecipeListResource extends JsonResource
             'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
             'updatedAt' => Carbon::parse($this->updated_at)->format('Y-m-d H:i:s'),
             'createdBy' =>$this->user->first_name . ' ' . $this->user->last_name,
+            'reviewsCount' => $this->reviews_count, 
+            'favoritesCount' => $this->favorites_count, 
         ];
     }
 }

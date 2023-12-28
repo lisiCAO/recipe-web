@@ -29,7 +29,7 @@ class RecipeController extends Controller
     {
         // Get all recipes
         try {
-            $recipes = Recipe::all();
+            $recipes = Recipe::withCount(['reviews', 'favorites'])->get();
             return $this->sendResponse(RecipeListResource::collection($recipes), 'Recipes fetched successfully');
         } catch (\Exception $e) {
             Log::error('Error fetching recipes: ' . $e->getMessage());
