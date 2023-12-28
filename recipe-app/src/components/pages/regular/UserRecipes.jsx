@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import RecipeCard from './RecipeCard';
-import ApiService from '../../services/ApiService';
-import RecipeDetailsModal from '../modals/recipes/RecipeDetailsModal';
+import RecipeCard from './../../common/RecipeCard';
+import ApiService from '../../../services/ApiService';
+import RecipeDetailsModal from '../../modals/recipes/RecipeDetailsModal';
 import './UserRecipes.scss';
 
 const UserRecipes = () => {

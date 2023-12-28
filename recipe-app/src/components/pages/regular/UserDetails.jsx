@@ -1,12 +1,15 @@
 import React, { useState, useContext } from 'react';
 import UserDetailsView from './UserDetailsView';
 import UserDetailsEdit from './UserDetailsView';
-import { UserContext } from '../../../contexts/UserContext';
+import { UserContext } from '../../../components/common/UserContext';
+import ApiService from '../../../services/ApiService';
+import { MessageContext } from '../../common/MessageContext';
 
 
 const UserDetails = () => {
     const [isEditing, setIsEditing] = useState(false);
     const { user, setUser } = useContext(UserContext);
+    const { showMessage} = useContext(MessageContext);
 
     const handleEditSubmit = async (updatedUser) => {
         console.log('Updating user:', updatedUser);

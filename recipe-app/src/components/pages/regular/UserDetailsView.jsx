@@ -1,6 +1,6 @@
 import React from 'react';
-import DetailContent from '../common/DetailContent';
-import Button from '../common/Button';
+import DetailContent from '../../common/DetailContent';
+import Button from '../../common/Button';
 
 
 function UserDetailsView( { setIsEditing, user }) {
