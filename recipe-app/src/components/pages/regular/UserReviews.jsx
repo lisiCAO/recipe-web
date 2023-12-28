@@ -1,6 +1,6 @@
 import React from 'react';
 
-function UserReviewsTable({ userId }) {
+function UserReviews({ userId }) {
   // Fetch and display user's reviews
   return (
     <div className="user-reviews-table">
@@ -9,4 +9,4 @@ function UserReviewsTable({ userId }) {
   );
 }
 
-export default UserReviewsTable;
+export default UserReviews;

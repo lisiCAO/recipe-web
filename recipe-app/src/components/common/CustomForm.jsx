@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import Button from './Button';
 import FormInput from './FormInput';
 import FormTextArea from './FormTextArea';
@@ -6,6 +6,7 @@ import FormFileInput from './FormFileInput';
 import Select from './Select';
 import Message from './Message';
 import ApiService from '../../services/ApiService';
+import { MessageContext } from './MessageContext';
 
 const CustomForm = ({ onSubmit, config, initialData, mode, onSubmissionSuccess }) => {
     const shouldShowPasswordCheckbox = useMemo(() => {

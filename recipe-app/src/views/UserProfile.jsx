@@ -1,7 +1,11 @@
 import React from 'react';
-import UserDetails from './../components/pages/regular/UserDetails';
-import UserRecipesTable from '../components/pages/regular/UserRecipes';
-import UserReviewsTable from './../components/pages/regular/UserReviewsTable';
+import Sidebar from '../components/layout/Sidebar';
+import UserDetails from '../components/pages/regular/UserDetails';
+import UserRecipes from '../components/pages/regular/UserRecipes';
+import UserReviews from '../components/pages/regular/UserReviews';
+import UserFavorites from '../components/pages/regular/UserFavorites';
+import { UserContext } from '../components/common/UserContext';
+
 import "./UserProfile.scss";
 
 function UserProfile() {

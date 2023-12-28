@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import Modal from './Modal';
+import CustomForm from './../common/CustomForm';
 import { MessageContext } from '../common/MessageContext';
 import './FormModal.scss';
 
@@ -9,7 +10,6 @@ const FormModal = ({ isOpen, onClose, onSubmit, config, initialData, mode }) => 
         if(message){
             setTimeout(() => {
                 onClose();
-                console.log("submit and enable" + isSubmitting)
             }, 3000);
         } else {
             onClose();

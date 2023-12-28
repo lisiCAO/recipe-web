@@ -1,6 +1,6 @@
 import React from 'react';
 
-function UserFavorite({userId}) {
+function UserFavorites({userId}) {
     return (
         <div className="user-favorite">
             <h1>User Favorite</h1>
@@ -8,3 +8,5 @@ function UserFavorite({userId}) {
         </div>
     );
 }
+
+export default UserFavorites;
