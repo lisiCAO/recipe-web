@@ -24,7 +24,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 // Login
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware(['parse.jwt', 'jwt.auth'])->group(function () {
+//Route::middleware(['parse.jwt', 'jwt.auth'])->group(function () {
     // User
     Route::get('/user', [UserController::class, 'getCurrentUser']);
 
@@ -38,7 +38,7 @@ Route::middleware(['parse.jwt', 'jwt.auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/upload', [FileUploadController::class, 'upload']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
-});
+//});
 
 
 
