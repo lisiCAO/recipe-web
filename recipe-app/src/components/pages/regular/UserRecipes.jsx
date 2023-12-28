@@ -1,52 +1,58 @@
-import React, { useEffect, useState } from 'react';
-import RecipeCard from './../../common/RecipeCard';
+import React, { useState } from 'react';
+import RecipeList from '../../layout/RecipeList';
+import RecipeDetails from '../../layout/RecipeDetails';
+import RecipeEdit from '../../layout/RecipeEdit';
 import ApiService from '../../../services/ApiService';
-import RecipeDetailsModal from '../../modals/recipes/RecipeDetailsModal';
+
 import './UserRecipes.scss';
 
 const UserRecipes = () => {
-    const [recipes, setRecipes] = useState([]);
+    const [currentView, setCurrentView] = useState('list');
     const [selectedRecipe, setSelectedRecipe] = useState(null);
-    const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+    const [recipes, setRecipes] = useState([]);
 
     useEffect(() => {
-      ApiService.getUserRecipes()
-      .then(response => {
-          if (Array.isArray(response)) {
-              setRecipes(response);
-          }
-          else {
-              console.error('Unable to fetch recipes.');
-              return [];
-          }
-        })
-        .catch(error => {
-          console.error(error);
-          // showMessage('error', 'Unable to fetch recipes.');
-          setRecipes([]);
-      });
+        const fetchUserRecipes = async () => {
+            // 获取数据的逻辑
+            try {
+                const response = await ApiService.fetchRecipeByUser();
+                if (response) {
+                    setRecipes(response);
+                }
+            } catch (error) {
+                console.error('Error fetching user recipes:', error);
+            }
+        };
+
+        fetchUserRecipes();
     }, []);
 
-    const handleOpenDetails = (recipe) => {
-      setSelectedRecipe(recipe);
-      setIsDetailsOpen(true);
-  };
+    const handleRecipeSelect = (recipe) => {
+        setSelectedRecipe(recipe);
+        setCurrentView('details');
+    };
 
-    const handleCloseDetails = () => {
-      setIsDetailsOpen(false);
-      setSelectedRecipe(null);
-  };
+    const handleEdit = (recipe) => {
+        setSelectedRecipe(recipe);
+        setCurrentView('edit');
+    };
+
+    const renderView = () => {
+        switch(currentView) {
+            case 'list':
+                return <RecipeList recipes={recipes} onRecipeSelect={handleRecipeSelect} />;
+            case 'details':
+                return <RecipeDetails recipe={selectedRecipe} onEdit={handleEdit} />;
+            case 'edit':
+                return <RecipeEdit recipe={selectedRecipe} />;
+            default:
+                return <RecipeList onRecipeSelect={handleRecipeSelect} />;
+        }
+    };
 
     return (
         <div>
-            {recipes.map(recipe => (
-                <RecipeCard key={recipe.id} recipe={recipe} onOpenDetails={handleOpenDetails} />
-            ))}
-            <RecipeDetailsModal
-                isOpen={isDetailsOpen}
-                onClose={handleCloseDetails}
-                recipe={selectedRecipe}
-            />
+            {renderView()}
         </div>
     );
 };
