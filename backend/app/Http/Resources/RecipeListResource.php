@@ -19,6 +19,7 @@ class RecipeListResource extends JsonResource
         return [
             'id' => $this->recipe_id,
             'name' => $this->recipe_name,
+            'imagePath' => $this->recipe_image_path,
             'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
             'updatedAt' => Carbon::parse($this->updated_at)->format('Y-m-d H:i:s'),
             'createdBy' =>$this->user->first_name . ' ' . $this->user->last_name,
