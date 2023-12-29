@@ -65,8 +65,12 @@ const CustomForm = ({ onSubmit, config, initialData, mode, onSubmissionSuccess }
         }
         };
 
-    const renderFormFields = (config) => {
+    const renderFormFields = (config, formData) => {
         return config.map((field) => {
+            if (field.shouldRender && !field.shouldRender(formData)) {
+                return null;
+            }
+
             if (field.name && field.name.includes('id')) {
                 return null;
             }
@@ -196,7 +200,7 @@ const CustomForm = ({ onSubmit, config, initialData, mode, onSubmissionSuccess }
                     />
                 </label>
             )}
-            {renderFormFields(config)}
+            {renderFormFields(config, formData)}
             <Message message={message} />
             <Button type="submit" disabled={isSubmitting}>
                 {mode === 'edit' ? 'Save Changes' : 'Create'}

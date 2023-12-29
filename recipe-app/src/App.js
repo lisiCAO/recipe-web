@@ -9,26 +9,22 @@ import UserProfile from './views/UserProfile';
 
 function App() {
 
-  const { user, isLoggedIn, showLoginModal, setShowLoginModal, handleLogin, handleLogout } = useContext(UserContext);
-  const [currentPage, setCurrentPage] = useState('home');
-
-  const navigateTo = (page) => {
-    setCurrentPage(page);
-  };
+  const { currentPage, navigateTo, user, isLoggedIn, showLoginModal, setShowLoginModal, handleLogin, handleLogout } = useContext(UserContext);
 
   return (
       <div> 
         {/* 通过条件渲染来决定显示哪个组件 */}
         <Navbar
           isLoggedIn={isLoggedIn}
-          userEmail={user?.email}
+          user={user}
           onLogout={handleLogout}
           onLoginClick={() => setShowLoginModal(true)}
+          navigateTo={navigateTo}
         />
         {/* 根据用户是否登录来决定显示Home组件还是AdminPanel组件 */}
         {currentPage === 'home' && <Home navigateTo={navigateTo}/>}
-        {user?.isAdmin && currentPage === 'adminPanel' && <AdminPanel />}
-        {!user?.isAdmin && currentPage === 'userProfile' && <UserProfile user={user}/>}
+        {currentPage === 'adminPanel' && <AdminPanel />}
+        {currentPage === 'userProfile' && <UserProfile />}
         {/* 显示登录模态框 */}
         {showLoginModal && (
           <LoginModal

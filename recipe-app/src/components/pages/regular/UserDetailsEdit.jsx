@@ -1,8 +1,11 @@
-import React from 'react';
-import CustomForm from './CustomForm';
-import userConfig from '../../configs/userConfig';
+import React, {useContext} from 'react';
+import CustomForm from './../../common/CustomForm';
+import userConfig from '../../modals/users/userConfig';
+import { MessageContext } from './../../common/MessageContext';
+import Button from '../../common/Button';
 
 const UserDetailsEdit = ({ setIsEditing, user, onSubmit }) => {
+    const { message, hideMessage } = useContext(MessageContext);
     const handleFormSubmissionSuccess = () => {
         if (message){
             setTimeout(() => {
@@ -14,6 +17,7 @@ const UserDetailsEdit = ({ setIsEditing, user, onSubmit }) => {
     }
 
     return (
+        <>
         <CustomForm
             config={userConfig}
             initialData={user}
@@ -21,6 +25,10 @@ const UserDetailsEdit = ({ setIsEditing, user, onSubmit }) => {
             mode="edit"
             onSubmissionSuccess={handleFormSubmissionSuccess}
         />
+        <Button onClick={() => {setIsEditing(false); hideMessage();}} className="cancel-button">
+            Cancel
+        </Button>
+        </>
     );
 };
 

@@ -10,7 +10,7 @@ export const UserProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false); // show/hide login modal
     const { showMessage } = useContext(MessageContext);          // save the message context
-
+    const [currentPage, setCurrentPage] = useState('home');
     useEffect(() =>{
         const checkLoginStatus = async () => {
           try {
@@ -58,15 +58,18 @@ export const UserProvider = ({ children }) => {
       setIsLoggedIn(false);
       setUser(null);
       showMessage('success', 'Logged out successfully');
+      navigateTo('home');
     } catch (error) {
       showMessage('error', 'Failed to log out');
     }
   };
   
-
+  const navigateTo = (page) => {
+    setCurrentPage(page);
+  };
 
     return (
-        <UserContext.Provider value={{ user, isLoggedIn, showLoginModal, setShowLoginModal, handleLogin, handleLogout }}>
+        <UserContext.Provider value={{currentPage, user, isLoggedIn, showLoginModal,navigateTo, setShowLoginModal, handleLogin, handleLogout }}>
             {children}
         </UserContext.Provider>
     );

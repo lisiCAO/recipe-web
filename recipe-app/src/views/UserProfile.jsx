@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { useState, useContext} from 'react';
 import Sidebar from '../components/layout/Sidebar';
 import UserDetails from '../components/pages/regular/UserDetails';
 import UserRecipes from '../components/pages/regular/UserRecipes';
@@ -9,9 +9,8 @@ import { UserContext } from '../components/common/UserContext';
 import "./UserProfile.scss";
 
 function UserProfile() {
-    const [activeTab, setActiveTab] = React.useState('recipes');
-    const [user] =React.useContext(UserContext);
-
+    const [activeTab, setActiveTab] = useState('details');
+    const { user } = useContext(UserContext);
     const renderComponent = () => {
         switch (activeTab) {
             case 'details':
@@ -29,9 +28,11 @@ function UserProfile() {
 
     return (
         <div className="user-profile">
-            <Sidebar setActiveTab={setActiveTab} category={user.category}/>
-            <div className="content">
-                {renderComponent()}
+            <div className="user-body">
+                <Sidebar setActiveTab={setActiveTab} category={user.category}/>
+                <div className="content">
+                    {renderComponent()}
+                </div>
             </div>
         </div>
     );

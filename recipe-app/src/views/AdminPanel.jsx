@@ -34,7 +34,7 @@ const AdminPanel = () => {
     return (
         <div className="admin-panel">
             <div className="admin-body">
-                <Sidebar setActiveTab={setActiveTab} />
+                <Sidebar setActiveTab={setActiveTab} category={'admin'}/>
                 <div className="admin-content">
                     {renderContent()}
                 </div>

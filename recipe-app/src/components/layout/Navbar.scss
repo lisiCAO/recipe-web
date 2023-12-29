@@ -20,4 +20,34 @@
         font-size: 20px;
     }
 
+    .user-info {
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+        }
+
+        &:active {
+            background-color: #c8c8c8;
+            transform: translateY(1px);
+        }
+    }
+
+    button {
+        background-color: #007bff;
+        border: none;
+        padding: 0.5rem 1rem;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
+
 }

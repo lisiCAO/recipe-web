@@ -1,7 +1,7 @@
 import React from 'react';
 import './Sidebar.scss';
 
-const Sidebar = ({ setActiveTab, category = 'user' }) => {
+const Sidebar = ({ setActiveTab, category}) => {
     // 根据用户类别显示不同的选项
     const renderMenuItems = () => {
         if (category === 'admin') {
