@@ -4,7 +4,7 @@ import UserDetailsEdit from './UserDetailsEdit';
 import { UserContext } from '../../../components/common/UserContext';
 import ApiService from '../../../services/ApiService';
 import { MessageContext } from '../../common/MessageContext';
-
+import './UserDetails.scss'
 
 const UserDetails = () => {
     const [isEditing, setIsEditing] = useState(false);

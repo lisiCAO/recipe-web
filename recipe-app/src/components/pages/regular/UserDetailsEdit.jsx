@@ -3,6 +3,7 @@ import CustomForm from './../../common/CustomForm';
 import userConfig from '../../modals/users/userConfig';
 import { MessageContext } from './../../common/MessageContext';
 import Button from '../../common/Button';
+import './UserDetailsEdit.scss';
 
 const UserDetailsEdit = ({ setIsEditing, user, onSubmit }) => {
     const { message, hideMessage } = useContext(MessageContext);
@@ -17,18 +18,18 @@ const UserDetailsEdit = ({ setIsEditing, user, onSubmit }) => {
     }
 
     return (
-        <>
-        <CustomForm
-            config={userConfig}
-            initialData={user}
-            onSubmit={onSubmit}
-            mode="edit"
-            onSubmissionSuccess={handleFormSubmissionSuccess}
-        />
-        <Button onClick={() => {setIsEditing(false); hideMessage();}} className="cancel-button">
-            Cancel
-        </Button>
-        </>
+        <div className="user-details-edit">
+            <CustomForm
+                config={userConfig}
+                initialData={user}
+                onSubmit={onSubmit}
+                mode="edit"
+                onSubmissionSuccess={handleFormSubmissionSuccess}
+            />
+            <Button onClick={() => {setIsEditing(false); hideMessage();}} className="cancel-button">
+                Cancel
+            </Button>
+        </div>
     );
 };
 

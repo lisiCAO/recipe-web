@@ -1,6 +1,7 @@
 import React from 'react';
 import DetailContent from '../../common/DetailContent';
 import Button from '../../common/Button';
+import './UserDetailsView.scss';
 
 
 function UserDetailsView( { onEdit, user }) {
