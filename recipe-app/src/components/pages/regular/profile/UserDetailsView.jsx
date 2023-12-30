@@ -4,10 +4,10 @@ import Button from '../../../common/Button';
 import './UserDetailsView.scss';
 
 
-function UserDetailsView( { onEdit, user }) {
-    const userConfig = {
+const UserDetailsView = ( { onEdit, user }) => {
+    const config = {
         title: 'name', 
-        image: 'profileImage', 
+        image: 'imagePath', 
         ignoreFields: ['id', 'password', 'createdAt', 'updatedAt'] // 忽略的字段
     };
     
@@ -15,7 +15,7 @@ function UserDetailsView( { onEdit, user }) {
         <div className="user-details-view">
             <h1>User Details</h1>
             {/* Display other user details here */}
-            <DetailContent data={user} config={userConfig} />
+            <DetailContent data={user} config={config} />
             <Button onClick={onEdit} className="edit-button">
                 Edit
             </Button>

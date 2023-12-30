@@ -17,17 +17,12 @@ class UserFavoriteResource extends JsonResource
     {
         return [
             'id' => $this->favorite_id,
-            'user' => [
-                'id' => $this->user->user_id,
-                'name' => $this->user->first_name . ' ' . $this->user->last_name,
-                // 其他用户信息...
-            ],
-            'recipe' => [
-                'id' => $this->recipe->recipe_id,
-                'name' => $this->recipe->recipe_name,
-                'description' => $this->recipe->description,
-                // 其他食谱信息...
-            ],
+            'recipeId' => $this->recipe->recipe_id,
+            'name' => $this->recipe->recipe_name,
+            'imagePath' => $this->recipe->recipe_image_path,
+            'cookingTime' => $this->recipe->cooking_time,
+            'stepInstruction' => $this->recipe->step_instruction,
+            'description' => $this->recipe->description,
             // 可以根据需要添加更多字段或相关模型数据
         ];
     }

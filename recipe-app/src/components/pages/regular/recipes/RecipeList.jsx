@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RecipeCard from '../../../common/RecipeCard'; 
 
-const RecipeList = ({ recipes, onRecipeSelect } ) => {
+const RecipeList = ({ recipes = [], onRecipeSelect, onDelete } ) => {
     
     return (
         <div className="user-recipe-list">
@@ -10,7 +10,8 @@ const RecipeList = ({ recipes, onRecipeSelect } ) => {
                 <RecipeCard 
                     key={recipe.id} 
                     recipe={recipe} 
-                    onOpenDetails={() => onRecipeSelect(recipe.id)} // 使用回调
+                    onOpenDetails={() => onRecipeSelect(recipe)} // 使用回调
+                    onDelete={onDelete}
                 />
             ))}
         </div>

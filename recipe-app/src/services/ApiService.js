@@ -76,6 +76,18 @@ const ApiService = {
       return handleResponse(response);
   },
 
+  async fetchFavoriteRecipeByUser() {
+      const response = await fetchWithConfig(`${API_BASE_URL}/user/favorites`);
+      return handleResponse(response);
+  },
+
+  async deleteFavoriteRecipeByUser(recipeId) {
+      const response = await fetchWithConfig(`${API_BASE_URL}/user/favorites/${recipeId}`, {
+        method: 'DELETE'
+      });
+      return handleResponse(response);
+  },
+
   async createRecipe(recipeData) {
       const response = await fetchWithConfig(`${API_BASE_URL}/recipes`, {
         method: 'POST',

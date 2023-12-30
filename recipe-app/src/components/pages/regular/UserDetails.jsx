@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
-import UserDetailsView from './UserDetailsView';
-import UserDetailsEdit from './UserDetailsEdit'; 
+import React, { useState, useContext } from 'react'; 
 import { UserContext } from '../../../components/common/UserContext';
+import UserDetailsView from './profile/UserDetailsView';
+import UserDetailsEdit from './profile/UserDetailsEdit';
 import ApiService from '../../../services/ApiService';
 import { MessageContext } from '../../common/MessageContext';
 import './UserDetails.scss'

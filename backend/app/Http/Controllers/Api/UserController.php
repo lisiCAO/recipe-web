@@ -295,7 +295,7 @@ class UserController extends Controller
                 return $this->sendError('Favorite not found', [], 404);
             }
 
-            return $this->sendResponse(new UserFavoriteResource($favorite), 'Favorite retrieved successfully');
+            return $this->sendResponse(new RecipeDetailResource($favorite), 'Favorite retrieved successfully');
         } catch (\Exception $e) {
             Log::error('Error retrieving favorite: ' . $e->getMessage());
             return $this->sendError($e->getMessage(), [], 500);
