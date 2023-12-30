@@ -14,8 +14,8 @@ const RecipeCard = ({ recipe, onOpenDetails, onDelete }) => {
             <img src={`http://localhost:8000${recipe.imagePath}`} alt={recipe.name} />
             <div className="recipe-info">
                 <h3>{recipe.name}</h3>
-                <p>Comments: {recipe.commentCount}</p>
-                <p>Favorites: {recipe.favoriteCount}</p>
+                <p>Comments: {recipe.reviewsCount}</p>
+                <p>Favorites: {recipe.favoritesCount}</p>
             </div>
             {onDelete && (
                 <Button onClick={handleButtonClick} className="btn-delete">Delete</Button>

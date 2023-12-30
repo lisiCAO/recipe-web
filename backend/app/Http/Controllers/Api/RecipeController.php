@@ -154,7 +154,7 @@ class RecipeController extends Controller
     {
         try {
             $currentUser = JWTAuth::parseToken()->authenticate();
-            $recipes = Recipe::where('user_id', $currentUser->user_id)->get();
+            $recipes = Recipe::where('user_id', $currentUser->user_id)->withCount(['reviews', 'favorites'])->get();
             return $this->sendResponse(RecipeListResource::collection($recipes), 'Recipes fetched by user ID successfully');
         } catch (\Exception $e) {
             Log::error('Error fetching recipes: ' . $e->getMessage());

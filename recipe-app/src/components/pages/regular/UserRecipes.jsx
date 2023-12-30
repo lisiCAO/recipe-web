@@ -33,6 +33,7 @@ const UserRecipes = () => {
         .then(response => {
             if (Array.isArray(response)) {
                 setRecipes(response);
+                console.log(response);
             }
             else {
                 console.error('Unable to fetch recipes.');
