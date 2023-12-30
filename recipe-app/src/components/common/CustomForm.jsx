@@ -203,7 +203,7 @@ const CustomForm = ({ onSubmit, config, initialData, mode, onSubmissionSuccess }
             {renderFormFields(config, formData)}
             <Message message={message} />
             <Button type="submit" disabled={isSubmitting}>
-                {mode === 'edit' ? 'Save Changes' : 'Create'}
+                {mode === 'edit' ? 'Save' : 'Create'}
             </Button>
         </form>
     );
