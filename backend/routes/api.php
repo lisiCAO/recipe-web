@@ -33,6 +33,8 @@ Route::middleware(['parse.jwt', 'jwt.auth','user'])->group(function () {
     Route::delete('/user/favorites/{recipeId}', [UserController::class, 'removeFavorite']);
     Route::post('/user/favorites', [UserController::class, 'addFavorites'])->middleware('jwt.auth');
     Route::get('/user/favorites', [UserController::class, 'listFavorites']);
+    Route::get('/reviews/{reviewId}/recipe', [ReviewController::class, 'getRecipeByReview']);
+
 
     // Tables
     Route::apiResource('users', UserController::class);

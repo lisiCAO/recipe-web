@@ -152,8 +152,18 @@ const ApiService = {
       return handleResponse(response);
   },
 
+  async fetchReviewsByUser() {
+      const response = await fetchWithConfig(`${API_BASE_URL}/user/reviews`);
+      return handleResponse(response);
+  },
+
   async fetchReview(reviewId) {
       const response = await fetchWithConfig(`${API_BASE_URL}/reviews/${reviewId}`);
+      return handleResponse(response);
+  },
+
+  async fetchRecipeByReview(reviewId) {
+      const response = await fetchWithConfig(`${API_BASE_URL}/reviews/${reviewId}/recipe`);
       return handleResponse(response);
   },
 
