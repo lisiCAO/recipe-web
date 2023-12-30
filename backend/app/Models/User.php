@@ -64,7 +64,7 @@ class User extends Authenticatable implements JWTSubject
     public $timestamps = true;
 
     // fillable attributes
-    protected $fillable = ['first_name', 'last_name', 'email', 'password', 'profile_image_path', 'category'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'password', 'profile_image_path', 'category', 'bio', 'location'];
 
     // hidden attributes
     protected $hidden =['password'];
@@ -131,5 +131,10 @@ class User extends Authenticatable implements JWTSubject
     public function reviews(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Review::class, 'user_id');
+    }
+
+    public function favoriteRecipes()
+    {
+        return $this->belongsToMany(Recipe::class, 'user_favorites', 'user_id', 'recipe_id');
     }
 }

@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import Button from '../common/Button';
-import Table from '../layout/Table';
-import SearchBar from '../common/Searchbar';
-import CreateIngredientModal from '../modals/ingredients/CreateIngredientModal';
-import EditIngredientModal from '../modals/ingredients/EditIngredientModal';
-import IngredientDetailsModal from '../modals/ingredients/IngredientDetailsModal';
-import ConfirmModal from '../modals/ConfirmModal';
-import ApiService from '../../services/ApiService';
-import { MessageContext } from './../common/MessageContext';
+import Button from '../../common/Button';
+import Table from '../../layout/Table';
+import SearchBar from '../../common/Searchbar';
+import CreateIngredientModal from '../../modals/ingredients/CreateIngredientModal';
+import EditIngredientModal from '../../modals/ingredients/EditIngredientModal';
+import IngredientDetailsModal from '../../modals/ingredients/IngredientDetailsModal';
+import ConfirmModal from '../../modals/ConfirmModal';
+import ApiService from '../../../services/ApiService';
+import { MessageContext } from '../../common/MessageContext';
 import './Ingredients.scss';
 
 const Ingredients = () => {
@@ -41,7 +41,6 @@ const Ingredients = () => {
     }, []);
 
     const handleCreate = async (newIngredient) => {
-        console.log('Creating new ingredient:', newIngredient);
         await ApiService.createIngredient(newIngredient)
         .then(addedIngredient => {
             setIngredients([...ingredients, addedIngredient]);
@@ -53,9 +52,7 @@ const Ingredients = () => {
         const ingredientId = ingredient.id;
             ApiService.fetchIngredient(ingredientId) // fetch the recipe details
               .then(data => {
-                console.log('Ingredient details from ingredient page:', data);
                   setSelectedIngredient(data);
-                  console.log('Selected ingredient:', selectedIngredient);
                   setShowDetailsModal(true);
               })
               .catch(error => {console.error(error); setEditingIngredient(null)});   
@@ -68,11 +65,8 @@ const Ingredients = () => {
     };
 
     const saveEditedIngredient = async (updatedIngredientData) => {
-        console.log('Updating ingredient data:', updatedIngredientData);
         await ApiService.updateIngredient(editingIngredient.id, updatedIngredientData)
             .then(updatedIngredient => {
-                console.log('Updated ingredient:', updatedIngredient);
-                // Update the Ingredients list with the updated Ingredient
                 setIngredients(ingredients.map(ingredient => 
                     ingredient.id === updatedIngredient.id ? updatedIngredient : ingredient
                 ));
@@ -172,5 +166,4 @@ const Ingredients = () => {
 };
 
 export default Ingredients;
-
 // Path: recipe-app/src/components/pages/Ingredients.jsx

@@ -92,6 +92,10 @@ class IngredientController extends Controller
     {
         // Update a specific ingredient by its ID
         try{
+            if(!$this->checkRole('admin')) {
+                return $this->sendError('Unauthorized', [], 401);
+            }
+
             $ingredient = Ingredient::findOrFail($id);
             $validatedData = $request->validate([
                 'name' => 'nullable|string|max:50',
@@ -119,6 +123,10 @@ class IngredientController extends Controller
     {
         // Delete a specific ingredient by its ID
         try {
+            if(!$this->checkRole('admin')) {
+                return $this->sendError('Unauthorized', [], 401);
+            }
+
             $ingredient = Ingredient::findOrFail($id);
             $ingredient->delete();
 

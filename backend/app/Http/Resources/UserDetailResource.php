@@ -23,11 +23,13 @@ class UserDetailResource extends JsonResource
     {
         return [
             'id' => $this->user_id,
+            'name' => $this->first_name . ' ' . $this->last_name,
+            'imagePath' => $this->profile_image_path,
             'firstName' => $this->first_name,
             'lastName' => $this->last_name,
-            'name' => $this->first_name . ' ' . $this->last_name,
             'email' => $this->email,
-            'imagePath' => $this->profile_image_path,
+            'bio' => $this->bio,
+            'location' => $this->location,
             'category' => $this->category,
             'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
             'updatedAt' => Carbon::parse($this->updated_at)->format('Y-m-d H:i:s')

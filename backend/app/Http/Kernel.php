@@ -74,6 +74,9 @@ class Kernel extends HttpKernel
         'jwt.refresh' => \Tymon\JWTAuth\Http\Middleware\RefreshToken::class,
         'jwt.check' => \Tymon\JWTAuth\Http\Middleware\Check::class,
         'parse.jwt' => \App\Http\Middleware\ParseTokenFromCookie::class,
+        'adminorcurrentuser' => \App\Http\Middleware\CheckAdminOrCurrentUser::class,
+        'admin' => \App\Http\Middleware\AdminMiddleware::class,
+        'user' => \App\Http\Middleware\UserMiddleware::class,
         // ...
     ];
 }

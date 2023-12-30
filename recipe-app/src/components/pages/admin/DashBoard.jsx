@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import StatisticsCard from '../common/StatisticsCard';
-import ApiService from '../../services/ApiService';
+import StatisticsCard from '../../common/StatisticsCard';
+import ApiService from '../../../services/ApiService';
 const Dashboard = ({ onCardClick })=> {
     const [dashboardData, setDashboardData] = useState(null);
     const [error, setError] = useState(null);

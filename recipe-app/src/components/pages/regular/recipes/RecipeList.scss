@@ -1,0 +1,11 @@
+.user-recipe-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .user-recipe-list {
+        grid-template-columns: 1fr;
+    }
+}

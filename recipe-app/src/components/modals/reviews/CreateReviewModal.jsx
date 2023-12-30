@@ -2,8 +2,6 @@ import React from 'react';
 import FormModal from '../FormModal.jsx';
 import reviewConfig from './reviewConfig.js';
 import './CreateReviewModal.scss';
-
-
 const CreateReviewModal = ({ isOpen, onClose, onCreate }) => {
     return (
         <FormModal
@@ -15,9 +13,5 @@ const CreateReviewModal = ({ isOpen, onClose, onCreate }) => {
         />
     );
 };
-
-
 export default CreateReviewModal;
-
-
 // Path: recipe-app/src/components/modals/CreateReviewModal.jsx

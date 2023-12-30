@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import Button from '../common/Button';
-import Table from '../layout/Table';
-import SearchBar from '../common/Searchbar';
-import CreateReviewModal from '../modals/reviews/CreateReviewModal';
-import EditReviewModal from '../modals/reviews/EditReviewModal';
-import ReviewDetailsModal from '../modals/reviews/ReviewDetailsModal';
-import ConfirmModal from '../modals/ConfirmModal';
-import ApiService from '../../services/ApiService';
-import { MessageContext } from './../common/MessageContext';
+import Button from '../../common/Button';
+import Table from '../../layout/Table';
+import SearchBar from '../../common/Searchbar';
+import CreateReviewModal from '../../modals/reviews/CreateReviewModal';
+import EditReviewModal from '../../modals/reviews/EditReviewModal';
+import ReviewDetailsModal from '../../modals/reviews/ReviewDetailsModal';
+import ConfirmModal from '../../modals/ConfirmModal';
+import ApiService from '../../../services/ApiService';
+import { MessageContext } from '../../common/MessageContext';
 import './Reviews.scss';
 
 /**
@@ -33,7 +33,7 @@ const Reviews = () => {
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
-    const [showConfirmModal, setShowConfirmModal] = useState(false); // 控制确认模态框的显示
+    const [showConfirmModal, setShowConfirmModal] = useState(false); 
 
     const { showMessage, hideMessage } = useContext(MessageContext); // Show/hide message
 
@@ -55,7 +55,6 @@ const Reviews = () => {
     }, []);
     
     const handleCreate = async (newReview) => {
-        console.log('Creating new review:', newReview);
         await ApiService.createReview(newReview)
         .then(addedReview => {
             setReviews([...reviews, addedReview]);
@@ -67,7 +66,6 @@ const Reviews = () => {
         const reviewId = review.id;
             ApiService.fetchReview(reviewId) // Fetch the review details
               .then(data => {
-                console.log('Review details from reviews page, by id:', data);
                 setSelectedReview(data);
                 setShowDetailsModal(true);
               })
@@ -80,10 +78,8 @@ const Reviews = () => {
     };
 
     const saveEditedReview = async (updatedReviewData) => {
-        console.log('Updating review:', updatedReviewData);
         await ApiService.updateReview(editingReview.id, updatedReviewData)
             .then(updatedReview => {
-                console.log('Updated review:', updatedReview);
                 // Update the reviews list with the updated review
                 setReviews(reviews.map(review => 
                     review.id === updatedReview.id ? updatedReview : review

@@ -16,6 +16,4 @@ const EditRecipeModal = ({ isOpen, onClose, onEdit, recipeData }) => {
 };
 
 export default EditRecipeModal;
-
-
 // Path: recipe-app/src/components/modals/EditRecipeModal.jsx

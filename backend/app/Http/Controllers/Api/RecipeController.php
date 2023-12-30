@@ -29,7 +29,7 @@ class RecipeController extends Controller
     {
         // Get all recipes
         try {
-            $recipes = Recipe::all();
+            $recipes = Recipe::withCount(['reviews', 'favorites'])->get();
             return $this->sendResponse(RecipeListResource::collection($recipes), 'Recipes fetched successfully');
         } catch (\Exception $e) {
             Log::error('Error fetching recipes: ' . $e->getMessage());
@@ -46,6 +46,7 @@ class RecipeController extends Controller
     public function store(Request $request): JsonResponse
     {
         try {
+            
             // Data validation
             $validatedData = $request->validate([
                 'recipe_name' => 'required|string|max:100',
@@ -61,7 +62,7 @@ class RecipeController extends Controller
 
             // create new recipe
             $recipe = new Recipe($validatedData);
-            $recipe->save(); // 保存食谱
+            $recipe->save(); // save to database
             return $this->sendResponse(new RecipeDetailResource($recipe), 'Recipe created successfully');
         } catch (\Exception $e) {
             Log::error('Error creating recipe: ' . $e->getMessage());
@@ -97,7 +98,11 @@ class RecipeController extends Controller
     {
         try {
             $recipe = Recipe::findOrFail($id);
-
+            $userId = $recipe->user_id;
+            if(!$this->checkRole('admin') && !$this->checkCurrentUser($userId))
+            {
+                return $this->sendError('Unauthorized', [], 403);
+            }
             $validatedData = $request->validate([
                 'recipe_name' => 'required|string|max:100',
                 'cooking_time' => 'nullable|integer',
@@ -132,11 +137,28 @@ class RecipeController extends Controller
     {
         try {
             $recipe = Recipe::findOrFail($id);
+            $userId = $recipe->user_id;
+            if(!$this->checkRole('admin') && !$this->checkCurrentUser($userId))
+            {
+                return $this->sendError('Unauthorized', [], 403);
+            }
             $recipe->delete();
             return $this->sendResponse(null, 'Recipe deleted successfully');
         } catch (\Exception $e) {
             Log::error('Error deleting recipe: ' . $e->getMessage());
             return $this->sendError('Error deleting recipe', [], 500);
+        }
+    }
+
+    public function showByUser(): JsonResponse
+    {
+        try {
+            $currentUser = JWTAuth::parseToken()->authenticate();
+            $recipes = Recipe::where('user_id', $currentUser->user_id)->withCount(['reviews', 'favorites'])->get();
+            return $this->sendResponse(RecipeListResource::collection($recipes), 'Recipes fetched by user ID successfully');
+        } catch (\Exception $e) {
+            Log::error('Error fetching recipes: ' . $e->getMessage());
+            return $this->sendError($e->getMessage(), [], 500);
         }
     }
 }

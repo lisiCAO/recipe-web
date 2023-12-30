@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\JsonResponse;
+use App\Http\Resources\UserDetailResource;
 
 
 /**
@@ -53,10 +54,12 @@ class AuthController extends Controller
      * @return JsonResponse The JSON response containing the token type, expiration time, and user information.
      */
     protected function createNewToken($token){
+        $user = Auth::user();
+        
         $result = [
             'token_type' => 'bearer',
             'expires_in' => JWTAuth::factory()->getTTL() * 60,
-            'user' => Auth::user(),
+            'user' => new UserDetailResource($user),
             'token' => $token
         ];
         return $this->sendResponse($result, 'Login successful');

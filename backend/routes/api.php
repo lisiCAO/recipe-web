@@ -24,9 +24,17 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 // Login
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware(['parse.jwt', 'jwt.auth'])->group(function () {
+Route::middleware(['parse.jwt', 'jwt.auth','user'])->group(function () {
     // User
+    Route::get('/user/recipes', [RecipeController::class, 'showByUser']);
+    Route::get('/user/reviews', [ReviewController::class, 'showByUser']);
     Route::get('/user', [UserController::class, 'getCurrentUser']);
+    Route::get('/user/favorites/{recipeId}', [UserController::class, 'getFavorite']);
+    Route::delete('/user/favorites/{recipeId}', [UserController::class, 'removeFavorite']);
+    Route::post('/user/favorites', [UserController::class, 'addFavorites'])->middleware('jwt.auth');
+    Route::get('/user/favorites', [UserController::class, 'listFavorites']);
+    Route::get('/reviews/{reviewId}/recipe', [ReviewController::class, 'getRecipeByReview']);
+
 
     // Tables
     Route::apiResource('users', UserController::class);
@@ -39,11 +47,3 @@ Route::middleware(['parse.jwt', 'jwt.auth'])->group(function () {
     Route::post('/upload', [FileUploadController::class, 'upload']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
 });
-
-
-
-
-
-
-
-

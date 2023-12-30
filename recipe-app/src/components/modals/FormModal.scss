@@ -1,43 +1,42 @@
+.modal-body {
+    padding: 20px;
 
-    .modal-body {
-        padding: 20px;
+    form {
+        display: flex;
+        flex-direction: column;
 
-        form {
-            display: flex;
-            flex-direction: column;
+        .form-group {
+            margin-bottom: 15px;
+        }
 
-            .form-group {
-                margin-bottom: 15px;
-            }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
 
-            label {
-                font-weight: bold;
-                margin-bottom: 5px;
-                display: block;
-            }
+        input[type="text"],
+        input[type="number"],
+        input[type="file"],
+        textarea {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
 
-            input[type="text"],
-            input[type="number"],
-            input[type="file"],
-            textarea {
-                padding: 8px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                font-size: 14px;
-            }
+        input[type="file"] {
+            border: none;
+        }
 
-            input[type="file"] {
-                border: none;
-            }
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
 
-            textarea {
-                resize: vertical;
-                height: 100px;
-            }
-
-            .button {
-                align-self: center; // Centers the button in the form
-            }
+        .button {
+            align-self: center; // Centers the button in the form
         }
     }
+}
 

@@ -75,7 +75,17 @@ class Recipe extends Model
 
     public function reviews(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Review::class, 'recipe_id');
+        return $this->hasMany(Review::class, 'recipe_id','recipe_id');
+    }
+
+    public function favoritedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'user_favorites', 'recipe_id', 'user_id');
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(UserFavorite::class, 'recipe_id', 'recipe_id');
     }
 
 }

@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\RecipeListResource;
 use App\Http\Resources\ReviewListResource;
 use App\Http\Resources\ReviewResource;
+use App\Http\Resources\RecipeDetailResource;
 use App\Models\Recipe;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 /**
  * ReviewController
  * 
@@ -26,6 +29,9 @@ class ReviewController extends Controller
     public function index()
     {
         try {
+            if(!$this->checkRole('admin')) {
+                return $this->sendError('Unauthorized', [], 403);
+            }
             $reviews = Review::all();
             return $this->sendResponse(ReviewListResource::collection($reviews), 'Reviews fetched successfully');
         } catch (\Exception $e) {
@@ -102,6 +108,32 @@ class ReviewController extends Controller
         }
     }
 
+
+    public function showByUser()
+    {
+        try {
+            $currentUser = JWTAuth::parseToken()->authenticate();
+            $reviews = Review::where('user_id', $currentUser->user_id)->get();
+
+            return $this->sendResponse(ReviewListResource::collection($reviews), 'Reviews fetched successfully');
+
+        } catch (\Exception $e) {
+            Log::error('Error fetching recipes: ' . $e->getMessage());
+            return $this->sendError('Error fetching recipes', [], 500);
+        }
+    }
+
+    public function showByRecipe(string $recipeId)
+    {
+        try {
+            $reviews = Review::where('recipe_id', $recipeId)->get();
+            return $this->sendResponse(ReviewListResource::collection($reviews), 'Reviews fetched successfully');
+        } catch (\Exception $e) {
+            Log::error('Error fetching reviews: ' . $e->getMessage());
+            return $this->sendError('Error fetching reviews', [], 500);
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -113,6 +145,10 @@ class ReviewController extends Controller
     {
         try {
             $review = Review::findOrFail($id);
+            $userId = $review->user_id;
+            if(!$this->checkRole('admin') && !$this->checkCurrentUser($userId)) {
+                return $this->sendError('Unauthorized', [], 403);
+            }
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 404);
         }
@@ -140,7 +176,12 @@ class ReviewController extends Controller
     public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
         try {
+
             $review = Review::findOrFail($id);
+            $userId = $review->user_id;
+            if(!$this->checkRole('admin') && !$this->checkCurrentUser($userId)) {
+                return $this->sendError('Unauthorized', [], 403);
+            }
             $review->delete();
             Log::info('Review deleted successfully.', ['review_id' => $id]);
             return $this->sendResponse(null, 'Review deleted successfully.');
@@ -149,4 +190,29 @@ class ReviewController extends Controller
             return $this->sendError($e->getMessage(), [], 500);
         }
     }
+
+        /**
+     * Get the recipe information for a given review.
+     *
+     * @param string $reviewId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getRecipeByReview(string $reviewId): \Illuminate\Http\JsonResponse
+    {
+        try {
+            // Find the review by ID
+            $review = Review::findOrFail($reviewId);
+
+            // Find the recipe associated with the review
+            $recipe = Recipe::findOrFail($review->recipe_id);
+
+            // Return recipe data
+            return $this->sendResponse(new RecipeDetailResource($recipe), 'Recipe fetched successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error fetching recipe by review: ' . $e->getMessage());
+            return $this->sendError('Error fetching recipe', [], 500);
+        }
+    }
+
+
 }

@@ -40,7 +40,11 @@ const userConfig = [
             { value: 'banned', name: 'Banned'},
             { value: 'deleted', name: 'Deleted'},
         ],
-        mapTo: 'category' // Maps to 'stepInstruction' in initialData
+        mapTo: 'category', // Maps to 'stepInstruction' in initialData
+        shouldRender: (userData) => {
+            // 根据 userData 来决定是否渲染这个字段
+            return userData && userData.category !== 'user';
+        }
     },
     {
         name: 'password',
