@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import RecipeCard from './../common/RecipeCard'; 
+import RecipeCard from '../../../common/RecipeCard'; 
 
 const RecipeList = ({ recipes, onRecipeSelect } ) => {
     return (
