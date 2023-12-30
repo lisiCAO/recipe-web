@@ -18,7 +18,7 @@ const Users = () => {
     const [userToDelete, setUserToDelete] = useState(null); 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
-    const [showConfirmModal, setShowConfirmModal] = useState(false); // 控制确认模态框的显示
+    const [showConfirmModal, setShowConfirmModal] = useState(false); 
     const [searchTerm, setSearchTerm] = useState('');
 
     const { showMessage, hideMessage } = useContext(MessageContext);
@@ -42,7 +42,6 @@ const Users = () => {
     }, []);
 
     const handleCreate = async (newUser) => {
-        console.log('Creating new User:', newUser);
         await ApiService.createUser(newUser)
         .then(addedUser => {
             setUsers([...users, addedUser]);
@@ -54,9 +53,7 @@ const Users = () => {
         const userId = user.id;
             ApiService.fetchUser(userId) 
               .then(data => {
-                console.log('User details from user page:', data);
                 setSelectedUser(data);
-                console.log('Selected user:', selectedUser);
                 setShowDetailsModal(true);
               })
               .catch(error => {console.error(error); setEditingUser(null)});   
@@ -69,10 +66,8 @@ const Users = () => {
     };
 
     const saveEditedUser = async (updatedUserData) => {
-        console.log('Updating User:', updatedUserData);
         await ApiService.updateUser(editingUser.id, updatedUserData)
             .then(updatedUser => {
-                console.log('updatedUser',updatedUser);
                 // Update the Users list with the updated User
                 setUsers(users.map(user => 
                     user.id === updatedUser.id ? updatedUser : user

@@ -13,7 +13,7 @@ function App() {
 
   return (
       <div> 
-        {/* 通过条件渲染来决定显示哪个组件 */}
+        {/* render based on contion */}
         <Navbar
           isLoggedIn={isLoggedIn}
           user={user}
@@ -21,11 +21,11 @@ function App() {
           onLoginClick={() => setShowLoginModal(true)}
           navigateTo={navigateTo}
         />
-        {/* 根据用户是否登录来决定显示Home组件还是AdminPanel组件 */}
+        {/* switch pages */}
         {currentPage === 'home' && <Home navigateTo={navigateTo}/>}
         {currentPage === 'adminPanel' && <AdminPanel />}
         {currentPage === 'userProfile' && <UserProfile />}
-        {/* 显示登录模态框 */}
+        {/* display login modal */}
         {showLoginModal && (
           <LoginModal
             onLogin={handleLogin}

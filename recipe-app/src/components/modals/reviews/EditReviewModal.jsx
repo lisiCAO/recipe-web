@@ -17,5 +17,4 @@ const EditReviewModal = ({ isOpen, onClose, onEdit, reviewData }) => {
 
 export default EditReviewModal;
 
-
 // Path: recipe-app/src/components/modals/EditReviewModal.jsx

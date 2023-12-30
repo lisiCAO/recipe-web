@@ -2,8 +2,6 @@ import React from 'react';
 import FormModal from '../FormModal.jsx';
 import ingredientConfig from './ingredientConfig.js';
 import './CreateIngredientModal.scss';
-
-
 const CreateIngredientModal = ({ isOpen, onClose, onCreate }) => {
     return (
         <FormModal
@@ -15,9 +13,5 @@ const CreateIngredientModal = ({ isOpen, onClose, onCreate }) => {
         />
     );
 };
-
-
 export default CreateIngredientModal;
-
-
 // Path: recipe-app/src/components/modals/ingredients/CreateIngredientModal.jsx

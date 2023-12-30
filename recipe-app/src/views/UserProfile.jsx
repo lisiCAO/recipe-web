@@ -5,7 +5,6 @@ import UserRecipes from '../components/pages/regular/UserRecipes';
 import UserReviews from '../components/pages/regular/UserReviews';
 import UserFavorites from '../components/pages/regular/UserFavorites';
 import { UserContext } from '../components/common/UserContext';
-
 import "./UserProfile.scss";
 
 function UserProfile() {
@@ -37,6 +36,5 @@ function UserProfile() {
         </div>
     );
 }
-
 
 export default UserProfile;

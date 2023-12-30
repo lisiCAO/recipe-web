@@ -28,6 +28,8 @@ class UserDetailResource extends JsonResource
             'firstName' => $this->first_name,
             'lastName' => $this->last_name,
             'email' => $this->email,
+            'bio' => $this->bio,
+            'location' => $this->location,
             'category' => $this->category,
             'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
             'updatedAt' => Carbon::parse($this->updated_at)->format('Y-m-d H:i:s')

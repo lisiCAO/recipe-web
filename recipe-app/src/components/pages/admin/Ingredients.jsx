@@ -41,7 +41,6 @@ const Ingredients = () => {
     }, []);
 
     const handleCreate = async (newIngredient) => {
-        console.log('Creating new ingredient:', newIngredient);
         await ApiService.createIngredient(newIngredient)
         .then(addedIngredient => {
             setIngredients([...ingredients, addedIngredient]);
@@ -53,9 +52,7 @@ const Ingredients = () => {
         const ingredientId = ingredient.id;
             ApiService.fetchIngredient(ingredientId) // fetch the recipe details
               .then(data => {
-                console.log('Ingredient details from ingredient page:', data);
                   setSelectedIngredient(data);
-                  console.log('Selected ingredient:', selectedIngredient);
                   setShowDetailsModal(true);
               })
               .catch(error => {console.error(error); setEditingIngredient(null)});   
@@ -68,11 +65,8 @@ const Ingredients = () => {
     };
 
     const saveEditedIngredient = async (updatedIngredientData) => {
-        console.log('Updating ingredient data:', updatedIngredientData);
         await ApiService.updateIngredient(editingIngredient.id, updatedIngredientData)
             .then(updatedIngredient => {
-                console.log('Updated ingredient:', updatedIngredient);
-                // Update the Ingredients list with the updated Ingredient
                 setIngredients(ingredients.map(ingredient => 
                     ingredient.id === updatedIngredient.id ? updatedIngredient : ingredient
                 ));
@@ -172,5 +166,4 @@ const Ingredients = () => {
 };
 
 export default Ingredients;
-
 // Path: recipe-app/src/components/pages/Ingredients.jsx

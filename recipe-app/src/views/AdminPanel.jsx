@@ -30,7 +30,6 @@ const AdminPanel = () => {
                 return <div>Select a tab</div>;
         }
     };
-
     return (
         <div className="admin-panel">
             <div className="admin-body">

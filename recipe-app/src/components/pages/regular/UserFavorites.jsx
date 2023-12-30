@@ -18,7 +18,6 @@ function UserFavorites({}) {
     useEffect(() => {
         ApiService.fetchFavoriteRecipeByUser()
         .then(response => {
-            console.log('response:', response);
             if (Array.isArray(response)) {
                 setFavorites(response);
             }
@@ -29,7 +28,6 @@ function UserFavorites({}) {
         })
         .catch(error => {
             console.error(error);
-            // showMessage('error', 'Unable to fetch favorites.');
             setFavorites([]);
         });
     }, []);
@@ -38,7 +36,6 @@ function UserFavorites({}) {
         const recipeId = favorite.recipeId;
             ApiService.fetchRecipe(recipeId) 
               .then(data => {
-                console.log('Favorite details from Favorites page, by id:', data);
                 setSelectedFavorite(data);
                 setShowDetailsModal(true);
               })

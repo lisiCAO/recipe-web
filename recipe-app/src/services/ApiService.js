@@ -1,5 +1,3 @@
-// src/services/ApiService.js
-
 // Path context
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -12,6 +10,22 @@ const fetchWithConfig = (url, options = {}) => {
     credentials: 'include'
   };
   return fetch(url, { ...defaultOptions, ...options });
+};
+
+const handleResponse = async (response) => {
+  const contentType = response.headers.get('Content-Type');
+  if (contentType && contentType.includes('application/json')) {
+    const data = await response.json();
+    if (data.success) {
+      return data.data;
+    } else {
+      throw new Error(data.message || 'An error occurred'); 
+    }
+  } else {
+    // non JSON response
+    const text = await response.text();
+    throw new Error(`Non-JSON response: ${text}`);
+  }
 };
 
 const ApiService = {
@@ -37,7 +51,6 @@ const ApiService = {
   },
 
   async createUser(userData) {
-      console.log('createUser api is called')
       const response = await fetchWithConfig(`${API_BASE_URL}/users`, {
         method: 'POST',
         body: userData
@@ -224,25 +237,6 @@ const ApiService = {
   }
 
   // other APIs
-
-};
-
-const handleResponse = async (response) => {
-  const contentType = response.headers.get('Content-Type');
-  if (contentType && contentType.includes('application/json')) {
-    const data = await response.json();
-    console.log(data);
-    if (data.success) {
-      return data.data;
-    } else {
-      console.log(data.message);
-      throw new Error(data.message || 'An error occurred'); 
-    }
-  } else {
-    // non JSON response
-    const text = await response.text();
-    throw new Error(`Non-JSON response: ${text}`);
-  }
 };
 
 export default ApiService;

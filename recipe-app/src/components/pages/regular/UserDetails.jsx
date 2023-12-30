@@ -16,9 +16,7 @@ const UserDetails = () => {
     }
 
     const handleEditSubmit = async (updatedUser) => {
-        console.log('Updating user:', updatedUser);
         const response = await ApiService.updateUser(user.id, updatedUser);
-        console.log('updatedUser', response);
         setUser(response);
         showMessage('success', 'User updated successfully');
         setIsEditing(false); 

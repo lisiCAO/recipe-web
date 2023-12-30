@@ -32,7 +32,7 @@ const Recipes = () => {
 
     const [showCreateModal, setShowCreateModal] = useState(false); // show/hide create modal
     const [showDetailsModal, setShowDetailsModal] = useState(false); // show/hide details modal
-    const [showConfirmModal, setShowConfirmModal] = useState(false); // 控制确认模态框的显示
+    const [showConfirmModal, setShowConfirmModal] = useState(false); 
 
 
     const { showMessage, hideMessage } = useContext(MessageContext); // Show/hide message
@@ -57,9 +57,7 @@ const Recipes = () => {
     }, []);
 
     const handleCreate = async (newRecipe) => { // async/await
-            console.log('Creating new recipe:', newRecipe);
             const addedRecipe = await ApiService.createRecipe(newRecipe);
-            console.log('Added recipe:', addedRecipe);
             setRecipes([...recipes, addedRecipe]);
             showMessage('success', 'Recipe created successfully');
     }
@@ -68,7 +66,6 @@ const Recipes = () => {
         const recipeId = recipe.id;
             ApiService.fetchRecipe(recipeId) 
               .then(data => {
-                console.log('Recipe details from recipes page, by id:', data);
                 setSelectedRecipe(data);
                 setShowDetailsModal(true);
               })
@@ -81,9 +78,7 @@ const Recipes = () => {
     };
 
     const saveEditedRecipe = async (updatedRecipeData) => {
-        console.log('Updated recipe data:', updatedRecipeData);
         const updatedRecipe = await ApiService.updateRecipe(editingRecipe.id, updatedRecipeData);
-        console.log('Updated recipe:', updatedRecipe);
         setRecipes(recipes.map(recipe => 
             recipe.id === updatedRecipe.id ? updatedRecipe : recipe
         ));

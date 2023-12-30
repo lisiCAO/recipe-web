@@ -52,7 +52,6 @@ const CustomForm = ({ onSubmit, config, initialData, mode, onSubmissionSuccess }
         try{
             const response = await ApiService.uploadFile(formData);
             if(response){
-                console.log('File upload response:', response);
                 setFormData(prevFormData => ({
                     ...prevFormData,
                     [fieldName]: response
@@ -171,7 +170,6 @@ const CustomForm = ({ onSubmit, config, initialData, mode, onSubmissionSuccess }
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true); // Disable submit button
-        console.log("submit and disable" + isSubmitting)
         let submittedFormData = formData;
         if (mode === 'edit' && !isPasswordChanging) {
             const { password, ...rest } = formData;

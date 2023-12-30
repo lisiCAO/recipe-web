@@ -5,18 +5,13 @@ import SearchBar from './../../common/Searchbar';
 import ConfirmModal from './../../modals/ConfirmModal';
 import RecipeDetailsModal from './../../modals/recipes/RecipeDetailsModal';
 
-
 const UserReviews = () => {
   const [reviews, setReviews] = useState([]);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
-
     const [reviewToDelete, setReviewToDelete] = useState(null); // review to delete
-
     const [searchTerm, setSearchTerm] = useState('');
-
     const [showDetailsModal, setShowDetailsModal] = useState(false);
-    const [showConfirmModal, setShowConfirmModal] = useState(false); // 控制确认模态框的显示
-
+    const [showConfirmModal, setShowConfirmModal] = useState(false); 
 
     // load initial data
     useEffect(() => {
@@ -40,14 +35,12 @@ const UserReviews = () => {
         const reviewId = review.id;
             ApiService.fetchRecipeByReview(reviewId) // Fetch the review details
               .then(data => {
-                console.log('Review details from reviews page, by id:', data);
                 setSelectedRecipe(data);
                 setShowDetailsModal(true);
               })
               .catch(error => {console.error(error)}) // Handle error
     };
 
-    
     const confirmDelete = (review) => {
         setReviewToDelete(review);
         setShowConfirmModal(true);
@@ -70,7 +63,6 @@ const UserReviews = () => {
 
     const handleSearch = (term) => {
         setSearchTerm(term);
-        // searchReviews(term); // Search reviews
     };
 
     // Table columns
