@@ -26,7 +26,7 @@ const UserDetailsEdit = ({ setIsEditing, user, onSubmit }) => {
                 mode="edit"
                 onSubmissionSuccess={handleFormSubmissionSuccess}
             />
-            <Button onClick={() => {setIsEditing(false); hideMessage();}} className="cancel-button">
+            <Button onClick={() => {setIsEditing(false); hideMessage();}} className="cancel">
                 Cancel
             </Button>
         </div>

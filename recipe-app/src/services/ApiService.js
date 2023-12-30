@@ -71,8 +71,8 @@ const ApiService = {
       return handleResponse(response);
   },
 
-  async fetchRecipeByUser(userId) {
-      const response = await fetchWithConfig(`${API_BASE_URL}/recipes/user/${userId}`);
+  async fetchRecipeByUser() {
+      const response = await fetchWithConfig(`${API_BASE_URL}/user/recipes`);
       return handleResponse(response);
   },
 

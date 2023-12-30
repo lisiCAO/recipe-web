@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import RecipeList from '../../layout/RecipeList';
-import RecipeDetails from '../../layout/RecipeDetails';
+import RecipeList from './recipes/RecipeList';
+import RecipeDetails from './recipes/RecipeDetails';
 import RecipeEdit from '../../layout/RecipeEdit';
 import ApiService from '../../../services/ApiService';
 
@@ -10,10 +10,11 @@ const UserRecipes = () => {
     const [currentView, setCurrentView] = useState('list');
     const [selectedRecipe, setSelectedRecipe] = useState(null);
     const [recipes, setRecipes] = useState([]);
+    const [selectedRecipeId, setSelectedRecipeId] = useState(null);
 
     useEffect(() => {
         const fetchUserRecipes = async () => {
-            // 获取数据的逻辑
+            // Fetch user recipes
             try {
                 const response = await ApiService.fetchRecipeByUser();
                 if (response) {
@@ -27,13 +28,15 @@ const UserRecipes = () => {
         fetchUserRecipes();
     }, []);
 
-    const handleRecipeSelect = (recipe) => {
-        setSelectedRecipe(recipe);
+    const handleRecipeSelect = async (recipeId) => {
+        setSelectedRecipeId(recipeId);
+        const response = await ApiService.fetchRecipe(recipeId);
+        setSelectedRecipe(response);
         setCurrentView('details');
     };
 
-    const handleEdit = (recipe) => {
-        setSelectedRecipe(recipe);
+    const handleEdit = (recipeId) => {
+        setSelectedRecipeId(recipeId);
         setCurrentView('edit');
     };
 
