@@ -15,7 +15,7 @@ const DetailContent = ({ data, config }) => {
                         {value ? (
                             <img src={`http://localhost:8000${value}`} alt={data[config.title]} />
                         ) : (
-                            <img src="http://localhost:8000/storage/recipes/1700071458_b1.jpg" alt="Default" />
+                            <img src="http://localhost:8000/storage/img/default.png" alt="Default" />
                         )}
                     </div>
                 );
