@@ -6,7 +6,6 @@ const RecipeList = ({ recipes = [], onRecipeSelect, onDelete } ) => {
     return (
         <div className="user-recipe-list">
             {recipes.map(recipe => (
-                console.log('recipe:', recipe),
                 <RecipeCard 
                     key={recipe.id} 
                     recipe={recipe} 

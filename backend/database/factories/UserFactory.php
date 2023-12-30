@@ -25,11 +25,11 @@ class UserFactory extends Factory
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
-            'password' => Hash::make('password'), // 使用哈希值作为密码
-            'created_date' => now(),
-            'last_login_date' => now(),
+            'password' => Hash::make('password'), // password
+            'bio' => $this->faker->paragraph,
+            'location' => $this->faker->city,
             'profile_image_path' => $this->faker->imageUrl(),
-            'category' => $this->faker->randomElement(['Category1', 'Category2', 'Category3'])
+            'category' => $this->faker->randomElement(['admin', 'user', 'inactive'])
         ];
     }
 
