@@ -93,11 +93,11 @@ class UserController extends Controller
     public function show(string $id) 
     {
         try {
-            if(!$this->checkRole('admin') && !$this->checkCurrentUser($id)){
+            $user = User::findOrFail($id);
+            $userId = $user->user_id;
+            if(!$this->checkRole('admin') && !$this->checkCurrentUser($userId)){
                 return $this->sendError('Unauthorized', [], 403);
             }
-
-            $user = User::findOrFail($id);
             return $this->sendResponse(new UserDetailResource($user), 'User retrieved successfully');
         } catch (QueryException $e) {
             Log::error('Error fetching user: ' . $e->getMessage());
@@ -149,10 +149,12 @@ class UserController extends Controller
     public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
         try{
-            if(!$this->checkRole('admin') && !$this->checkCurrentUser($id)){
+            $user = User::findOrFail($id);
+            $userId = $user->user_id;
+            if(!$this->checkRole('admin') && !$this->checkCurrentUser($userId)){
                 return $this->sendError('Unauthorized', [], 403);
             }
-            $user = User::findOrFail($id);
+
 
             $validatedData = $request->validate([
                 'first_name' => 'required|string|max:50',

@@ -61,12 +61,10 @@ class Controller extends BaseController
         }
         return false;
     }
-    public function checkCurrentUser($id)
+    public function checkCurrentUser($id = null)
     {
         $user = JWTAuth::parseToken()->authenticate();
-        if ($user->user_id === $id) {
-            return true;
-        }
-        return false;
+        $id = $id ?? $user->user_id;
+        return $user->user_id === $id;
     }
 }

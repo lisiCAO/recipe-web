@@ -9,7 +9,7 @@ import './UserDetails.scss'
 const UserDetails = () => {
     const [isEditing, setIsEditing] = useState(false);
     const { user, setUser } = useContext(UserContext);
-    const { showMessage} = useContext(MessageContext);
+    const { showMessage } = useContext(MessageContext);
 
     const handleEditClick = () => {
         setIsEditing(!isEditing);
@@ -17,12 +17,11 @@ const UserDetails = () => {
 
     const handleEditSubmit = async (updatedUser) => {
         console.log('Updating user:', updatedUser);
-        const { category, ...updatableFields } = updatedUser;
-            const response = await ApiService.updateUser(user.id, updatableFields);
-            console.log('updatedUser', response);
-            setUser({ ...response, category: user.category });
-            showMessage('success', 'User updated successfully');
-            setIsEditing(false); 
+        const response = await ApiService.updateUser(user.id, updatedUser);
+        console.log('updatedUser', response);
+        setUser(response);
+        showMessage('success', 'User updated successfully');
+        setIsEditing(false); 
     };
 
     return (

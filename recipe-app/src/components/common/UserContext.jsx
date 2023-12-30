@@ -6,7 +6,7 @@ import ApiService from '../../services/ApiService';
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] =useState(null);
+    const [ user, setUser ] =useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false); // show/hide login modal
     const { showMessage } = useContext(MessageContext);          // save the message context
@@ -69,7 +69,7 @@ export const UserProvider = ({ children }) => {
   };
 
     return (
-        <UserContext.Provider value={{currentPage, user, isLoggedIn, showLoginModal,navigateTo, setShowLoginModal, handleLogin, handleLogout }}>
+        <UserContext.Provider value={{currentPage, user, isLoggedIn, showLoginModal, setUser, navigateTo, setShowLoginModal, handleLogin, handleLogout }}>
             {children}
         </UserContext.Provider>
     );
