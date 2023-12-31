@@ -17,6 +17,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Resources\UserFavoriteResource;
 use App\Models\UserFavorite;
+use App\Http\Resources\RecipeDetailResource;
 
 
 /**
@@ -247,7 +248,7 @@ class UserController extends Controller
     public function removeFavorite(Request $request, $recipeId)
     {
         try {
-            $userId = $request->input('user_id');
+            $userId = JWTAuth::parseToken()->authenticate()->user_id;
     
             $favorite = UserFavorite::where('user_id', $userId)
                                     ->where('recipe_id', $recipeId)
@@ -297,7 +298,7 @@ class UserController extends Controller
                 return $this->sendError('Favorite not found', [], 404);
             }
 
-            return $this->sendResponse(new RecipeDetailResource($favorite), 'Favorite retrieved successfully');
+            return $this->sendResponse(new UserFavoriteResource($favorite), 'Favorite retrieved successfully');
         } catch (\Exception $e) {
             Log::error('Error retrieving favorite: ' . $e->getMessage());
             return $this->sendError($e->getMessage(), [], 500);

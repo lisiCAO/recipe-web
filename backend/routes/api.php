@@ -34,6 +34,7 @@ Route::middleware(['parse.jwt', 'jwt.auth','user'])->group(function () {
     Route::post('/user/favorites', [UserController::class, 'addFavorites'])->middleware('jwt.auth');
     Route::get('/user/favorites', [UserController::class, 'listFavorites']);
     Route::get('/reviews/{reviewId}/recipe', [ReviewController::class, 'getRecipeByReview']);
+    
 
 
     // Tables

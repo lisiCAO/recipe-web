@@ -11,6 +11,8 @@ class UserFavorite extends Model
     
     protected $table = 'user_favorites';
 
+    protected $primaryKey = 'favorite_id';
+
     protected $fillable = [
         'user_id', 'recipe_id'
     ];
