@@ -170,6 +170,11 @@ const ApiService = {
       return handleResponse(response);
   },
 
+  async fetchReviewsByRecipe(recipeId, page) {
+    const response = await fetchWithConfig (`${API_BASE_URL}/reviews/${recipeId}/page/${page}`);
+    return handleResponse(response);
+  },
+
   async fetchReview(reviewId) {
       const response = await fetchWithConfig(`${API_BASE_URL}/reviews/${reviewId}`);
       return handleResponse(response);
