@@ -210,41 +210,6 @@ class UserController extends Controller
         }
     }
 
-    public function addFavorite(Request $request): \Illuminate\Http\JsonResponse
-    {
-        try {
-            $user = JWTAuth::parseToken()->authenticate();
-            $recipeId = $request->input('recipe_id');
-
-            if(!$recipeId) {
-                return $this->sendError('Recipe ID is required', [], 400);
-            }
-            
-            // validate whether the recipe is added to favorite
-            $isFavorite = UserFavorite::where('user_id', $user->user_id)
-                ->where('recipe_id', $recipeId)
-                ->exists();
-
-            if ($isFavorite) {
-                return $this->sendError('Recipe already added to favorite', [], 400);
-            }
-
-            // add to favorite
-            $favorite = UserFavorite::create([
-                'user_id' => $user->id,
-                'recipe_id' => $recipeId
-            ]);
-
-            return $this->sendResponse(new UserFavoriteResource($favorite), 'Favorite added successfully');
-        } catch (QueryException $e) {
-            Log::error('Error adding favorite: ' . $e->getMessage());
-            return $this->sendError($e->getMessage(), [], 500);
-        } catch (\Exception $e) {
-            Log::error('Error adding favorite: ' . $e->getMessage());
-            return $this->sendError($e->getMessage(), [], 500);
-        }
-    }
-
     public function removeFavorite(Request $request, $recipeId)
     {
         try {
@@ -333,9 +298,12 @@ class UserController extends Controller
             ]);
 
             return $this->sendResponse(new UserFavoriteResource($favorite), 'Recipe added to favorites successfully');
+        } catch (QueryException $e) {
+            Log::error('Error adding favorite: ' . $e->getMessage());
+            return $this->sendError($e->getMessage(), [], 500);
         } catch (\Exception $e) {
-            Log::error('Error adding to favorites: ' . $e->getMessage());
-            return $this->sendError('Error adding to favorites', [], 500);
+            Log::error('Error adding favorite: ' . $e->getMessage());
+            return $this->sendError($e->getMessage(), [], 500);
         }
     }
 
