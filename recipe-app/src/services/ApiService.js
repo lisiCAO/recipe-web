@@ -94,6 +94,13 @@ const ApiService = {
       return handleResponse(response);
   },
 
+  async addFavoriteRecipeByUser() {
+      const response = await fetchWithConfig(`${API_BASE_URL}/user/favorites`, {
+        method: 'POST'
+      });
+      return handleResponse(response);
+  },
+
   async deleteFavoriteRecipeByUser(recipeId) {
       const response = await fetchWithConfig(`${API_BASE_URL}/user/favorites/${recipeId}`, {
         method: 'DELETE'
@@ -170,6 +177,11 @@ const ApiService = {
       return handleResponse(response);
   },
 
+  async fetchReviewsByRecipe(recipeId, page) {
+    const response = await fetchWithConfig (`${API_BASE_URL}/recipes/${recipeId}/reviews?page=${page}`);
+    return handleResponse(response);
+  },
+  
   async fetchReview(reviewId) {
       const response = await fetchWithConfig(`${API_BASE_URL}/reviews/${reviewId}`);
       return handleResponse(response);
@@ -182,6 +194,14 @@ const ApiService = {
 
   async createReview(reviewData) {
       const response = await fetchWithConfig(`${API_BASE_URL}/reviews`, {
+        method: 'POST',
+        body: reviewData
+      });
+      return handleResponse(response);
+  },
+
+  async createReviewByRecipe(recipeId, reviewData) {
+      const response = await fetchWithConfig(`${API_BASE_URL}/recipes/${recipeId}/reviews`, {
         method: 'POST',
         body: reviewData
       });

@@ -1,6 +1,7 @@
 // Desc: This is the main component of the application. It is responsible for rendering the Navbar and the Home or AdminPanel components depending on whether the user is logged in or not.
-import React, { useContext, useState } from 'react';
-import { UserContext } from './components/common/UserContext';
+import React, { useContext } from 'react';
+import {UserContext }from './components/common/UserContext';
+import { MessageContext } from './components/common/MessageContext';
 import Navbar from './components/layout/Navbar';
 import LoginModal from './components/modals/LoginModal';
 import Home from './views/Home';
@@ -10,7 +11,7 @@ import UserProfile from './views/UserProfile';
 function App() {
 
   const { currentPage, navigateTo, user, isLoggedIn, showLoginModal, setShowLoginModal, handleLogin, handleLogout } = useContext(UserContext);
-
+  const { hideMessage } = useContext(MessageContext);
   return (
       <div> 
         {/* render based on contion */}
@@ -29,7 +30,10 @@ function App() {
         {showLoginModal && (
           <LoginModal
             onLogin={handleLogin}
-            onClose={() => setShowLoginModal(false)}
+            onClose={() => {
+              setShowLoginModal(false);
+              hideMessage(); 
+            }}
           />
         )}
       </div>

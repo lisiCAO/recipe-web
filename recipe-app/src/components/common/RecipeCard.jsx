@@ -1,14 +1,19 @@
 import React from 'react';
 import Button from './Button';
+import FavoriteButton from './FavoriteButton';
 import './RecipeCard.scss';
 
-const RecipeCard = ({ recipe, onOpenDetails, onDelete }) => {
+const RecipeCard = ({ recipe, onOpenDetails, onDelete, onToggleFavorite }) => {
     const handleButtonClick = (event) => {
         event.stopPropagation(); // 阻止事件冒泡
-        if (onDelete) {
-            onDelete(recipe);
-        }
+        onDelete && onDelete(recipe);
     };
+
+    const handleFavoriteClick = (event) => {
+        event.stopPropagation(); // 阻止事件冒泡
+        onToggleFavorite && onToggleFavorite(recipe.id);
+    };
+
     return (
         <div className="recipe-card" onClick={() => onOpenDetails(recipe)}>
             <img src={`http://localhost:8000${recipe.imagePath}`} alt={recipe.name} />
@@ -20,8 +25,16 @@ const RecipeCard = ({ recipe, onOpenDetails, onDelete }) => {
             {onDelete && (
                 <Button onClick={handleButtonClick} className="btn-delete">Delete</Button>
             )}
+            {onToggleFavorite && (
+                <FavoriteButton 
+                    isFavorited={recipe.isFavorited} 
+                    onToggle={handleFavoriteClick} 
+                />
+            )}
         </div>
     );
 };
 
 export default RecipeCard;
+
+// Path: recipe-app/src/components/common/RecipeCard.jsx

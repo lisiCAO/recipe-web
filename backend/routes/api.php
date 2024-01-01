@@ -24,6 +24,10 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 // Login
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::apiResource('recipes', RecipeController::class)->only(['index', 'show']);
+Route::apiResource('reviews', ReviewController::class)->only(['index', 'show']);
+Route::get('/recipes/{recipeId}/reviews', [ReviewController::class, 'showByRecipe']);
+
 Route::middleware(['parse.jwt', 'jwt.auth','user'])->group(function () {
     // User
     Route::get('/user/recipes', [RecipeController::class, 'showByUser']);
@@ -33,14 +37,16 @@ Route::middleware(['parse.jwt', 'jwt.auth','user'])->group(function () {
     Route::delete('/user/favorites/{recipeId}', [UserController::class, 'removeFavorite']);
     Route::post('/user/favorites', [UserController::class, 'addFavorites'])->middleware('jwt.auth');
     Route::get('/user/favorites', [UserController::class, 'listFavorites']);
+
     Route::get('/reviews/{reviewId}/recipe', [ReviewController::class, 'getRecipeByReview']);
+    Route::post('/recipes/{recipeId}/reviews', [ReviewController::class, 'storeByRecipe']);
 
 
     // Tables
     Route::apiResource('users', UserController::class);
-    Route::apiResource('recipes', RecipeController::class);
     Route::apiResource('ingredients', IngredientController::class);
-    Route::apiResource('reviews', ReviewController::class);
+    Route::apiResource('recipes', RecipeController::class)->except(['index', 'show']);
+    Route::apiResource('reviews', ReviewController::class)->except(['index', 'show']);
     
     // Functions
     Route::post('/logout', [AuthController::class, 'logout']);
