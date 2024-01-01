@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import RecipeList from './../components/pages/regular/recipes/RecipeList';
 import RecipeDetails from './../components/pages/RecipeDetails';
 import SearchBar from './../components/common/Searchbar';
 import ApiService from './../services/ApiService';
+import { UserContext } from './../components/common/UserContext';
+import { MessageContext } from './../components/common/MessageContext';
 import './Home.scss';
 
 const Home = () => {
     const [recipes, setRecipes] = useState([]);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
     const [searchTerm, setSearchTerm] = useState(''); // search term
-
+    const { isLoggedIn, setShowLoginModal } = useContext(UserContext);
+    const { showMessage, hideMessage } = useContext(MessageContext);
     
     useEffect(() => {
         ApiService.fetchRecipes()
@@ -41,9 +44,20 @@ const Home = () => {
         });
     }
 
+    const handleBackToList = () => {
+        setSelectedRecipe(null); // Clear the selected recipe
+        hideMessage(); // Clear any messages
+    };
+
     const handleToggleFavorite = async (recipeId) => {
         try {
-            // 检查当前食谱是否已收藏
+            if (!isLoggedIn) {
+                showMessage('error', 'Please log in to favorite recipes.');
+                setShowLoginModal(true);
+                return;
+            }
+
+            // fetch the recipe to get the current favorite status
             const isCurrentlyFavorited = recipes.find(recipe => recipe.id === recipeId).isFavorited;
     
             let updatedStatus;
@@ -86,12 +100,16 @@ const Home = () => {
         <div className="home-page">
             <main className="welcome-section">
                 <h1>Welcome to Our Application</h1>
-                <div className="top-bar">
-                    <SearchBar value={searchTerm} onChange={handleSearch} />
-                </div>
-                <RecipeList recipes={filteredRecipes} onRecipeSelect={handleViewDetails} onToggleFavorite={handleToggleFavorite} />
-                {selectedRecipe && (
-                    <RecipeDetails recipe={selectedRecipe} onToggleFavorite={handleToggleFavorite} />
+                {selectedRecipe ? (
+                    <>
+                        <button onClick={handleBackToList}>Back to List</button>
+                        <RecipeDetails recipe={selectedRecipe} onToggleFavorite={handleToggleFavorite} />
+                    </>
+                ) : (
+                    <>
+                        <SearchBar value={searchTerm} onChange={handleSearch} />
+                        <RecipeList recipes={filteredRecipes} onRecipeSelect={handleViewDetails} onToggleFavorite={handleToggleFavorite} />
+                    </>
                 )}
             </main>
         </div>

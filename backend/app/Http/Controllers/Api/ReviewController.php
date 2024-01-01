@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Validator;
 
 /**
  * ReviewController
@@ -32,7 +33,7 @@ class ReviewController extends Controller
             if(!$this->checkRole('admin')) {
                 return $this->sendError('Unauthorized', [], 403);
             }
-            $reviews = Review::all();
+            $reviews = Review::paginate(10);
             return $this->sendResponse(ReviewListResource::collection($reviews), 'Reviews fetched successfully');
         } catch (\Exception $e) {
             Log::error('Error fetching reviews: ' . $e->getMessage());
@@ -113,7 +114,7 @@ class ReviewController extends Controller
     {
         try {
             $currentUser = JWTAuth::parseToken()->authenticate();
-            $reviews = Review::where('user_id', $currentUser->user_id)->get();
+            $reviews = Review::where('user_id', $currentUser->user_id)->paginate(10);
 
             return $this->sendResponse(ReviewListResource::collection($reviews), 'Reviews fetched successfully');
 
@@ -126,8 +127,8 @@ class ReviewController extends Controller
     public function showByRecipe(string $recipeId)
     {
         try {
-            $reviews = Review::where('recipe_id', $recipeId)->get();
-            return $this->sendResponse(ReviewListResource::collection($reviews), 'Reviews fetched successfully');
+            $reviews = Review::where('recipe_id', $recipeId)->paginate(10);
+            return $this->sendResponse(ReviewResource::collection($reviews), 'Reviews fetched successfully');
         } catch (\Exception $e) {
             Log::error('Error fetching reviews: ' . $e->getMessage());
             return $this->sendError('Error fetching reviews', [], 500);
@@ -214,5 +215,39 @@ class ReviewController extends Controller
         }
     }
 
+    public function storeByRecipe(Request $request, $recipeId)
+    {
+        try {
+            // 验证请求数据
+            $validator = Validator::make($request->all(), [
+                'comment' => 'nullable|string',
+                'rating' => 'nullable|numeric|between:1,5',
+            ]);
 
+            // 检查验证失败
+            if ($validator->fails()) {
+                return $this->sendError('Validation Error.', $validator->errors(), 400);
+            }
+
+            // 验证 Recipe 是否存在
+            $recipe = Recipe::find($recipeId);
+            if (!$recipe) {
+                return $this->sendError('Recipe not found', [], 404);
+            }
+
+            // 创建新的 Review
+            $review = new Review();
+            $review->recipe_id = $recipeId;
+            $review->user_id = JWTAuth::parseToken()->authenticate()->user_id; // 假设用户已经通过JWT认证
+            $review->comment = $request->input('comment');
+            $review->rating = $request->input('rating');
+            $review->save();
+
+            return $this->sendResponse(new ReviewResource($review), 'Review created successfully.');
+
+        } catch (\Exception $e) {
+            Log::error('Error creating review: ' . $e->getMessage());
+            return $this->sendError('Error creating review', [], 500);
+        }
+    }
 }
