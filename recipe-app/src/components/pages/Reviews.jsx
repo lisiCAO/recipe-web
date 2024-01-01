@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import ApiService from '../../services/ApiService';
-
+import './Reviews.scss';
 const Reviews = ({ recipeId }) => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -17,8 +17,15 @@ const Reviews = ({ recipeId }) => {
         fetchReviews();
     },[recipeId, page]);
 
+    const handleObserver = (entities) => {
+        const target = entities[0];
+        if (target.isIntersecting) {
+            setPage((prevPage) => prevPage + 1);
+        }
+    };
+
     useEffect(() => {
-        const observer = new intersectionObserver(handleObserver, {
+        const observer = new IntersectionObserver(handleObserver, {
             root: null,
             threshold: 1.0,
         });
@@ -52,6 +59,8 @@ const Reviews = ({ recipeId }) => {
             {loading && <p>Loading more reviews...</p>}
         </div>
     )
-
-
 }
+
+export default Reviews;
+
+// Path: recipe-app/src/components/pages/Reviews.jsx

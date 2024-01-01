@@ -1,0 +1,15 @@
+.favorite-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #ff6961; // #ff6961 is a light red color
+
+    &:hover {
+        color: #ff4747;
+    }
+
+    &.favorited {
+        color: #ff4747;
+    }
+}
