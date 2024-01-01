@@ -7,6 +7,7 @@ import Select from './Select';
 import Message from './Message';
 import ApiService from '../../services/ApiService';
 import { MessageContext } from './MessageContext';
+import './CustomForm.scss';
 
 const CustomForm = ({ onSubmit, config, initialData, mode, onSubmissionSuccess }) => {
     const shouldShowPasswordCheckbox = useMemo(() => {
@@ -161,6 +162,7 @@ const CustomForm = ({ onSubmit, config, initialData, mode, onSubmissionSuccess }
                         onChange={handleChange}
                         />
                     );
+
                 default:
                     return null;
             }
@@ -178,7 +180,7 @@ const CustomForm = ({ onSubmit, config, initialData, mode, onSubmissionSuccess }
         const jsonFormData = JSON.stringify(submittedFormData);
         try {
             await onSubmit(jsonFormData);
-            onSubmissionSuccess();
+            onSubmissionSuccess && onSubmissionSuccess();
         } catch (error) {
             showMessage('error', error.message || 'Error occurred');
         } finally {

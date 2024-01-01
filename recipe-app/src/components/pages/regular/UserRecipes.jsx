@@ -24,7 +24,6 @@ const UserRecipes = () => {
     const [showDetailsModal, setShowDetailsModal] = useState(false); // show/hide details modal
     const [showConfirmModal, setShowConfirmModal] = useState(false); // 控制确认模态框的显示
 
-
     const { showMessage, hideMessage } = useContext(MessageContext); // Show/hide message
 
     // load initial data

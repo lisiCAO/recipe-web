@@ -34,7 +34,7 @@ export const UserProvider = ({ children }) => {
       showMessage('success', 'Login successful');
       setTimeout(() => {
         setIsLoggedIn(true);           
-        setShowLoginModal(false);      
+        setShowLoginModal(false);   
         setUser(response.user);        
       }, 2000);
   

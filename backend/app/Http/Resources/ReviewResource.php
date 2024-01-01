@@ -22,6 +22,7 @@ class ReviewResource extends JsonResource
             'userName' => $this->user->first_name . ' ' . $this->user->last_name,
             'comment' => $this->comment,
             'rating' => $this->rating,
+            'location' => $this->user->location,
             'createdAt' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
         ];
     }
