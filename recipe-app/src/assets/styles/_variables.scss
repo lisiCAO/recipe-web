@@ -3,6 +3,10 @@ $primary-color: #3498db;
 $secondary-color: #2ecc71;
 $error-color: #e74c3c;
 
+$info-color: #d1ecf1;
+$success-color: #d4edda;
+$warning-color: #fff3cd;
+
 // 字体
 $font-stack: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 $font-size-normal: 16px;
@@ -12,3 +16,16 @@ $font-size-large: 20px;
 $spacing-small: 8px;
 $spacing-medium: 16px;
 $spacing-large: 32px;
+
+
+// 细微的圆角
+$border-radius-small: 2px;
+
+// 默认圆角
+$border-radius: 4px; 
+
+// 较大的圆角
+$border-radius-large: 8px;
+
+// 非常大的圆角，适用于圆形按钮或类似元素
+$border-radius-circle: 50%;

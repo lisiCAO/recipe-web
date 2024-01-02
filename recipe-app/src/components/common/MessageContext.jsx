@@ -1,5 +1,4 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import './MessageContext.scss';
 
 export const MessageContext =  createContext();
 

@@ -43,3 +43,10 @@
   grid-template-columns: repeat($columns, 1fr);
   gap: $gap;
 }
+
+// 背景和文字颜色调整
+@mixin adjust-color($background, $text-darken-amount: 0, $border-lighten-amount: 0) {
+  background-color: $background;
+  color: darken($background, $text-darken-amount);
+  border-color: lighten($background, $border-lighten-amount);
+}
