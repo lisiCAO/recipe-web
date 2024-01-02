@@ -17,7 +17,7 @@ const Navbar = ({ onLoginClick, isLoggedIn, user, onLogout, navigateTo }) => {
             </div>
             <div className="title" onClick={handleLogoClick}>Recipe Web</div>
             {!isLoggedIn ?
-                <Button onClick={onLoginClick}>Login</Button> :
+                <Button className="button button-primary" onClick={onLoginClick}>Login</Button> :
                 <>
                     <div className="user-info" onClick={handleUserClick}>
                     Welcome, {user.email}

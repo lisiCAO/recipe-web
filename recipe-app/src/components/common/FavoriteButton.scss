@@ -1,16 +1,17 @@
+@import './../../assets/styles/variables';
+@import './../../assets/styles/mixins';
+
 .favorite-button {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #ff6961; // #ff6961 is a light red color
+  @extend .button; // 继承基本按钮样式
+  // 特定于favorite-button的样式
+  color: $primary-color;
 
-    &:hover {
-        transform: scale(1.1); // 稍微放大按钮
-        color: #ff4747; // 鼠标悬停时的颜色
-    }
-
-    &.favorited {
-        color: #ff4747;
-    }
+  &--favorited {
+    color: $error-color;
+  }
 }
+
+/*
+在FavoriteButton.scss中定义favorite-button和favorite-button--favorited样式。
+在FavoriteButton组件中使用favorite-button和条件性地使用favorite-button--favorited。
+*/

@@ -1,25 +1,46 @@
+@import './../../assets/styles/variables';
+@import './../../assets/styles/mixins';
+
 .button {
-    padding: 0.5em 1em;
-    border: none;
-    margin: 5px 10px;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
+  @include button-style($primary-color, white); // 基础样式
+  margin: $spacing-small; // 使用variables中定义的间距
+  font-size: $font-size-normal;
+  text-transform: uppercase;
+  font-weight: bold;
 
-    &:hover {
-      background-color: #0069d9;
-    }
-    &.primary {
-      background-color: #007bff;
-      color: white;
-    }
-
-  
-    &:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
+  // 修饰符
+  &--add {
+    @include button-style($secondary-color, white);
   }
+
+  &--delete {
+    @include button-style($error-color, white);
+  }
+
+  &--edit, &--view, &--login, &--sign-in {
+    @include button-style(lighten($primary-color, 20%), white);
+  }
+
+  &--back-to-list {
+    @include button-style(darken($secondary-color, 20%), white);
+  }
+
+  &--favorite {
+    @include button-style(lighten($error-color, 30%), white);
+  }
+
+  &:disabled {
+    background-color: lighten($primary-color, 40%);
+    cursor: not-allowed;
+  }
+}
+
+/**
+  * 文本样式
+
+<Button className="button button--add">添加</Button>
+<Button className="button button--delete">删除</Button>
+<Button className="button button--edit">编辑</Button>
+// ... 其他按钮
+
+  */

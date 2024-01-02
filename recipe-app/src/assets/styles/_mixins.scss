@@ -1,0 +1,45 @@
+// 媒体查询
+@mixin respond-to($media) {
+  @if $media == 'phone' {
+    @media (max-width: 600px) { @content; }
+  } @else if $media == 'tablet' {
+    @media (max-width: 900px) { @content; }
+  } @else if $media == 'desktop' {
+    @media (max-width: 1200px) { @content; }
+  }
+}
+
+// 按钮样式
+@mixin button-style($bg-color, $text-color) {
+  background-color: $bg-color;
+  color: $text-color;
+  padding: $spacing-small $spacing-medium;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  
+  &:hover {
+    background-color: darken($bg-color, 10%);
+  }
+}
+
+// 文本样式
+@mixin text-style($font-size, $color: $font-color) {
+  font-size: $font-size;
+  color: $color;
+}
+
+// 容器样式
+@mixin container-style($padding: $spacing-medium) {
+  padding: $padding;
+  margin: auto;
+  max-width: 1200px;
+}
+
+// 网格布局
+@mixin grid-layout($columns: 3, $gap: $spacing-medium) {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr);
+  gap: $gap;
+}

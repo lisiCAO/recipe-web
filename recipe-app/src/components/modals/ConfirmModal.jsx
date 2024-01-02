@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from './Modal'; 
+import Button from '../common/Button';
 import './ConfirmModal.scss'; 
 
 const ConfirmModal = ({ isOpen, title, message, onConfirm, onCancel }) => {
@@ -9,8 +10,8 @@ const ConfirmModal = ({ isOpen, title, message, onConfirm, onCancel }) => {
                 <div className="confirm-modal-header">{title}</div>
                 <div className="confirm-modal-body">{message}</div>
                 <div className="confirm-modal-footer">
-                    <button onClick={onCancel}>Cancel</button>
-                    <button onClick={onConfirm}>Confirm</button>
+                    <Button className="button button-secondary button-small" onClick={onCancel}>Cancel</Button>
+                    <Button onClick={onConfirm}>Confirm</Button>
                 </div>
             </div>
         </Modal>
