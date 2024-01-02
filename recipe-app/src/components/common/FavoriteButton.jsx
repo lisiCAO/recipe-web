@@ -3,11 +3,10 @@ import Button from './Button';
 import './FavoriteButton.scss';
 
 const FavoriteButton = ({ isFavorited, onToggle }) => (
-    <Button 
+    <button 
         className={`favorite-button ${isFavorited ? 'favorite-button--favorited' : ''}`}
         onClick={onToggle}>
-        {isFavorited ? '♥' : '♡'}
-    </Button>
+    </button>
 );
 
 export default FavoriteButton;
