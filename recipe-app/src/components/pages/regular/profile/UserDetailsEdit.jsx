@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import CustomForm from '../../../common/CustomForm';
 import userConfig from '../../../modals/users/userConfig';
-import { MessageContext } from '../../../common/MessageContext';
+import { MessageContext } from './../../../../contexts/MessageContext';
 import Button from '../../../common/Button';
 import './UserDetailsEdit.scss';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '../common/Button';
 import Modal from './Modal';
-import DetailContent from '../common/DetailContent';
+import DetailContent from './../common/DetailContent';
 import './DetailsModal.scss';
 
 const displayConfig = {

@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import Button from '../../common/Button';
-import Table from '../../layout/Table';
-import SearchBar from '../../common/Searchbar';
-import CreateIngredientModal from '../../modals/ingredients/CreateIngredientModal';
-import EditIngredientModal from '../../modals/ingredients/EditIngredientModal';
-import IngredientDetailsModal from '../../modals/ingredients/IngredientDetailsModal';
-import ConfirmModal from '../../modals/ConfirmModal';
-import ApiService from '../../../services/ApiService';
-import { MessageContext } from '../../common/MessageContext';
+import Button from './../../common/Button';
+import Table from './../../layout/Table';
+import SearchBar from './../../common/Searchbar';
+import CreateIngredientModal from './../../modals/ingredients/CreateIngredientModal';
+import EditIngredientModal from './../../modals/ingredients/EditIngredientModal';
+import IngredientDetailsModal from './../../modals/ingredients/IngredientDetailsModal';
+import ConfirmModal from './../../modals/ConfirmModal';
+import ApiService from './../../../services/ApiService';
+import { MessageContext } from './../../../contexts/MessageContext';
 import './Ingredients.scss';
 
 const Ingredients = () => {

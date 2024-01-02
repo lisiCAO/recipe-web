@@ -4,7 +4,7 @@ import UserDetails from '../components/pages/regular/UserDetails';
 import UserRecipes from '../components/pages/regular/UserRecipes';
 import UserReviews from '../components/pages/regular/UserReviews';
 import UserFavorites from '../components/pages/regular/UserFavorites';
-import { UserContext } from '../components/common/UserContext';
+import { UserContext } from './../contexts/UserContext';
 import "./UserProfile.scss";
 
 function UserProfile() {

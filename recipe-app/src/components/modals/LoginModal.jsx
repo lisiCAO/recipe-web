@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import Modal from './Modal';
-import FormInput from '../common/FormInput';
-import Button from '../common/Button';
-import { MessageContext } from '../common/MessageContext';
-import Message from '../common/Message';
+import FormInput from './../common/FormInput';
+import Button from './../common/Button';
+import { MessageContext } from './../../contexts/MessageContext';
+import Message from './../common/Message';
 
 const LoginModal = ({ onLogin, onClose }) => {
     const [email, setEmail] = useState('');

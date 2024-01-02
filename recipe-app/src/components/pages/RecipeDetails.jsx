@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import DetailContent from './../common/DetailContent';
 import FavoriteButton from './../common/FavoriteButton';
 import Message from './../common/Message';
-import { MessageContext } from './../../components/common/MessageContext';
+import { MessageContext } from './../../contexts/MessageContext';
 import Reviews from './Reviews';
 import './RecipeDetails.scss';
 const RecipeDetail = ({ recipe, onToggleFavorite }) => {

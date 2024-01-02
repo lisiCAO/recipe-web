@@ -3,8 +3,8 @@ import RecipeList from './../components/pages/regular/recipes/RecipeList';
 import RecipeDetails from './../components/pages/RecipeDetails';
 import SearchBar from './../components/common/Searchbar';
 import ApiService from './../services/ApiService';
-import { UserContext } from './../components/common/UserContext';
-import { MessageContext } from './../components/common/MessageContext';
+import { UserContext } from './../contexts/UserContext';
+import { MessageContext } from './../contexts/MessageContext';
 import './Home.scss';
 
 const Home = () => {

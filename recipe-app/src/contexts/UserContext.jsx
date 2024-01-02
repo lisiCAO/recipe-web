@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import { MessageContext } from './MessageContext';
-import ApiService from '../../services/ApiService';
+import ApiService from './../services/ApiService';
 
 
 export const UserContext = createContext();
