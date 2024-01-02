@@ -1,0 +1,32 @@
+@import './../../assets/styles/variables';
+@import './../../assets/styles/mixins';
+
+.detail-content {
+  // Basic styles
+  padding: $spacing-medium;
+
+  &__title {
+    color: $primary-color;
+    margin-bottom: $spacing-medium;
+  }
+
+  &__item {
+    margin-bottom: $spacing-small;
+
+    &__image {
+      max-width: 100%;
+      height: auto;
+      border-radius: $border-radius-small;
+    }
+
+    &__label {
+      font-weight: bold;
+    }
+
+    &__value {
+      color: $text-color-light;
+    }
+  }
+
+  // More styles here
+}
