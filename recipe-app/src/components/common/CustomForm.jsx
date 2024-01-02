@@ -6,7 +6,7 @@ import FormFileInput from './FormFileInput';
 import Select from './Select';
 import Message from './Message';
 import ApiService from '../../services/ApiService';
-import { MessageContext } from './MessageContext';
+import { MessageContext } from './../../contexts/MessageContext';
 import './CustomForm.scss';
 
 const CustomForm = ({ onSubmit, config, initialData, mode, onSubmissionSuccess }) => {
@@ -189,23 +189,24 @@ const CustomForm = ({ onSubmit, config, initialData, mode, onSubmissionSuccess }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            {shouldShowPasswordCheckbox && (
-                <label>
-                    Change Password:
-                    <input
-                        type="checkbox"
-                        checked={isPasswordChanging}
-                        onChange={() => setIsPasswordChanging(!isPasswordChanging)}
-                    />
-                </label>
-            )}
-            {renderFormFields(config, formData)}
-            <Message message={message} />
-            <Button type="submit" disabled={isSubmitting}>
-                {mode === 'edit' ? 'Save' : 'Create'}
-            </Button>
-        </form>
+<form className="custom-form" onSubmit={handleSubmit}>
+  {shouldShowPasswordCheckbox && (
+    <label className="custom-form__checkbox-label">
+      Change Password:
+      <input
+        type="checkbox"
+        checked={isPasswordChanging}
+        onChange={() => setIsPasswordChanging(!isPasswordChanging)}
+      />
+    </label>
+  )}
+  {renderFormFields(config, formData)}
+  <Message className="custom-form__message" message={message} />
+  <Button className="custom-form__submit-button" type="submit" disabled={isSubmitting}>
+    {mode === 'edit' ? 'Save' : 'Create'}
+  </Button>
+</form>
+
     );
 };
 

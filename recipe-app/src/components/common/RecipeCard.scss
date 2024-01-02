@@ -1,35 +1,51 @@
+@import './../../assets/styles/variables';
+@import './../../assets/styles/mixins';
+
 .recipe-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s;
+  @include container-style;
+  border-radius: $border-radius-large;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-    &:hover {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &__image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  &__info {
+    padding: $spacing-small;
+    h3 {
+      @include text-style($font-size-large);
+      margin-bottom: $spacing-small;
     }
-
-    img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
+    p {
+      font-size: $font-size-normal;
+      color: $text-color-light;
+      margin: 0;
     }
+  }
 
-    .recipe-info {
-        padding: 10px;
+  &__delete {
+    @include button-style($error-color, white);
+    position: absolute; // Example of positioning the delete button
+    top: $spacing-small;
+    right: $spacing-small;
+  }
 
-        h3 {
-            margin: 0 0 10px;
-        }
-
-        p {
-            margin: 0;
-            font-size: 0.9em;
-            color: #666;
-        }
-    }
+  .favorite-button {
+    position: absolute;
+    bottom: $spacing-small;
+    right: $spacing-small;
+  }
 }
+
+
 
 /*
 // RecipeCard.scss

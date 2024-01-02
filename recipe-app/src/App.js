@@ -1,7 +1,7 @@
 // Desc: This is the main component of the application. It is responsible for rendering the Navbar and the Home or AdminPanel components depending on whether the user is logged in or not.
 import React, { useContext } from 'react';
-import {UserContext }from './components/common/UserContext';
-import { MessageContext } from './components/common/MessageContext';
+import {UserContext }from './contexts/UserContext';
+import { MessageContext } from './contexts/MessageContext';
 import Navbar from './components/layout/Navbar';
 import LoginModal from './components/modals/LoginModal';
 import Home from './views/Home';

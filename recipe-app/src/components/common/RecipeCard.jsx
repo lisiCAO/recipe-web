@@ -5,30 +5,30 @@ import './RecipeCard.scss';
 
 const RecipeCard = ({ recipe, onOpenDetails, onDelete, onToggleFavorite }) => {
     const handleButtonClick = (event) => {
-        event.stopPropagation(); // 阻止事件冒泡
+        event.stopPropagation(); // prevent event bubbling
         onDelete && onDelete(recipe);
     };
 
     const handleFavoriteClick = (event) => {
-        event.stopPropagation(); // 阻止事件冒泡
+        event.stopPropagation(); // prevent event bubbling
         onToggleFavorite && onToggleFavorite(recipe.id);
     };
 
     return (
         <div className="recipe-card" onClick={() => onOpenDetails(recipe)}>
-            <img src={`http://localhost:8000${recipe.imagePath}`} alt={recipe.name} />
-            <div className="recipe-info">
+            <img src={`http://localhost:8000${recipe.imagePath}`} alt={recipe.name} className="recipe-card__image" />
+            <div className="recipe-card__info">
                 <h3>{recipe.name}</h3>
                 <p>Comments: {recipe.reviewsCount}</p>
                 <p>Favorites: {recipe.favoritesCount}</p>
             </div>
             {onDelete && (
-                <Button onClick={handleButtonClick} className="btn-delete">Delete</Button>
+                <Button onClick={(e) => handleButtonClick(e)} className="recipe-card__delete">Delete</Button>
             )}
             {onToggleFavorite && (
                 <FavoriteButton 
                     isFavorited={recipe.isFavorited} 
-                    onToggle={handleFavoriteClick} 
+                    onToggle={(e) => handleFavoriteClick(e)}
                 />
             )}
         </div>

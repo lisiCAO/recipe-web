@@ -7,7 +7,7 @@ import EditUserModal from '../../modals/users/EditUserModal';
 import UserDetailsModal from '../../modals/users/UserDetailsModal';
 import ConfirmModal from '../../modals/ConfirmModal';
 import ApiService from '../../../services/ApiService';
-import { MessageContext } from '../../common/MessageContext';
+import { MessageContext } from './../../../contexts/MessageContext';
 import './Users.scss';
 
 const Users = () => {

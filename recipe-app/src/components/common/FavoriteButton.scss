@@ -2,14 +2,24 @@
 @import './../../assets/styles/mixins';
 
 .favorite-button {
-  @extend .button; // 继承基本按钮样式
-  // 特定于favorite-button的样式
+  @extend .button !optional; // 继承Button的基本样式
+  // 特定于FavoriteButton的样式
   color: $primary-color;
 
+  // 修饰符 - 收藏状态
   &--favorited {
-    color: $error-color;
+    color: $error-color; // 使用红色表示已收藏
+    &:before {
+      content: '♥ '; // 收藏时显示实心心形
+    }
+  }
+
+  // 默认状态（未收藏）
+  &:before {
+    content: '♡ '; // 未收藏时显示空心心形
   }
 }
+
 
 /*
 在FavoriteButton.scss中定义favorite-button和favorite-button--favorited样式。
