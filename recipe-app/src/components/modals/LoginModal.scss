@@ -1,0 +1,54 @@
+@import './../../assets/styles/variables';
+@import './../../assets/styles/mixins';
+
+.login-modal {
+    .login-modal__content {
+        @include container-style;
+        background-color: $background-color-light;
+        padding: $spacing-medium;
+        border-radius: $border-radius;
+        box-shadow: $box-shadow;
+        width: auto; // 适应不同屏幕宽度
+        max-width: 500px; // 限制最大宽度
+
+        @include respond-to('tablet') {
+            padding: $spacing-small;
+            max-width: 100%; // 平板及更小设备上占据全部宽度
+        }
+
+        .login-modal__title {
+            color: $primary-color;
+            margin-bottom: $spacing-medium;
+
+            @include respond-to('phone') {
+                margin-bottom: $spacing-small;
+                font-size: $font-size-large; // 在手机上使用较大的标题
+            }
+        }
+
+        .login-modal__input {
+            margin-bottom: $spacing-small;
+
+            &__input {
+                @include respond-to('phone') {
+                    padding: $spacing-small; // 手机上适应的内边距
+                }
+            }
+        }
+
+        .login-modal__message {
+            margin-top: $spacing-small;
+            margin-bottom: $spacing-medium;
+        }
+
+        .login-modal__button {
+            @include button-style($primary-color, white);
+            width: 100%; // 按钮宽度与容器一致
+            margin-top: $spacing-small;
+
+            @include respond-to('tablet') {
+                font-size: $font-size-normal; // 平板和手机上使用适中的字体大小
+            }
+        }
+    }
+}

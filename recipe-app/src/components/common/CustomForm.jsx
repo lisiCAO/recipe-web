@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
+import classNames from 'classnames';
 import Button from './Button';
 import FormInput from './FormInput';
 import FormTextArea from './FormTextArea';
@@ -9,7 +10,7 @@ import ApiService from '../../services/ApiService';
 import { MessageContext } from './../../contexts/MessageContext';
 import './CustomForm.scss';
 
-const CustomForm = ({ onSubmit, config, initialData, mode, onSubmissionSuccess }) => {
+const CustomForm = ({className, onSubmit, config, initialData, mode, onSubmissionSuccess }) => {
     const shouldShowPasswordCheckbox = useMemo(() => {
         return mode === 'edit' && config.some(field => field.type === 'password');
     }, [config, mode]);
@@ -27,7 +28,7 @@ const CustomForm = ({ onSubmit, config, initialData, mode, onSubmissionSuccess }
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { message } =useContext(MessageContext);
     const { showMessage } = useContext(MessageContext);
-
+    const formClassNames = classNames('custom-form', className); 
 
     // Set formData to initialData when in edit mode
     useEffect(() => {
@@ -189,25 +190,25 @@ const CustomForm = ({ onSubmit, config, initialData, mode, onSubmissionSuccess }
     };
 
     return (
-<form className="custom-form" onSubmit={handleSubmit}>
-  {shouldShowPasswordCheckbox && (
-    <label className="custom-form__checkbox-label">
-      Change Password:
-      <input
-        type="checkbox"
-        checked={isPasswordChanging}
-        onChange={() => setIsPasswordChanging(!isPasswordChanging)}
-      />
-    </label>
-  )}
-  {renderFormFields(config, formData)}
-  <Message className="custom-form__message" message={message} />
-  <Button className="custom-form__submit-button" type="submit" disabled={isSubmitting}>
-    {mode === 'edit' ? 'Save' : 'Create'}
-  </Button>
-</form>
+        <form className={formClassNames} onSubmit={handleSubmit}>
+        {shouldShowPasswordCheckbox && (
+            <label className="custom-form__checkbox-label">
+            Change Password:
+            <input
+                type="checkbox"
+                checked={isPasswordChanging}
+                onChange={() => setIsPasswordChanging(!isPasswordChanging)}
+            />
+            </label>
+        )}
+        {renderFormFields(config, formData)}
+        <Message className="custom-form__message" message={message} />
+        <Button className="custom-form__submit-button" type="submit" disabled={isSubmitting}>
+            {mode === 'edit' ? 'Save' : 'Create'}
+        </Button>
+        </form>
 
-    );
-};
+            );
+        };
 
 export default CustomForm;
