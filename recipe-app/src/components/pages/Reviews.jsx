@@ -80,33 +80,32 @@ const Reviews = ({ recipeId }) => {
         console.log('Review submitted successfully!');
         // Additional logic after successful submission, if needed
     };
-    
-    return (
-        <div className = "reviews-container">
-            {/* content */}
+   return (
+        <div className="reviews">
             <CustomForm
                 config={reviewFormConfig}
                 onSubmit={handleSubmitReview}
                 mode="create"
                 onSubmissionSuccess={handleSubmissionSuccess}
-                className="review-form"
-                />
-            {reviews.map((review, index) => (
-                <div key={index} className="review">
-                    {/* single review */}
-                    <div className="review-rating">{renderRating(review.rating)}</div>
-                    <div className="review-content">{review.comment}</div>
-                    <div className="review-footer">
-                        <span className="review-user">{review.location}</span>
-                        <span className="review-date">{new Date(review.createdAt).toLocaleDateString()}</span>
+                className="reviews__form"
+            />
+            <div className="reviews__list">
+                {reviews.map((review, index) => (
+                    <div key={index} className="review">
+                        <div className="review__rating">{renderRating(review.rating)}</div>
+                        <div className="review__content">{review.comment}</div>
+                        <div className="review__footer">
+                            <span className="review__user">{review.location}</span>
+                            <span className="review__date">{new Date(review.createdAt).toLocaleDateString()}</span>
+                        </div>
                     </div>
-                </div>
-            ))}
-            <div ref={loader} />
-            {loading && <p>Loading more reviews...</p>}
+                ))}
+            </div>
+            <div ref={loader} className="reviews__loader" />
+            {loading && <p className="reviews__loading">Loading more reviews...</p>}
         </div>
-    )
-}
+    );
+};
 
 export default Reviews;
 
