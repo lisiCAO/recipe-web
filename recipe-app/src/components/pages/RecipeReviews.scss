@@ -2,15 +2,20 @@
 @import './../../assets/styles/mixins';
 
 .reviews {
-    max-width: 800px;
+    max-width: $max-container-width;
     width: 100%;
     margin: auto;
-    padding: $spacing-medium;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: $background-color-light;
     border-radius: $border-radius;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
     &__form {
+        margin-left:0;
+        margin-right:0;
+        width: 100%;
         margin-bottom: $spacing-large;
         background-color: $background-color-dark;
         color: $font-color-light;
@@ -19,6 +24,23 @@
         box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
+    &__loader {
+        display: flex;
+        justify-content: center;
+        margin: $spacing-medium 0;
+        text-align: center;
+        color: $primary-color;
+        font-weight: bold;
+        font-size: $font-size-normal;
+    
+        .loading-spinner {
+            // 添加加载动画或图标
+        }
+    }
+    
+}
+
+.reviews {
     &__list {
         margin-bottom: $spacing-medium;
     }
@@ -62,22 +84,5 @@
         &__date {
             opacity: 0.8;
         }
-    }
-
-    &__loader {
-        display: flex;
-        justify-content: center;
-        margin: $spacing-medium 0;
-
-        .loading-spinner {
-            // 添加加载动画或图标
-        }
-    }
-
-    &__loading {
-        text-align: center;
-        color: $primary-color;
-        font-weight: bold;
-        font-size: $font-size-normal;
     }
 }

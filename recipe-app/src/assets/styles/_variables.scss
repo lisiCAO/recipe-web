@@ -1,6 +1,6 @@
 // 颜色
-$primary-color: #3498db;
-$secondary-color: #2ecc71;
+$primary-color: #2c3e50;
+$secondary-color: #2B3A42;
 $error-color: #e74c3c;
 
 $background-color-light: #f8f9fa;
@@ -9,7 +9,6 @@ $background-color-dark: #343a40;
 $font-color: #212529;
 $text-color-light: #6c757d;
 $font-color-light: #f8f9fa;
-
 
 $info-color: #d1ecf1;
 $success-color: #d4edda;
@@ -24,7 +23,8 @@ $font-size-large: 20px;
 $spacing-small: 8px;
 $spacing-medium: 16px;
 $spacing-large: 32px;
-
+$spacing-unit: 16px;
+$max-container-width: 800px;
 
 // 圆角
 $border-radius-small: 2px;

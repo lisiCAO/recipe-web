@@ -33,10 +33,10 @@ const DetailsModal =  ({ isOpen, onClose, data, type, onEdit }) => {
     const config = displayConfig[type];
 
     return (
-        <Modal isOpen = {isOpen} onClose = {onClose} className="details-modal">
-            <DetailContent data={data} config={config} />
+        <Modal isOpen={isOpen} onClose={onClose} className="details-modal">
+            <DetailContent data={data} config={config} className="detail-content" />
             {onEdit && (
-                <Button onClick={() => onEdit(data)} className="edit-button" variant="edit">
+                <Button onClick={() => onEdit(data)} className="button button--edit">
                     Edit
                 </Button>
             )}

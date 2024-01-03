@@ -13,7 +13,7 @@ const DetailContent = ({ data, config }) => {
 
                 if (key === config.image) {
                     return (
-                        <div key={key} className="detail-content__item">
+                        <div key={key} className="detail-content__image">
                             <img src={value ? `http://localhost:8000${value}` : "http://localhost:8000/storage/img/default.png"} 
                                 alt={data[config.title] || "Default"} 
                                 className="detail-content__image" />
@@ -42,9 +42,9 @@ const DetailContent = ({ data, config }) => {
 };
 
     return (
-        <div className="detail-content">
+        <>
           {renderDetails()}
-        </div>
+        </>
       );
     };
 

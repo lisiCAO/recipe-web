@@ -1,35 +1,25 @@
+@import './../../assets/styles/variables';
+@import './../../assets/styles/mixins';
 
-.modal-body {
-    padding: 20px;
+.details-modal {
+    @include modal-style; // 使用 modal-style 混合宏
     display: flex;
-    flex-direction: column;
 
-    .detail-item {
-        margin-bottom: 15px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-
-        strong {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        img {
-            max-width: 200px; // 设置图片的宽度
-            height: auto; // 
-            border-radius: 4px;
-            margin-top: 10px;
-        }
-
-        p {
-            margin: 0;
-            padding: 0;
-            line-height: 1.5; // Enhances readability
+    .detail-content {
+        // 如果需要为 DetailContent 定制样式
+        // 保持与 DetailContent 组件的样式一致
+        &__image{
+            width:200px;
         }
     }
 
-    .edit-button {
-        align-self: flex-end; // Aligns the button to the right
+    .button {
+        margin: $spacing-small; // 使用全局变量
+        @include button-style($primary-color, white); // 使用 button-style 混合宏
+
+        &--edit {
+            @include button-style($secondary-color, white);
+        }
+        // ...其他按钮样式
     }
 }

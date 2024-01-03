@@ -46,6 +46,8 @@
             @include button-style($primary-color, white);
             width: 100%; // 按钮宽度与容器一致
             margin-top: $spacing-small;
+            margin-left: 0;
+            margin-right: 0;
 
             @include respond-to('tablet') {
                 font-size: $font-size-normal; // 平板和手机上使用适中的字体大小

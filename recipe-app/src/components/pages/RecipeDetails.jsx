@@ -3,7 +3,7 @@ import DetailContent from './../common/DetailContent';
 import FavoriteButton from './../common/FavoriteButton';
 import Message from './../common/Message';
 import { MessageContext } from './../../contexts/MessageContext';
-import Reviews from './Reviews';
+import RecipeReviews from './RecipeReviews';
 import './RecipeDetails.scss';
 const RecipeDetail = ({ recipe, onToggleFavorite }) => {
     const config = {
@@ -27,7 +27,7 @@ const RecipeDetail = ({ recipe, onToggleFavorite }) => {
                 onToggle={() => onToggleFavorite(recipe.id)} 
             />
             <Message message={message} />
-            <Reviews recipeId={recipe.id} />
+            <RecipeReviews recipeId={recipe.id} />
         </div>
     );
 };

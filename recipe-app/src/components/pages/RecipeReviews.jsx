@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useContext} from 'react';
-import CustomForm from './../common/CustomForm';
-import ApiService from './../../services/ApiService';
+import CustomForm from '../common/CustomForm';
+import ApiService from '../../services/ApiService';
 import { UserContext } from '../../contexts/UserContext';
 import { MessageContext } from '../../contexts/MessageContext';
-import './Reviews.scss';
-const Reviews = ({ recipeId }) => {
+import './RecipeReviews.scss';
+const RecipeReviews = ({ recipeId }) => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
@@ -107,6 +107,6 @@ const Reviews = ({ recipeId }) => {
     );
 };
 
-export default Reviews;
+export default RecipeReviews;
 
 // Path: recipe-app/src/components/pages/Reviews.jsx
