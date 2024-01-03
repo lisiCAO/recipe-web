@@ -9,6 +9,7 @@
         border-radius: $border-radius;
         box-shadow: $box-shadow;
         width: auto; // 适应不同屏幕宽度
+        min-width: 400px; // 限制最小宽度
         max-width: 500px; // 限制最大宽度
 
         @include respond-to('tablet') {
