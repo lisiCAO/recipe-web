@@ -2,7 +2,6 @@ import { createContext, useState, useContext, useEffect } from 'react';
 import { MessageContext } from './MessageContext';
 import ApiService from './../services/ApiService';
 
-
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -11,6 +10,7 @@ export const UserProvider = ({ children }) => {
     const [showLoginModal, setShowLoginModal] = useState(false); // show/hide login modal
     const { showMessage } = useContext(MessageContext);          // save the message context
     const [currentPage, setCurrentPage] = useState('home');
+
     useEffect(() =>{
         const checkLoginStatus = async () => {
           try {
