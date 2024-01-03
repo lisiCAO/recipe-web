@@ -30,9 +30,6 @@ class ReviewController extends Controller
     public function index()
     {
         try {
-            if(!$this->checkRole('admin')) {
-                return $this->sendError('Unauthorized', [], 403);
-            }
             $reviews = Review::paginate(10);
             return $this->sendResponse(ReviewListResource::collection($reviews), 'Reviews fetched successfully');
         } catch (\Exception $e) {
