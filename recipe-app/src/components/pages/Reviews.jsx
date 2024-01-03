@@ -1,12 +1,16 @@
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef, useContext} from 'react';
 import CustomForm from './../common/CustomForm';
 import ApiService from './../../services/ApiService';
+import { UserContext } from '../../contexts/UserContext';
+import { MessageContext } from '../../contexts/MessageContext';
 import './Reviews.scss';
 const Reviews = ({ recipeId }) => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const loader = useRef(null);
+    const { isLoggedIn, setShowLoginModal } = useContext(UserContext);
+    const { showMessage } = useContext(MessageContext);
 
     useEffect(() => {
         const fetchReviews = async () => {
@@ -14,7 +18,6 @@ const Reviews = ({ recipeId }) => {
             const newReviews = await ApiService.fetchReviewsByRecipe(recipeId, page);
             setReviews((prevReviews) => [...prevReviews, ...newReviews]);
             setLoading(false);
-            console.log(newReviews);
         };
         fetchReviews();
     },[recipeId, page]);
@@ -63,6 +66,11 @@ const Reviews = ({ recipeId }) => {
     ];
 
     const handleSubmitReview = (reviewData) => {
+        if (!isLoggedIn) {
+            showMessage('error', 'Please log in to favorite recipes.');
+            setShowLoginModal(true);
+            return;
+        }
         ApiService.createReviewByRecipe(recipeId, reviewData).then((newReview) => {
             setReviews([newReview, ...reviews]);
         });

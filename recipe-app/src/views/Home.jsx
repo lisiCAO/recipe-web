@@ -26,18 +26,17 @@ const Home = () => {
     
                 let updatedRecipes = recipesData.map(recipe => ({
                     ...recipe,
-                    isFavorited: false, // 默认设置为false
+                    isFavorited: false, // default to false
                 }));
     
                 if (isLoggedIn) {
-                    // 如果用户已登录，获取收藏状态并更新食谱列表
+                    // Fetch the user's favorite recipes
                     const userFavorites = await ApiService.fetchFavoriteRecipeByUser();
                     const userFavoritesIds = new Set(userFavorites.map(favorite => favorite.recipeId));
                     updatedRecipes = updatedRecipes.map(recipe => ({
                         ...recipe,
                         isFavorited: userFavoritesIds.has(recipe.id),
                     }));
-                    console.log('updatedRecipes', updatedRecipes);
                 }
                 setRecipes(updatedRecipes);
             } catch (error) {
@@ -47,13 +46,12 @@ const Home = () => {
         };
     
         fetchRecipesAndFavorites();
-    }, [isLoggedIn, refreshFavorites]); // 依赖项为isLoggedIn
+    }, [isLoggedIn, refreshFavorites]); // Fetch recipes when the user logs in or out
     
     
 
     const handleViewDetails = (recipe) => {
         const recipeId = recipe.id;
-        console.log('recipe', recipe);
         ApiService.fetchRecipe(recipeId) 
         .then(data => {
             // update selected recipe's favorite status
@@ -114,7 +112,6 @@ const Home = () => {
     return (
         <div className="home-page">
             <main className="welcome-section">
-                <h1>Welcome to Our Application</h1>
                 {selectedRecipe ? (
                     <>
                         <button onClick={handleBackToList}>Back to List</button>
