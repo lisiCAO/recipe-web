@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import RecipeList from './../components/pages/regular/recipes/RecipeList';
 import RecipeDetails from './../components/pages/RecipeDetails';
 import SearchBar from './../components/common/Searchbar';
@@ -13,30 +13,52 @@ const Home = () => {
     const [searchTerm, setSearchTerm] = useState(''); // search term
     const { isLoggedIn, setShowLoginModal } = useContext(UserContext);
     const { showMessage, hideMessage } = useContext(MessageContext);
+    const [refreshFavorites, setRefreshFavorites] = useState(false);
     
     useEffect(() => {
-        ApiService.fetchRecipes()
-        .then(response => {
-            if (Array.isArray(response)) {
-                setRecipes(response);
-                console.log(response);
+        const fetchRecipesAndFavorites = async () => {
+            try {
+                const recipesData = await ApiService.fetchRecipes();
+                if (!Array.isArray(recipesData)) {
+                    console.error('Unable to fetch recipes.');
+                    return;
+                }
+    
+                let updatedRecipes = recipesData.map(recipe => ({
+                    ...recipe,
+                    isFavorited: false, // 默认设置为false
+                }));
+    
+                if (isLoggedIn) {
+                    // 如果用户已登录，获取收藏状态并更新食谱列表
+                    const userFavorites = await ApiService.fetchFavoriteRecipeByUser();
+                    const userFavoritesIds = new Set(userFavorites.map(favorite => favorite.recipeId));
+                    updatedRecipes = updatedRecipes.map(recipe => ({
+                        ...recipe,
+                        isFavorited: userFavoritesIds.has(recipe.id),
+                    }));
+                    console.log('updatedRecipes', updatedRecipes);
+                }
+                setRecipes(updatedRecipes);
+            } catch (error) {
+                console.error('Error fetching recipes and favorites:', error);
+                setRecipes([]);
             }
-            else {
-                console.error('Unable to fetch recipes.');
-                return [];
-            }
-        })
-        .catch(error => {
-            console.error(error);
-            setRecipes([]);
-        });
-    }, []);
+        };
+    
+        fetchRecipesAndFavorites();
+    }, [isLoggedIn, refreshFavorites]); // 依赖项为isLoggedIn
+    
+    
 
     const handleViewDetails = (recipe) => {
         const recipeId = recipe.id;
+        console.log('recipe', recipe);
         ApiService.fetchRecipe(recipeId) 
         .then(data => {
-            setSelectedRecipe(data);
+            // update selected recipe's favorite status
+            const updatedRecipe = { ...data, isFavorited: recipe.isFavorited };
+            setSelectedRecipe(updatedRecipe);
         })
         .catch(error => {
             console.error(error);
@@ -49,43 +71,36 @@ const Home = () => {
         hideMessage(); // Clear any messages
     };
 
-    const handleToggleFavorite = async (recipeId) => {
-        try {
+    const handleToggleFavorite = useCallback(async (recipeId) => {
             if (!isLoggedIn) {
                 showMessage('error', 'Please log in to favorite recipes.');
                 setShowLoginModal(true);
                 return;
             }
-
-            // fetch the recipe to get the current favorite status
-            const isCurrentlyFavorited = recipes.find(recipe => recipe.id === recipeId).isFavorited;
-    
-            let updatedStatus;
-            if (isCurrentlyFavorited) {
-                // 如果当前已收藏，发送 DELETE 请求移除收藏
-                await ApiService.deleteFavoriteRecipeByUser(recipeId);
-                updatedStatus = false; // 设置为未收藏状态
-            } else {
-                // 如果当前未收藏，发送 POST 请求添加收藏
-                await ApiService.addFavoriteRecipeByUser(recipeId);
-                updatedStatus = true; // 设置为已收藏状态
+            const recipeToUpdate = recipes.find(recipe => recipe.id === recipeId);
+            if (!recipeToUpdate) {
+                console.error('Recipe not found');
+                return;
             }
-    
-            // 更新食谱列表中的收藏状态
-            setRecipes(recipes.map(recipe => 
-                recipe.id === recipeId ? { ...recipe, isFavorited: updatedStatus } : recipe
-            ));
-    
-            // 如果选中的食谱是当前操作的食谱，更新其收藏状态
-            if (selectedRecipe && selectedRecipe.id === recipeId) {
-                setSelectedRecipe({ ...selectedRecipe, isFavorited: updatedStatus });
-            }
-        } catch (error) {
-            console.error('Error toggling favorite status', error);
-        }
-    };
-    
+        
+            try {
 
+                const apiFunction = recipeToUpdate.isFavorited ? ApiService.deleteFavoriteRecipeByUser : ApiService.addFavoriteRecipeByUser;
+                await apiFunction(recipeId);
+                const updatedRecipes = recipes.map(recipe =>
+                    recipe.id === recipeId ? { ...recipe, isFavorited: !recipe.isFavorited } : recipe
+                );
+        
+                setRecipes(updatedRecipes);
+                if (selectedRecipe && selectedRecipe.id === recipeId) {
+                    setSelectedRecipe({ ...selectedRecipe, isFavorited: !selectedRecipe.isFavorited });
+                }
+            } catch (error) {
+                console.error('Error toggling favorite status', error);
+            };
+            setRefreshFavorites(prev => !prev);
+        }, [recipes, selectedRecipe, isLoggedIn, showMessage, setShowLoginModal, setRefreshFavorites]);
+    
     const handleSearch = (term) => {
         setSearchTerm(term);
         // searchRecipes(term); // TODO: Implement search

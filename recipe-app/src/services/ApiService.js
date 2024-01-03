@@ -94,9 +94,10 @@ const ApiService = {
       return handleResponse(response);
   },
 
-  async addFavoriteRecipeByUser() {
+  async addFavoriteRecipeByUser(recipeId) {
       const response = await fetchWithConfig(`${API_BASE_URL}/user/favorites`, {
-        method: 'POST'
+        method: 'POST',
+        body: JSON.stringify({ recipe_id: recipeId })
       });
       return handleResponse(response);
   },
