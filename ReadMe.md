@@ -1,97 +1,96 @@
- recipe项目的admin panel在开发过程中，因频繁重构，技术栈不确定，需求不确定等多重复杂因素，无法如期完成，并导致项目混乱和崩溃。现在，重新整理思路，准备重构。
+The admin panel of the "recipe" project has faced delays and chaos during development due to factors such as frequent refactoring, uncertain technology stack, and evolving requirements. Now, it's time to reorganize and prepare for a refactor.
 
-为了重构项目，将开展结构化的学习和开发计划。这个计划将分为几个部分：学习必要技术、项目规划、环境设置、开发、测试和部署。以下是一个按步骤分解的指南：
+To refactor the project, we will embark on a structured learning and development plan. This plan will be divided into several parts: learning essential technologies, project planning, environment setup, development, testing, and deployment. Here's a step-by-step guide:
 
-### 学习阶段
+### Learning Phase
 
-1. **HTML & Sass**: 由于已经有了一些Sass的概念，可以通过创建一些简单的项目来练习，比如一个静态页面。
-   - 使用资源如Sass官方文档和在线教程来提高你的技能。
+1. **HTML & Sass**:
+   - As you already have some knowledge of Sass, practice by creating simple projects like a static webpage.
+   - Improve your skills using resources such as the Sass official documentation and online tutorials.
 
-2. **React**: 
-   - 从React的官方文档开始，学习基础知识，如JSX、组件、状态和生命周期。
-   - 完成一些入门教程，如创建一个新的ToDo应用。
-   - 学习React Router，它对于构建单页面应用程序（SPA）非常有用。
+2. **React**:
+   - Start with React's official documentation, learn fundamentals like JSX, components, state, and lifecycle.
+   - Complete introductory tutorials, like creating a ToDo application.
+   - Learn React Router, which is valuable for building Single Page Applications (SPAs).
 
-3. **Laravel (PHP框架)**:
-   - Laravel有很好的文档和教程，从基础开始学习路由、控制器、视图和模型。
-   - 学习如何使用Eloquent ORM进行数据库交互。
-   - 了解如何在Laravel中进行表单验证。
+3. **Laravel (PHP framework)**:
+   - Laravel offers excellent documentation and tutorials. Begin with the basics: routing, controllers, views, and models.
+   - Learn how to interact with databases using Eloquent ORM.
+   - Understand how to perform form validation in Laravel.
 
 4. **Docker**:
-   - 由于对Docker已经比较熟悉，可以学习如何为你的开发环境创建Docker容器。
+   - Since you're already familiar with Docker, learn how to create Docker containers for your development environment.
 
 5. **GitHub Actions & AWS**:
-   - 学习如何使用GitHub Actions进行CI/CD流程。
-   - 了解AWS服务，特别是与持续部署相关的服务，如AWS CodeDeploy、Elastic Beanstalk或EC2。
+   - Learn how to use GitHub Actions for CI/CD workflows.
+   - Gain knowledge of AWS services, especially those related to continuous deployment, such as AWS CodeDeploy, Elastic Beanstalk, or EC2.
 
-### 项目规划
+### Project Planning
 
-1. **需求分析**:
-   - 确定项目的需求和目标。
-   - 定义用户故事和管理员面板的功能。
+1. **Requirements Analysis**:
+   - Define project requirements and goals.
+   - Outline user stories and functionalities for the admin panel.
 
-2. **设计数据库**:
-   - 设计MySQL数据库模式。
-   - 为recipes, users, ingredients, reviews创建表和关系。
+2. **Database Design**:
+   - Design the MySQL database schema.
+   - Create tables and relationships for recipes, users, ingredients, and reviews.
 
-3. **设计UI/UX**:
-   - 创建wireframe和设计mockup。
-   - 使用Sass编写样式，保持UI的一致性。
+3. **UI/UX Design**:
+   - Create wireframes and design mockups.
+   - Write styles using Sass to maintain UI consistency.
 
-4. **技术架构**:
-   - 决定前后端的交互方式，例如REST API。
+4. **Technical Architecture**:
+   - Decide on the interaction between the front-end and back-end, such as implementing a REST API.
 
-### 环境设置
+### Environment Setup
 
-1. **本地开发环境**:
-   - 使用Docker设置本地开发环境，包括PHP, MySQL和任何其他需要的服务。
-   - 设置本地React开发环境。
+1. **Local Development Environment**:
+   - Use Docker to set up your local development environment, including PHP, MySQL, and any other required services.
+   - Configure a local React development environment.
 
-2. **版本控制**:
-   - 在GitHub上设置一个新的仓库。
-   - 确保你的Docker环境和所有代码都已经提交。
+2. **Version Control**:
+   - Set up a new repository on GitHub.
+   - Ensure that your Docker environment and all code are committed.
 
-### 开发阶段
+### Development Phase
 
-1. **后端开发**:
-   - 使用Laravel建立API端点。
-   - 实现用户验证、数据验证和错误处理。
+1. **Backend Development**:
+   - Build API endpoints using Laravel.
+   - Implement user authentication, data validation, and error handling.
 
-2. **前端开发**:
-   - 使用React构建UI组件。
-   - 实现与后端API的通信。
+2. **Frontend Development**:
+   - Construct UI components using React.
+   - Implement communication with the backend API.
 
-3. **前后端集成**:
-   - 确保前端能够正确显示后端发送的数据。
-   - 实现增删改查功能。
+3. **Frontend-Backend Integration**:
+   - Ensure that the frontend correctly displays data sent by the backend.
+   - Implement CRUD operations.
 
-### 测试阶段
+### Testing Phase
 
-1. **单元测试**:
-   - 为Laravel后端编写单元测试。
-   - 为React组件编写测试。
+1. **Unit Testing**:
+   - Write unit tests for the Laravel backend.
+   - Write tests for React components.
 
-2. **集成测试**:
-   - 测试前后端集成是否顺畅。
+2. **Integration Testing**:
+   - Test the smooth integration between the frontend and backend.
 
-### 部署阶段
+### Deployment Phase
 
 1. **CI/CD Pipeline**:
-   - 使用GitHub Actions设置持续集成和持续部署。
-   - 确保代码提交后能自动部署到AWS。
+   - Set up continuous integration and continuous deployment using GitHub Actions.
+   - Ensure automatic deployment to AWS after code submission.
 
-2. **AWS环境**:
-   - 设置AWS服务以运行和管理你的应用。
-   - 配置数据库和任何需要的存储服务。
+2. **AWS Environment**:
+   - Configure AWS services to run and manage your application.
+   - Set up the database and any required storage services.
 
-### 维护阶段
+### Maintenance Phase
 
-1. **监控**:
-   - 设置监控和日志记录以跟踪生产环境的性能和问题。
+1. **Monitoring**:
+   - Establish monitoring and logging to track performance and issues in the production environment.
 
-2. **反馈
+2. **Feedback Loop**:
+   - Continuously adjust and improve the application based on user feedback.
 
-循环**:
-   - 根据用户反馈调整和改进应用。
-
-通过以上步骤，一步步地学习必要的技术，规划和开发项目，并将其部署到生产环境。每个步骤都需要时间和努力，所以保持耐心并持续学习是很重要的。
+By following these steps, you will systematically learn essential technologies, plan and develop your project, and deploy it to the production environment. Each step requires time and effort, so patience and continuous learning are crucial.
