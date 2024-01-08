@@ -3,31 +3,31 @@ const ingredientConfig = [
         name: 'ingredient_id',
         label: 'Ingredient ID',
         type: 'text',
-        mapTo: 'id', // Maps to 'id' in initialData
+        mapTo: 'id',
     },
     {
         name: 'name',
         label: 'Ingredient Name',
         type: 'text',
-        mapTo: 'name' // Maps to 'name' in initialData
+        mapTo: 'name' 
     },
     {
         name: 'img_path',
         label: 'Ingredient Image',
         type: 'file',
-        mapTo: 'imagePath' // Maps to 'ImagePath' in initialData
+        mapTo: 'imagePath' 
     },
     {
         name: 'description',
         label: 'Description',
         type: 'textarea',
-        mapTo: 'description' // Maps to 'stepInstruction' in initialData
+        mapTo: 'description' 
     },
     {
         name: 'updated_at',
         label: 'Updated At',
         type: 'date',
-        mapTo: 'updatedAt' // Maps to 'stepInstruction' in initialData
+        mapTo: 'updatedAt' 
     },
     // Additional fields can be added as required
 ];

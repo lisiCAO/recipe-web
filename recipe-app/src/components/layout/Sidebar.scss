@@ -2,25 +2,25 @@
 @import './../../assets/styles/mixins';
 
 .sidebar {
-    background-color: $primary-color; // 使用全局颜色变量
+    background-color: $primary-color; 
     color: white;
     width: 200px;
     height: 100vh;
-    padding-top: $spacing-medium; // 使用全局间距变量
+    padding-top: $spacing-medium; 
 
     &__menu {
         list-style-type: none;
         padding: 0;
 
         &__item {
-            padding: $spacing-small $spacing-medium; // 使用全局间距变量
+            padding: $spacing-small $spacing-medium; 
             cursor: pointer;
             border-left: 3px solid transparent;
             transition: background-color 0.3s, border-left 0.3s;
 
             &:hover, &--active {
-                background-color: lighten($primary-color, 10%); // 轻微调亮
-                border-left-color: $secondary-color; // 使用全局颜色变量
+                background-color: lighten($primary-color, 10%); 
+                border-left-color: $secondary-color; 
             }
         }
     }
